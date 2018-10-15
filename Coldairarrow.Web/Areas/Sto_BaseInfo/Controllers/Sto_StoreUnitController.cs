@@ -51,6 +51,7 @@ namespace Coldairarrow.Web
         /// <param name="theData">保存的数据</param>
         public ActionResult SaveData(Sto_StoreUnit theData)
         {
+            theData.CreateTime = DateTime.Now;
             if(theData.Id.IsNullOrEmpty())
             {
                 theData.Id = Guid.NewGuid().ToSequentialGuid();

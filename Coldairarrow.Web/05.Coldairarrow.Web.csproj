@@ -627,6 +627,7 @@
     <Compile Include="Areas\Base_SysManage\Controllers\RapidDevelopmentController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_BigClassController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_MaterialController.cs" />
+    <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_MaterialUnitController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_StorageController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_StoreUnitController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_SupplierController.cs" />
@@ -680,6 +681,8 @@
     <Content Include="Areas\Sto_BaseInfo\Views\Sto_Unit\Form.cshtml" />
     <Content Include="Areas\Sto_BaseInfo\Views\Sto_Unit\Index.cshtml" />
     <Content Include="Areas\Sto_BaseInfo\Views\web.config" />
+    <Content Include="Areas\Sto_BaseInfo\Views\Sto_MaterialUnit\Form.cshtml" />
+    <Content Include="Areas\Sto_BaseInfo\Views\Sto_MaterialUnit\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />

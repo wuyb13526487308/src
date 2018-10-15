@@ -74,6 +74,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sto_BaseInfo\Sto_BigClass.cs" />
     <Compile Include="Sto_BaseInfo\Sto_Material.cs" />
+    <Compile Include="Sto_BaseInfo\Sto_MaterialUnit.cs" />
     <Compile Include="Sto_BaseInfo\Sto_Storage.cs" />
     <Compile Include="Sto_BaseInfo\Sto_StoreUnit.cs" />
     <Compile Include="Sto_BaseInfo\Sto_Supplier.cs" />

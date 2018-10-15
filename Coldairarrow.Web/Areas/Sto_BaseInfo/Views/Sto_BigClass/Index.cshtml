@@ -15,9 +15,9 @@
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
                 
-                <option value="BigClassCode">BigClassCode</option>
-                <option value="BigClassName">BigClassName</option>
-                <option value="Context">Context</option>
+                <option value="BigClassCode">分类编码</option>
+                <option value="BigClassName">分类名称</option>
+                <option value="Context">备注</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -32,8 +32,8 @@
 
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 340;
+    var formWidth = 350;
+    var formHeight = 240;
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -55,10 +55,10 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: 'BigClassCode', field: 'BigClassCode', width: 200 },
-                { title: 'BigClassName', field: 'BigClassName', width: 200 },
-                { title: 'LastTime', field: 'LastTime', width: 200 },
-                { title: 'Context', field: 'Context', width: 200 }
+                { title: '分类编码', field: 'BigClassCode', width: 200 },
+                { title: '分类名称', field: 'BigClassName', width: 200 },
+                { title: '更新时间', field: 'LastTime', width: 200 },
+                { title: '备注', field: 'Context', width: 200 }
             ]],
             onBeforeLoad: function (param) {
 

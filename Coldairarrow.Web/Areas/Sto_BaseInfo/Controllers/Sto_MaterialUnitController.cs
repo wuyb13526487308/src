@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace Coldairarrow.Web
 {
-    public class Sto_BigClassController : BaseMvcController
+    public class Sto_MaterialUnitController : BaseMvcController
     {
-        Sto_BigClassBusiness _sto_BigClassBusiness = new Sto_BigClassBusiness();
+        Sto_MaterialUnitBusiness _sto_MaterialUnitBusiness = new Sto_MaterialUnitBusiness();
 
         #region 视图功能
 
@@ -19,7 +19,7 @@ namespace Coldairarrow.Web
 
         public ActionResult Form(string id)
         {
-            var theData = id.IsNullOrEmpty() ? new Sto_BigClass() : _sto_BigClassBusiness.GetTheData(id);
+            var theData = id.IsNullOrEmpty() ? new Sto_MaterialUnit() : _sto_MaterialUnitBusiness.GetTheData(id);
 
             return View(theData);
         }
@@ -36,10 +36,11 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
         {
-            var dataList = _sto_BigClassBusiness.GetDataList(condition, keyword, pagination);
+            var dataList = _sto_MaterialUnitBusiness.GetDataList(condition, keyword, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
+
 
         public ActionResult GetDataList_NoPagin()
         {
@@ -48,11 +49,10 @@ namespace Coldairarrow.Web
                 PageIndex = 1,
                 PageRows = int.MaxValue
             };
-            var dataList = _sto_BigClassBusiness.GetDataList(null, null, pagination);
+            var dataList = _sto_MaterialUnitBusiness.GetDataList(null, null, pagination);
 
             return Content(dataList.ToJson());
         }
-
         #endregion
 
         #region 提交数据
@@ -61,18 +61,17 @@ namespace Coldairarrow.Web
         /// 保存
         /// </summary>
         /// <param name="theData">保存的数据</param>
-        public ActionResult SaveData(Sto_BigClass theData)
+        public ActionResult SaveData(Sto_MaterialUnit theData)
         {
-            theData.LastTime = DateTime.Now;
             if(theData.Id.IsNullOrEmpty())
             {
                 theData.Id = Guid.NewGuid().ToSequentialGuid();
 
-                _sto_BigClassBusiness.AddData(theData);
+                _sto_MaterialUnitBusiness.AddData(theData);
             }
             else
             {
-                _sto_BigClassBusiness.UpdateData(theData);
+                _sto_MaterialUnitBusiness.UpdateData(theData);
             }
 
             return Success();
@@ -84,7 +83,7 @@ namespace Coldairarrow.Web
         /// <param name="theData">删除的数据</param>
         public ActionResult DeleteData(string ids)
         {
-            _sto_BigClassBusiness.DeleteData(ids.ToList<string>());
+            _sto_MaterialUnitBusiness.DeleteData(ids.ToList<string>());
 
             return Success("删除成功！");
         }

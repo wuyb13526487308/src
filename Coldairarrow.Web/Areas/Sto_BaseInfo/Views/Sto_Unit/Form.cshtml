@@ -1,20 +1,18 @@
 @using Coldairarrow.Entity.Sto_BaseInfo;
 @using Coldairarrow.Util;
-
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Sto_Unit)Model;
     var objStr = Html.Raw(obj.ToJson());
 }
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
+
             <tr>
                 <th>Name</th>
                 <td>
@@ -30,11 +28,12 @@
         </tbody>
     </table>
 </form>
-
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <div style="position: absolute; right: 50px;">
+        <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">确定</a>
+        <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'">取消</a>
+    </div>
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
@@ -56,6 +55,11 @@
                     dialogError(resJson.Msg);
                 }
             });
+        });
+
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
         });
     });
 </script>

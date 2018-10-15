@@ -1,52 +1,53 @@
 @using Coldairarrow.Entity.Sto_BaseInfo;
 @using Coldairarrow.Util;
-
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Sto_BigClass)Model;
     var objStr = Html.Raw(obj.ToJson());
 }
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
+
             <tr>
-                <th>BigClassCode</th>
+                <th>分类编码</th>
                 <td>
                     <input name="BigClassCode" value="@obj.BigClassCode" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>BigClassName</th>
+                <th>分类名称</th>
                 <td>
                     <input name="BigClassName" value="@obj.BigClassName" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
+            @*<tr>
+                    <th>LastTime</th>
+                    <td>
+                        <input name="LastTime" value="@obj.LastTime" class="easyui-textbox" data-options="width:'200px',required:true">
+                    </td>
+                </tr>*@
             <tr>
-                <th>LastTime</th>
+                <th>备注</th>
                 <td>
-                    <input name="LastTime" value="@obj.LastTime" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>Context</th>
-                <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
-
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    @*<div id="myfooter" style="padding:5px;height:33px">*@
+        <div style="position: absolute; right: 50px;">
+            <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">确定</a>
+            <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'" >取消</a>
+        </div>
+    @*</div>*@
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
@@ -68,6 +69,10 @@
                     dialogError(resJson.Msg);
                 }
             });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
         });
     });
 </script>

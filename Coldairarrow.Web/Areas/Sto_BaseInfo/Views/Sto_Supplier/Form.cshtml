@@ -1,100 +1,81 @@
 @using Coldairarrow.Entity.Sto_BaseInfo;
 @using Coldairarrow.Util;
-
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Sto_Supplier)Model;
     var objStr = Html.Raw(obj.ToJson());
 }
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
+
             <tr>
-                <th>SupNumber</th>
+                <th>供应商编号</th>
                 <td>
                     <input name="SupNumber" value="@obj.SupNumber" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
+
             </tr>
             <tr>
-                <th>SupName</th>
-                <td>
-                    <input name="SupName" value="@obj.SupName" class="easyui-textbox" data-options="width:'200px',required:true">
+                <th>供应商名称</th>
+                <td colspan="3">
+                    <input name="SupName" value="@obj.SupName" class="easyui-textbox" data-options="width:'460px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>SupType</th>
-                <td>
-                    <input name="SupType" value="@obj.SupType" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>Phone</th>
+                <th>电话</th>
                 <td>
                     <input name="Phone" value="@obj.Phone" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
-            </tr>
-            <tr>
-                <th>Fax</th>
+                <th>传真</th>
                 <td>
-                    <input name="Fax" value="@obj.Fax" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="Fax" value="@obj.Fax" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+            </tr>
+
+            <tr>
+                <th>邮箱</th>
+                <td>
+                    <input name="Mail" value="@obj.Mail" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+                <th>邮编</th>
+                <td>
+                    <input name="PostCode" value="@obj.PostCode" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
             <tr>
-                <th>Mail</th>
+
+                <th>地址</th>
+                <td colspan="3">
+                    <input name="Address" value="@obj.Address" class="easyui-textbox" data-options="width:'460px'">
+                </td>
+            </tr>
+
+            <tr>
+                <th>联系人</th>
                 <td>
-                    <input name="Mail" value="@obj.Mail" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="ContactName" value="@obj.ContactName" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
             <tr>
-                <th>Address</th>
+                <th>备注</th>
                 <td>
-                    <input name="Address" value="@obj.Address" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>PostCode</th>
-                <td>
-                    <input name="PostCode" value="@obj.PostCode" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>ContactName</th>
-                <td>
-                    <input name="ContactName" value="@obj.ContactName" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>Context</th>
-                <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>CreateTime</th>
-                <td>
-                    <input name="CreateTime" value="@obj.CreateTime" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>Creater</th>
-                <td>
-                    <input name="Creater" value="@obj.Creater" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
-
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <div style="position: absolute; right: 50px;">
+        <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">确定</a>
+        <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'">取消</a>
+    </div>
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
@@ -116,6 +97,11 @@
                     dialogError(resJson.Msg);
                 }
             });
+        });
+
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
         });
     });
 </script>

@@ -1,46 +1,45 @@
 @using Coldairarrow.Entity.Sto_BaseInfo;
 @using Coldairarrow.Util;
-
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Sto_Storage)Model;
     var objStr = Html.Raw(obj.ToJson());
 }
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
+
             <tr>
-                <th>StoreNo</th>
+                <th>仓库编号</th>
                 <td>
                     <input name="StoreNo" value="@obj.StoreNo" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>StoreName</th>
+                <th>仓库名称</th>
                 <td>
                     <input name="StoreName" value="@obj.StoreName" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>Context</th>
+                <th>备注</th>
                 <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
-
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <div style="position: absolute; right: 50px;">
+        <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">确定</a>
+        <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'">取消</a>
+    </div>
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
@@ -62,6 +61,10 @@
                     dialogError(resJson.Msg);
                 }
             });
+        });
+        
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
         });
     });
 </script>

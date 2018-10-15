@@ -15,11 +15,10 @@
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
                 
-                <option value="StoreId">StoreId</option>
-                <option value="UnitNo">UnitNo</option>
-                <option value="UnitName">UnitName</option>
-                <option value="UnitClass">UnitClass</option>
-                <option value="Context">Context</option>
+                <option value="UnitNo">编号</option>
+                <option value="UnitName">名称</option>
+                <option value="UnitClass">类别</option>
+                <option value="Context">备注</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -34,8 +33,8 @@
 
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 445;
+    var formWidth = 400;
+    var formHeight = 345;
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -57,13 +56,12 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: 'StoreId', field: 'StoreId', width: 200 },
-                { title: 'UnitNo', field: 'UnitNo', width: 200 },
-                { title: 'UnitName', field: 'UnitName', width: 200 },
-                { title: 'UnitClass', field: 'UnitClass', width: 200 },
-                { title: 'UsedState', field: 'UsedState', width: 200 },
-                { title: 'CreateTime', field: 'CreateTime', width: 200 },
-                { title: 'Context', field: 'Context', width: 200 }
+                { title: '所属仓库', field: 'StoreId', width: 100 },
+                { title: '库位编号', field: 'UnitNo', width: 100 },
+                { title: '库位名称', field: 'UnitName', width: 200 },
+                { title: '库位分类', field: 'UnitClass', width: 100 },
+                { title: '创建时间', field: 'CreateTime', width: 200 },
+                { title: '备注', field: 'Context', width: 200 }
             ]],
             onBeforeLoad: function (param) {
 

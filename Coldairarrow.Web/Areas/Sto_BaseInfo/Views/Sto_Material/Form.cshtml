@@ -1,88 +1,106 @@
 @using Coldairarrow.Entity.Sto_BaseInfo;
 @using Coldairarrow.Util;
+@using Coldairarrow.Business.Sto_BaseInfo;
 
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Sto_Material)Model;
     var objStr = Html.Raw(obj.ToJson());
+    string unitIdList = "[]";
+    string classIdList = "[]";
+    if (!obj.Id.IsNullOrEmpty())
+    {
+        unitIdList = string.Format("['{0}']", obj.UnitNo);
+        classIdList = string.Format("['{0}']", obj.BigClass);
+    }
 }
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
+
             <tr>
-                <th>MatNo</th>
+                <th>物料编号</th>
                 <td>
                     <input name="MatNo" value="@obj.MatNo" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
-            </tr>
-            <tr>
-                <th>BarCode</th>
+                <th>物料条码</th>
                 <td>
-                    <input name="BarCode" value="@obj.BarCode" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="BarCode" value="@obj.BarCode" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
+
             <tr>
-                <th>MatName</th>
+                <th>物料名称</th>
                 <td>
                     <input name="MatName" value="@obj.MatName" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
-            </tr>
-            <tr>
-                <th>JianPin</th>
+                <th>简拼</th>
                 <td>
                     <input name="JianPin" value="@obj.JianPin" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
+
             <tr>
-                <th>BigClass</th>
+                <th>分类</th>
                 <td>
-                    <input name="BigClass" value="@obj.BigClass" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="BigClass" class="easyui-combobox"  editable='false' data-options="
+                        width:200,
+                        valueField: 'BigClassCode',
+                        textField: 'BigClassName',
+                        multiple:false,
+                        value:@classIdList,
+                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_BigClass/GetDataList_NoPagin'
+                    ">
                 </td>
-            </tr>
-            <tr>
-                <th>GuiGe</th>
+                <th>规格</th>
                 <td>
                     <input name="GuiGe" value="@obj.GuiGe" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
+
             <tr>
-                <th>MaxStoreQuantity</th>
+                <th>上限</th>
                 <td>
                     <input name="MaxStoreQuantity" value="@obj.MaxStoreQuantity" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
-            </tr>
-            <tr>
-                <th>WarnStoreQuantity</th>
+                <th>下限</th>
                 <td>
                     <input name="WarnStoreQuantity" value="@obj.WarnStoreQuantity" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
+
             <tr>
-                <th>UnitNo</th>
+                <th>单位</th>
                 <td>
-                    <input name="UnitNo" value="@obj.UnitNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="UnitNo"  class="easyui-combobox" editable='false' data-options="
+                        width:200,
+                        valueField: 'UnitNum',
+                        textField: 'Name',
+                        multiple:false,
+                        value:@unitIdList,
+                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_MaterialUnit/GetDataList_NoPagin'
+                    ">
                 </td>
             </tr>
             <tr>
-                <th>Context</th>
+                <th>备注</th>
                 <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
-
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <div style="position: absolute; right: 50px;">
+        <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">确定</a>
+        <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'">取消</a>
+    </div>
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
@@ -104,6 +122,10 @@
                     dialogError(resJson.Msg);
                 }
             });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
         });
     });
 </script>

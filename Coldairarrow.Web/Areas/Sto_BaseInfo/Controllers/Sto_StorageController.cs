@@ -41,6 +41,18 @@ namespace Coldairarrow.Web
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 
+        public ActionResult GetDataList_NoPagin()
+        {
+            Pagination pagination = new Pagination
+            {
+                PageIndex = 1,
+                PageRows = int.MaxValue
+            };
+            var dataList = _sto_StorageBusiness.GetDataList(null, null, pagination);
+
+            return Content(dataList.ToJson());
+        }
+
         #endregion
 
         #region 提交数据

@@ -3,14 +3,8 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
-    var obj = (Sto_StoreUnit)Model;
+    var obj = (Sto_MaterialUnit)Model;
     var objStr = Html.Raw(obj.ToJson());
-    //仓库列表
-    string storeIdList = "[]";
-    if (!obj.Id.IsNullOrEmpty())
-    {
-        storeIdList = string.Format("['{0}']", obj.StoreId);
-    }
 }
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
@@ -20,40 +14,15 @@
         <tbody>
 
             <tr>
-                <th>所属仓库</th>
+                <th>编码</th>
                 <td>
-                    <input name="StoreId" value="@obj.StoreId" class="easyui-combobox" editable='false' data-options="
-                        width:200,
-                        valueField: 'StoreNo',
-                        textField: 'StoreName',
-                        multiple:false,
-                        value:@storeIdList,
-                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin'
-                    ">
+                    <input name="UnitNum" value="@obj.UnitNum" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>库位编号</th>
+                <th>名称</th>
                 <td>
-                    <input name="UnitNo" value="@obj.UnitNo" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>库位名称</th>
-                <td>
-                    <input name="UnitName" value="@obj.UnitName" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>库位分类</th>
-                <td>
-                    <input name="UnitClass" value="@obj.UnitClass" class="easyui-textbox" data-options="width:'200px'">
-                </td>
-            </tr>
-            <tr>
-                <th>备注</th>
-                <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
+                    <input name="Name" value="@obj.Name" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
             </tr>
         </tbody>
@@ -76,7 +45,7 @@
 
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
-            $.postJSON(rootUrl + 'Sto_BaseInfo/Sto_StoreUnit/SaveData', theEntity, function (resJson) {
+            $.postJSON(rootUrl + 'Sto_BaseInfo/Sto_MaterialUnit/SaveData', theEntity, function (resJson) {
                 if (resJson.Success) {
                     parent.$('#dataTable').datagrid('reload');
                     parent.dialogMsg('保存成功!');
@@ -92,5 +61,6 @@
         $('#closeForm').click(function () {
             parent.dialogClose('form');
         });
+
     });
 </script>

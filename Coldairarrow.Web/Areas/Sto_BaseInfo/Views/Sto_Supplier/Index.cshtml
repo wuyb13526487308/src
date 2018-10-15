@@ -15,16 +15,12 @@
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
                 
-                <option value="SupNumber">SupNumber</option>
-                <option value="SupName">SupName</option>
-                <option value="Phone">Phone</option>
-                <option value="Fax">Fax</option>
-                <option value="Mail">Mail</option>
-                <option value="Address">Address</option>
-                <option value="PostCode">PostCode</option>
-                <option value="ContactName">ContactName</option>
-                <option value="Context">Context</option>
-                <option value="Creater">Creater</option>
+                <option value="SupNumber">供应商编号</option>
+                <option value="SupName">供应商名称</option>
+                <option value="Phone">电话</option>
+                <option value="Mail">邮箱</option>
+                <option value="Address">地址</option>
+                <option value="ContactName">联系人</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -39,8 +35,8 @@
 
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 620;
+    var formWidth = 600;
+    var formHeight = 400;
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -62,18 +58,16 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: 'SupNumber', field: 'SupNumber', width: 200 },
-                { title: 'SupName', field: 'SupName', width: 200 },
-                { title: 'SupType', field: 'SupType', width: 200 },
-                { title: 'Phone', field: 'Phone', width: 200 },
-                { title: 'Fax', field: 'Fax', width: 200 },
-                { title: 'Mail', field: 'Mail', width: 200 },
-                { title: 'Address', field: 'Address', width: 200 },
-                { title: 'PostCode', field: 'PostCode', width: 200 },
-                { title: 'ContactName', field: 'ContactName', width: 200 },
-                { title: 'Context', field: 'Context', width: 200 },
-                { title: 'CreateTime', field: 'CreateTime', width: 200 },
-                { title: 'Creater', field: 'Creater', width: 200 }
+                { title: '供应商编号', field: 'SupNumber', width: 100 },
+                { title: '供应商名称', field: 'SupName', width: 200 },
+                { title: '电话', field: 'Phone', width: 120 },
+                { title: '传真', field: 'Fax', width: 120 },
+                { title: '邮箱', field: 'Mail', width: 150 },
+                { title: '地址', field: 'Address', width: 200 },
+                { title: '邮编', field: 'PostCode', width: 100 },
+                { title: '联系人', field: 'ContactName', width: 100 },
+                { title: '备注', field: 'Context', width: 200 },
+                { title: '创建时间', field: 'CreateTime', width: 100 }
             ]],
             onBeforeLoad: function (param) {
 

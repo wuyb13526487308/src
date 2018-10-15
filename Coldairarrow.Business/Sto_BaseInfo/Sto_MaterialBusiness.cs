@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Linq.Expressions;
 
 namespace Coldairarrow.Business.Sto_BaseInfo
 {
@@ -19,6 +20,21 @@ namespace Coldairarrow.Business.Sto_BaseInfo
         /// <returns></returns>
         public List<Sto_Material> GetDataList(string condition, string keyword, Pagination pagination)
         {
+            //var whereExpre = LinqHelper.True<Sto_MaterialModel>();
+            //Expression<Func<Sto_Material, object, object, object, object, Sto_MaterialModel>> selectExpre = (a, b, c, d, e) => new Sto_MaterialModel
+            //{
+            //    ClassNameList = (List<string>)b,
+            //    ClassIdList = (List<string>)c,
+            //    MaterialUnitIdList = (List<string>)d,
+            //    MaterialUnitNameList = (List<string>)e
+            //};
+            //selectExpre = selectExpre.BuildExtendSelectExpre();
+            
+            //var db_Sto_BigClass = Service.GetIQueryable<Sto_BigClass>();
+            //var db_Sto_MaterialUnit = Service.GetIQueryable<Sto_MaterialUnit>();
+            //var q = from a in GetIQueryable().AsExpandable()
+            //        let classIds = db_Sto_BigClass.Where
+
             var q = GetIQueryable();
 
             //模糊查询
@@ -37,6 +53,12 @@ namespace Coldairarrow.Business.Sto_BaseInfo
         {
             return GetEntity(id);
         }
+
+        //public static List<string> GetUserDepartIds(string userId)
+        //{
+        //    return GetTheUser(userId).DepartmentIdList;
+        //}
+
 
         /// <summary>
         /// 添加数据
@@ -73,5 +95,19 @@ namespace Coldairarrow.Business.Sto_BaseInfo
         #region 数据模型
 
         #endregion
+    }
+
+    public class Sto_MaterialModel : Sto_Material
+    {
+        public List<string> ClassIdList { get; set; }
+
+        public List<string> ClassNameList { get; set; }
+
+        public List<string> MaterialUnitIdList { get; set; }
+
+        public List<string> MaterialUnitNameList { get; set; }
+
+
+
     }
 }
