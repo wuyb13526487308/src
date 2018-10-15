@@ -1,0 +1,121 @@
+@using Coldairarrow.Entity.Sto_BaseInfo;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Sto_Supplier)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>SupNumber</th>
+                <td>
+                    <input name="SupNumber" value="@obj.SupNumber" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SupName</th>
+                <td>
+                    <input name="SupName" value="@obj.SupName" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>SupType</th>
+                <td>
+                    <input name="SupType" value="@obj.SupType" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>
+                    <input name="Phone" value="@obj.Phone" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>
+                    <input name="Fax" value="@obj.Fax" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Mail</th>
+                <td>
+                    <input name="Mail" value="@obj.Mail" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>
+                    <input name="Address" value="@obj.Address" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>PostCode</th>
+                <td>
+                    <input name="PostCode" value="@obj.PostCode" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>ContactName</th>
+                <td>
+                    <input name="ContactName" value="@obj.ContactName" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>CreateTime</th>
+                <td>
+                    <input name="CreateTime" value="@obj.CreateTime" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Creater</th>
+                <td>
+                    <input name="Creater" value="@obj.Creater" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'Sto_BaseInfo/Sto_Supplier/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>
