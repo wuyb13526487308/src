@@ -1,0 +1,159 @@
+@using Coldairarrow.Entity.Sto_ProManage;
+@using Coldairarrow.Business.Sto_ProManage;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Pro_TemplateModel)Model;
+    obj.Id = Guid.NewGuid().ToSequentialGuid();
+
+    var objStr = Html.Raw(obj.ToJson());
+
+    var objTemplateItemStr = Html.Raw(obj.TemplateItemList.ToJson());
+
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>模板编号</th>
+                <td>
+                    <input name="TemplateId" value="@obj.TemplateId" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+                <th>模板类型</th>
+                <td>
+                    <select class="easyui-combobox" name="TemplateType"  editable='false' style="width:400px;">
+                        <option value="0">管道工程</option>
+                        <option value="1">小区配套</option>
+                        <option value="2">民用户</option>
+                        <option value="3">工业用户</option>
+                        <option value="4">商业用户</option>
+                    </select>
+                        @*<input name="TemplateType" value="@obj.TemplateType" class="easyui-textbox" data-options="width:'200px',required:true">*@
+                </td>
+            </tr>
+            <tr>
+                <th>模板名称</th>
+                <td colspan="3">
+                    <input name="TemplateName" value="@obj.TemplateName" class="easyui-textbox" data-options="width:'670px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td colspan="3">
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'670px'">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div style="height:350px">
+    <div id="dataTable">
+    </div>
+</div>
+
+
+@section foottoolbar{
+    <a id="addForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加物料</a>
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+    var theTemplateItems = @objTemplateItemStr;
+    var newId ='12345';
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theTemplateItems,
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            //height:300,
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+                { title: '序号', field: 'OrderId', width: 200 },
+
+                //{ title: 'TemplateId', field: 'TemplateId', width: 200 },
+                { title: '材料编号', field: 'MatNo', width: 200 },
+                { title: '材料名称', field: 'MatName', width: 200 },
+                { title: '单位', field: 'UnitNo', width: 200 },
+                { title: '规格', field: 'GuiGe', width: 200 },
+                { title: '数量', field: 'Quantity', width: 200 },
+                { title: '备注', field: 'Context', width: 200 }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    $(function () {
+
+        initTable();
+
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+
+        //为物料模板添加材料
+        $('#addForm').click(function () {
+            dialogOpen({
+                id: 'form',
+                title: '添加材料',
+                width: 660,
+                height: 370,
+                url: rootUrl + 'Sto_ProManage/Pro_TemplateItem/Form/' + newId,
+                onClose: function (arge) {
+                    $.getJSON(rootUrl + 'Sto_ProManage/Pro_TemplateItem/FindCacheItem/' + newId, function (resJson) {
+                        if (resJson.Id === newId) {
+                            theTemplateItems.push(resJson);
+                            $('#dataTable').datagrid('loadData', theTemplateItems);
+                        }                        
+                    });                   
+                }
+            });
+        });
+    });
+</script>

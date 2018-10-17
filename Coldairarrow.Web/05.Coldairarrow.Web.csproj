@@ -109,6 +109,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\business\requestbusiness.js" />
     <Content Include="Scripts\config.js" />
+    <Content Include="Scripts\index.css" />
     <Content Include="Scripts\util\easyui-extend.js" />
     <Content Include="Scripts\easyui\datagrid-cellediting.js" />
     <Content Include="Scripts\easyui\easyloader.js" />
@@ -633,6 +634,9 @@
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_SupplierController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Controllers\Sto_UnitController.cs" />
     <Compile Include="Areas\Sto_BaseInfo\Sto_BaseInfoAreaRegistration.cs" />
+    <Compile Include="Areas\Sto_ProManage\Controllers\Pro_TemplateController.cs" />
+    <Compile Include="Areas\Sto_ProManage\Controllers\Pro_TemplateItemController.cs" />
+    <Compile Include="Areas\Sto_ProManage\Sto_ProManageAreaRegistration.cs" />
     <Compile Include="Common\PermissionManage.cs" />
     <Compile Include="Common\SystemMenuManage.cs" />
     <Compile Include="Common\UrlPermissionManage.cs" />
@@ -683,6 +687,12 @@
     <Content Include="Areas\Sto_BaseInfo\Views\web.config" />
     <Content Include="Areas\Sto_BaseInfo\Views\Sto_MaterialUnit\Form.cshtml" />
     <Content Include="Areas\Sto_BaseInfo\Views\Sto_MaterialUnit\Index.cshtml" />
+    <Content Include="Areas\Sto_ProManage\Views\Pro_TemplateItem\Form.cshtml" />
+    <Content Include="Areas\Sto_ProManage\Views\Pro_TemplateItem\Index.cshtml" />
+    <Content Include="Areas\Sto_ProManage\Views\Pro_Template\Form.cshtml" />
+    <Content Include="Areas\Sto_ProManage\Views\Pro_Template\Index.cshtml" />
+    <Content Include="Areas\Sto_ProManage\Views\web.config" />
+    <Content Include="Areas\Sto_BaseInfo\Views\Sto_Material\Find.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />

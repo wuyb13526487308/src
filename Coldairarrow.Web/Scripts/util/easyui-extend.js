@@ -9,11 +9,14 @@ function dialogOpen(options) {
         url: '',
         cache: false,
         modal: true,
+        onClose: function () { },
     };
     $.extend(_options, options);
 
     var id = _options.id;
     var src = _options.url;
+    var closeDialog = _options.onClose;
+
     var $html = $('#{0}'.format(id));
     if ($html.length == 0)
         $html = $('<div id="{0}" style="padding:5px;display:none;"></div>'.format(id, src)).appendTo("body");
@@ -28,7 +31,10 @@ function dialogOpen(options) {
         cache: false,
         modal: true,
         onClose: function () {
-            $(this).dialog('destroy');//后面可以关闭后的事件  
+            // $(this).dialog('destroy');//后面可以关闭后的事件  
+            if (closeDialog != null) {
+                closeDialog(this);
+            }            
         },
     });
 }

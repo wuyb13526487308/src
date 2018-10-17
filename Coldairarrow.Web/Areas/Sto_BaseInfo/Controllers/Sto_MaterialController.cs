@@ -9,6 +9,7 @@ namespace Coldairarrow.Web
     public class Sto_MaterialController : BaseMvcController
     {
         Sto_MaterialBusiness _sto_MaterialBusiness = new Sto_MaterialBusiness();
+        static SystemCache _systemCache = new SystemCache();
 
         #region 视图功能
 
@@ -23,6 +24,7 @@ namespace Coldairarrow.Web
 
             return View(theData);
         }
+
 
         #endregion
 
@@ -41,6 +43,50 @@ namespace Coldairarrow.Web
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 
+
+        #endregion
+
+        #region 缓存数据和提取
+        /// <summary>
+        /// 用于查询物料缓存id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Find(string id)
+        {
+            Sto_Material _o = new Sto_Material() { Id = id };
+            return View(_o);
+        }
+
+        public ActionResult FindCacheItem(string id)
+        {
+            var theData = _systemCache.GetCache<Sto_Material>(id);
+            if (theData == null)
+            {
+                theData = new Sto_Material();
+            }
+            else
+            {
+                //清除缓存
+                _systemCache.RemoveCache(id);
+            }
+
+            return Content(theData.ToJson());
+        }
+
+
+        public ActionResult CreateCacheItem(CacheMaterial theData)
+        {
+            if (theData.Id.IsNullOrEmpty())
+            {
+                return Error("对象无效");
+            }
+            else
+            {
+                _systemCache.SetCache(theData.Id, theData.Entity, new TimeSpan(0, 1, 0));
+            }
+            return Success();
+        }
         #endregion
 
         #region 提交数据
@@ -77,5 +123,11 @@ namespace Coldairarrow.Web
         }
 
         #endregion
+    }
+
+    public class CacheMaterial
+    {
+        public Sto_Material Entity { get; set; }
+        public string Id { get; set; }
     }
 }

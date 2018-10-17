@@ -1,0 +1,123 @@
+@using Coldairarrow.Entity.Sto_ProManage;
+@using Coldairarrow.Util;
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Pro_TemplateItem)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>序号</th>
+                <td>
+                    <input name="OrderId" value="@obj.OrderId" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>材料编码</th>
+                <td>
+                    <input id="MatNo" name="MatNo" value="@obj.MatNo" class="easyui-textbox" data-options="prompt:'输入材料编码回车查询',width:'200px',required:true">
+                    <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+                </td>
+            </tr>
+            <tr>
+                <th>材料名称</th>
+                <td>
+                    <input name="MatName" value="@obj.MatName" class="easyui-textbox"  data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>单位</th>
+                <td>
+                    <input name="UnitNo" value="@obj.UnitNo" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+            </tr>
+            <tr>
+                <th>规格</th>
+                <td>
+                    <input name="GuiGe" value="@obj.GuiGe" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <td>
+                    <input name="Quantity" value="@obj.Quantity" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+
+            <tr>
+                <th>备注</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+    var id = '12345';
+    var isSelect = false;
+    var formWidth = 660;
+    var formHeight = 340;
+
+
+    function materilSelect() {
+        alert("Hello");
+    }
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_TemplateItem/CreateCacheItem', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+
+        $('#btnSearch').bind("click", function () {
+            dialogOpen({
+                id: 'form',
+                title: '选择物料',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_BaseInfo/Sto_Material/Find?id=' + id,
+                onClose: function () {
+                    $.getJSON(rootUrl + 'Sto_BaseInfo/Sto_Material/FindCacheItem/' + id, function (resJson) {
+                        location.href = rootUrl + 'Sto_ProManage/Pro_TemplateItem/Form/' + 'cache_'+ resJson.Id;
+                    });    
+                }
+            });
+        });
+
+
+        $('#MatNo').textbox({
+            onChange: function (value) {
+
+            }
+        });
+
+    });
+</script>

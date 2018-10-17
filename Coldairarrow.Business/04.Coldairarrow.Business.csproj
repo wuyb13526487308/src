@@ -82,6 +82,9 @@
     <Compile Include="Sto_BaseInfo\Sto_StoreUnitBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_SupplierBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_UnitBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_TemplateBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_TemplateItemBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_TemplateModelCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
