@@ -43,6 +43,11 @@ namespace Coldairarrow.Web
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 
+        public ActionResult QueryByMatNo(string matNo)
+        {
+            Sto_Material _m = _sto_MaterialBusiness.QueryMaterial(matNo);
+            return Content(_m.ToJson());
+        }
 
         #endregion
 

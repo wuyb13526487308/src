@@ -6,7 +6,6 @@
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
     var obj = (Pro_TemplateModel)Model;
-    obj.Id = Guid.NewGuid().ToSequentialGuid();
 
     var objStr = Html.Raw(obj.ToJson());
 
@@ -120,7 +119,11 @@
 
             var formValues = $('#dataForm').getValues();
             $.extend(theEntity, formValues);
-
+            theEntity.TemplateItemList = [];
+            theTemplateItems.forEach(function (currentValue) {
+                theEntity.TemplateItemList.push(currentValue);
+            });
+            
             $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/SaveData', theEntity, function (resJson) {
                 if (resJson.Success) {
                     parent.$('#dataTable').datagrid('reload');

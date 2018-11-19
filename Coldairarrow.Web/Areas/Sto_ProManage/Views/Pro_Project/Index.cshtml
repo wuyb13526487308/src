@@ -1,25 +1,28 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
-    //权限检查
-    var manage = PermissionManage.OperatorHasPermissionValue("sysuser.manage");
-    var manageSysPermission = PermissionManage.OperatorHasPermissionValue("sysuser.manageSysPermission");
-}
 
+    //权限检查
+    var proAddPermission = PermissionManage.OperatorHasPermissionValue("pro.add");
+    var proEditPermission = PermissionManage.OperatorHasPermissionValue("pro.edit");
+    var proDeletePermission = PermissionManage.OperatorHasPermissionValue("pro.delete");
+}
 @section toolbar{
     <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+    @*<a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>*@
     <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
 }
-
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
             <label class="search_label">查询类别</label>
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
-                
-                <option value="TemplateId">模板编号</option>
-                <option value="TemplateName">模板名称</option>
+
+                <option value="ProCode">项目编码</option>
+                <option value="ProName">项目名称</option>
+                <option value="Creator">创建人</option>
+                <option value="ProAddress">项目地址</option>
+                <option value="ProLeader">负责人</option>
                 <option value="Context">备注</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
@@ -30,19 +33,19 @@
     </div>
 }
 <div id="dataTable">
-
 </div>
-
 <script>
-    var editPermission =@manageSysPermission.ToString().ToLower();//编辑权限
+    var addPermission = @proAddPermission.ToString().ToString().ToLower();
+    var editPermission =@proEditPermission.ToString().ToLower();//编辑权限
+    var deletePermission = @proDeletePermission.ToString().ToLower();
 
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 800;
-    var formHeight = 570;
+    var formWidth = 520;
+    var formHeight = 300;
 
     function initTable() {
         $('#dataTable').datagrid({
-            url: rootUrl + 'Sto_ProManage/Pro_Template/GetDataList',
+            url: rootUrl + 'Sto_ProManage/Pro_Project/GetDataList',
             method: 'POST',
             //queryParams: { 'id': id },
             idField: 'Id',
@@ -59,37 +62,39 @@
             //showFooter: true,
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
-                
-                { title: '模板编号', field: 'TemplateId', width: 100 },
+
+                { title: '项目编码', field: 'ProCode', width: 100 },
+                { title: '项目名称', field: 'ProName', width: 200 },
+                { title: '项目地址', field: 'ProAddress', width: 260 },
+                { title: '负责人', field: 'ProLeader', width: 100 },
+                { title: '创建日期', field: 'CreateDate', width: 160 },
+                { title: '创建人', field: 'Creator', width: 100 },
+                { title: '备注', field: 'Context', width: 200 },
                 {
-                    title: '模板类型', field: 'TemplateType', width: 150, formatter: function (value, row) {
-                        var mapping = {
-                            '0': '管道工程',
-                            '1': '小区配套',
-                            '2': '民用户',
-                            '3': '工业用户',
-                            '4': '商业用户'
+                    title: '状态', field: 'Status', width: 100, formatter: function (value, row) {
+                        var mapping = {// 预算  1 建设  2 已结算 3
+
+                            '0': '预算',
+                            '1': '建设',
+                            '2': '已结算'
                         };
                         return mapping[value];
-                    }},
-                { title: '模板名称', field: 'TemplateName', width: 200 },
-                { title: '最后更新时间', field: 'LastTime', width: 200 },
-                { title: '最后修改人', field: 'LastOperator', width: 100 },
-                { title: '备注', field: 'Context', width: 300 },
+                    } },
                 {
                     title: '操作', field: '_', width: 100, fixed: true, formatter: function (value, row) {
                         var html = '';
                         if (editPermission) {
                             html += '<a href="javascript:;" onclick="editData(\'{0}\')">编辑</a>'.format(row['Id']);
                         }
-                        if (editPermission ) {
+                        if (editPermission) {
                             html += ' | ';
                         }
-                        if (editPermission) {
+                        if (deletePermission) {
                             html += ' <a href="javascript:;" onclick="deleteData(\'{0}\')">删除</a>'.format(row['Id']);
                         }
                         return html;
-                    } }
+                    }
+                }
             ]],
             onBeforeLoad: function (param) {
 
@@ -107,27 +112,41 @@
         $('#add').click(function () {
             dialogOpen({
                 id: 'form',
-                title: '创建模板',
+                title: '创建工程',
                 width: formWidth,
                 height: formHeight,
-                url: rootUrl + 'Sto_ProManage/Pro_Template/Form',
+                url: rootUrl + 'Sto_ProManage/Pro_Project/Form',
             });
         });
 
         //修改数据
         $('#edit').click(function () {
+            if (!editPermission) {
+                dialogError('您无记录修改权限!');
+                return;
+            }
             var selected = $("#dataTable").datagrid("getChecked");
             if (!selected || !selected.length || selected.length > 1) {
                 dialogError('请选择一条记录修改!');
                 return;
             }
             var id = selected[0].Id;
-            editData(id);
 
+            dialogOpen({
+                id: 'form',
+                title: '修改数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_ProManage/Pro_Project/Form?id=' + id,
+            });
         });
 
         //删除数据
         $('#delete').click(function () {
+            if (!deletePermission) {
+                dialogError('您无记录删除权限!');
+                return;
+            }
             var checked = $("#dataTable").datagrid("getChecked");
             if (!checked || !checked.length) {
                 dialogError('请选择要删除的记录!');
@@ -138,7 +157,7 @@
             });
 
             dialogComfirm('确认删除吗？', function () {
-                $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+                $.postJSON(rootUrl + 'Sto_ProManage/Pro_Project/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
@@ -153,19 +172,27 @@
     });
 
     function editData(id) {
+        if (!editPermission) {
+            dialogError('您无记录修改权限!');
+            return;
+        }
         dialogOpen({
             id: 'form',
-            title: '修改模板',
+            title: '修改工程信息',
             width: formWidth,
             height: formHeight,
-            url: rootUrl + 'Sto_ProManage/Pro_Template/Form/' + id,
+            url: rootUrl + 'Sto_ProManage/Pro_Project/Form/' + id,
         });
     }
 
     function deleteData(id) {
+        if (!deletePermission) {
+            dialogError('您无记录删除权限!');
+            return;
+        }
         var ids = [id];
         dialogComfirm('确认删除吗？', function () {
-            $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_Project/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
                 if (resJson.Success) {
                     $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                     $('#dataTable').datagrid('reload');

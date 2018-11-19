@@ -1,8 +1,5 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
-    //权限检查
-    var manage = PermissionManage.OperatorHasPermissionValue("sysuser.manage");
-    var manageSysPermission = PermissionManage.OperatorHasPermissionValue("sysuser.manageSysPermission");
 }
 
 @section toolbar{
@@ -18,9 +15,12 @@
             <select name="condition" class="easyui-combobox" data-options="width:100">
                 <option value="">请选择</option>
                 
-                <option value="TemplateId">模板编号</option>
-                <option value="TemplateName">模板名称</option>
-                <option value="Context">备注</option>
+                <option value="ProCode">ProCode</option>
+                <option value="PMR_No">PMR_No</option>
+                <option value="MatNo">MatNo</option>
+                <option value="MatName">MatName</option>
+                <option value="GuiGe">GuiGe</option>
+                <option value="UnitNo">UnitNo</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -34,15 +34,13 @@
 </div>
 
 <script>
-    var editPermission =@manageSysPermission.ToString().ToLower();//编辑权限
-
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 800;
-    var formHeight = 570;
+    var formWidth = 500;
+    var formHeight = 445;
 
     function initTable() {
         $('#dataTable').datagrid({
-            url: rootUrl + 'Sto_ProManage/Pro_Template/GetDataList',
+            url: rootUrl + 'Sto_ProManage/Pro_MaterialRequisitionItem/GetDataList',
             method: 'POST',
             //queryParams: { 'id': id },
             idField: 'Id',
@@ -60,36 +58,13 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: '模板编号', field: 'TemplateId', width: 100 },
-                {
-                    title: '模板类型', field: 'TemplateType', width: 150, formatter: function (value, row) {
-                        var mapping = {
-                            '0': '管道工程',
-                            '1': '小区配套',
-                            '2': '民用户',
-                            '3': '工业用户',
-                            '4': '商业用户'
-                        };
-                        return mapping[value];
-                    }},
-                { title: '模板名称', field: 'TemplateName', width: 200 },
-                { title: '最后更新时间', field: 'LastTime', width: 200 },
-                { title: '最后修改人', field: 'LastOperator', width: 100 },
-                { title: '备注', field: 'Context', width: 300 },
-                {
-                    title: '操作', field: '_', width: 100, fixed: true, formatter: function (value, row) {
-                        var html = '';
-                        if (editPermission) {
-                            html += '<a href="javascript:;" onclick="editData(\'{0}\')">编辑</a>'.format(row['Id']);
-                        }
-                        if (editPermission ) {
-                            html += ' | ';
-                        }
-                        if (editPermission) {
-                            html += ' <a href="javascript:;" onclick="deleteData(\'{0}\')">删除</a>'.format(row['Id']);
-                        }
-                        return html;
-                    } }
+                { title: 'ProCode', field: 'ProCode', width: 200 },
+                { title: 'PMR_No', field: 'PMR_No', width: 200 },
+                { title: 'MatNo', field: 'MatNo', width: 200 },
+                { title: 'MatName', field: 'MatName', width: 200 },
+                { title: 'GuiGe', field: 'GuiGe', width: 200 },
+                { title: 'UnitNo', field: 'UnitNo', width: 200 },
+                { title: 'Quantity', field: 'Quantity', width: 200 }
             ]],
             onBeforeLoad: function (param) {
 
@@ -107,10 +82,10 @@
         $('#add').click(function () {
             dialogOpen({
                 id: 'form',
-                title: '创建模板',
+                title: '添加数据',
                 width: formWidth,
                 height: formHeight,
-                url: rootUrl + 'Sto_ProManage/Pro_Template/Form',
+                url: rootUrl + 'Sto_ProManage/Pro_MaterialRequisitionItem/Form',
             });
         });
 
@@ -122,8 +97,14 @@
                 return;
             }
             var id = selected[0].Id;
-            editData(id);
 
+            dialogOpen({
+                id: 'form',
+                title: '修改数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_ProManage/Pro_MaterialRequisitionItem/Form?id=' + id,
+            });
         });
 
         //删除数据
@@ -138,7 +119,7 @@
             });
 
             dialogComfirm('确认删除吗？', function () {
-                $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+                $.postJSON(rootUrl + 'Sto_ProManage/Pro_MaterialRequisitionItem/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
                     if (resJson.Success) {
                         $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
                         $('#dataTable').datagrid('reload');
@@ -151,30 +132,4 @@
             });
         });
     });
-
-    function editData(id) {
-        dialogOpen({
-            id: 'form',
-            title: '修改模板',
-            width: formWidth,
-            height: formHeight,
-            url: rootUrl + 'Sto_ProManage/Pro_Template/Form/' + id,
-        });
-    }
-
-    function deleteData(id) {
-        var ids = [id];
-        dialogComfirm('确认删除吗？', function () {
-            $.postJSON(rootUrl + 'Sto_ProManage/Pro_Template/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
-                if (resJson.Success) {
-                    $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
-                    $('#dataTable').datagrid('reload');
-                    dialogMsg('删除成功!');
-                }
-                else {
-                    dialogError(resJson.Msg);
-                }
-            });
-        });
-    }
 </script>

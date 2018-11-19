@@ -82,9 +82,15 @@
     <Compile Include="Sto_BaseInfo\Sto_StoreUnitBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_SupplierBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_UnitBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_GetMaterialBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_MaterialRequisitionBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_MaterialRequisitionItemBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_ProjectBusiness.cs" />
+    <Compile Include="Sto_ProManage\Pro_ProjectMaterielBusiness.cs" />
     <Compile Include="Sto_ProManage\Pro_TemplateBusiness.cs" />
     <Compile Include="Sto_ProManage\Pro_TemplateItemBusiness.cs" />
     <Compile Include="Sto_ProManage\Pro_TemplateModelCache.cs" />
+    <Compile Include="Sto_ProManage\Pro_UseMaterielBusiness.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

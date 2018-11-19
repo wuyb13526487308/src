@@ -1,0 +1,223 @@
+@using Coldairarrow.Entity.Sto_ProManage;
+@using Coldairarrow.Util;
+@using Coldairarrow.Business.Base_SysManage;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Coldairarrow.Business.Sto_ProManage.MaterialRequisitionModel)Model;
+
+    var objStr = Html.Raw(obj.ToJson());
+
+    var objTemplateItemStr = Html.Raw(obj.MReqItemList.ToJson());
+
+    var strStatus = "-";
+    if (obj.Status == 0) {
+        strStatus = "创建";
+    }
+    else if (obj.Status == 1){
+        strStatus = "已领料";
+    }
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>项目编号</th>
+                <td>
+                    <input name="ProCode" value="@obj.ProCode" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>项目名称</th>
+                <td>
+                    <input name="ProName" value="@obj.ProName" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>领料单编号</th>
+                <td>
+                    <input name="PMR_No" value="@obj.PMR_No" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>申请人</th>
+                <td>
+                    <input name="Creator" value="@obj.Creator" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>申请时间</th>
+                <td>
+                    <input name="CreateDate" value="@obj.CreateDate" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>状态</th>
+                <td>
+                    <input name="Status" value="@strStatus" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</form>
+<div style="height:350px">
+    <div id="dataTable">
+    </div>
+</div>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+    var theMaterialItems = @objTemplateItemStr;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theMaterialItems,
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            //height:300,
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: '材料编号', field: 'MatNo', width: 50 },
+                { title: '材料名称', field: 'MatName', width: 80 },
+                { title: '单位', field: 'UnitNo', width: 60 },
+                { title: '规格', field: 'GuiGe', width: 60 },
+                { title: '数量', field: 'Quantity', width: 80, editor: 'numberbox' },
+                {
+                    title: '操作', field: '_', width: 80, fixed: true, formatter: function (value, row) {
+                        var html = '';
+                        html += ' <a href="javascript:;" onclick="removeRow(\'{0}\')">删除</a>'.format(row['Id']);
+                        return html;
+                    }
+                }
+            ]],
+            onClickCell: function (index, field) {
+                onClickCell(index, field);
+            },
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+
+    $(function () {
+        initTable();
+
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+            //保存申请单的修改（包括：申请单数量修改、物料条目删除)
+            //var formValues = $('#dataForm').getValues();
+            //$.extend(theEntity, formValues);
+
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_MaterialRequisition/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+
+        $('#closeForm').click(function () {
+
+            $.ajax({
+                type: 'get',
+                url: '',
+                data: {},
+                success: function (data, status) {
+
+                }
+            });
+            parent.dialogClose('form');
+        });
+    });
+
+
+    //如下代码
+    $.extend($.fn.datagrid.methods, {
+        editCell: function (jq, param) {
+            return jq.each(function () {
+                var opts = $(this).datagrid('options');
+                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor1 = col.editor;
+                    if (fields[i] != param.field) {
+                        col.editor = null;
+                    }
+                }
+                $(this).datagrid('beginEdit', param.index);
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor = col.editor1;
+                }
+            });
+        }
+    });
+
+    var editIndex = undefined;
+    function endEditing() {
+        if (editIndex == undefined) { return true }
+        if ($('#dataTable').datagrid('validateRow', editIndex)) {
+            $('#dataTable').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index, field) {
+        if (endEditing()) {
+            $('#dataTable').datagrid('selectRow', index)
+                .datagrid('editCell', { index: index, field: field });
+            editIndex = index;
+        }
+    }
+
+    //移除行
+    function removeRow(id) {
+        //移除行,记录到服务端缓存中
+        $.ajax({
+            type: 'get',
+            url: '/Sto_ProManage/Pro_MaterialRequisition/RemoveRowToCached',
+            data: { mrId: theEntity.Id, itemId:id},
+            success: function (data, status) {
+                if (status == "success") {
+                    var index = 0;
+                    theMaterialItems.forEach(function (item) {
+                        if (item.Id == id) {
+                            theMaterialItems.splice(index, 1);
+                        }
+                        index++;
+                    });
+                    initTable();
+                }
+            }
+        });
+    }
+
+</script>

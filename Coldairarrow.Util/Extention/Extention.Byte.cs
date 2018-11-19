@@ -12,6 +12,7 @@ namespace Coldairarrow.Util
     /// </summary>
     public static partial class Extention
     {
+
         /// <summary>
         /// byte[]转string
         /// 注：默认使用UTF8编码

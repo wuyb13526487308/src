@@ -1,0 +1,228 @@
+@using Coldairarrow.Entity.Sto_ProManage;
+@using Coldairarrow.Util;
+@using Coldairarrow.Business.Base_SysManage;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Pro_ProjectMateriel)Model;
+    var objStr = Html.Raw(obj.ToJson());
+    var items = new List<Pro_UseMateriel>();
+
+    var objTemplateItemStr = Html.Raw(items.ToJson());
+
+    var projectList = "[]";
+    var templateId = "[]";
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>工程项目</th>
+                <td>
+                    <input id="ProCode" name="ProCode" class="easyui-combobox" data-options="
+                        width:300,
+                        valueField: 'ProCode',
+                        textField: 'ProName',
+                        multiple:false,
+                        value:@projectList,
+                        url: '@Url.Content("~/")Sto_ProManage/Pro_Project/GetNormalProjectList'
+                    ">
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <th>物料模板</th>
+                <td>
+                    <input id="TemplateId" name="TemplateId" class="easyui-combobox" data-options="
+                        width:300,
+                        valueField: 'Id',
+                        textField: 'TemplateName',
+                        multiple:false,
+                        value:@templateId,
+                        url: '@Url.Content("~/")Sto_ProManage/Pro_Template/GetAllDataList'
+                    ">
+                </td>
+                <th>生成倍数</th>
+                <td>
+                    <input name="CreateCount" value="1" class="easyui-textbox" data-options="width:'60px',required:true">
+                    <a id="makeMaterial" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">生成</a>
+                    <input name="CreateRequisition" type="checkbox" checked/>申请领料
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div style="height:350px">
+    <div id="dataTable">
+    </div>
+</div>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    var theMaterialItems = @objTemplateItemStr;
+    var login = '@Base_UserBusiness.GetCurrentUser().RealName';
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theMaterialItems,
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            //height:300,
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: '材料编号', field: 'MatNo', width:50 },
+                { title: '材料名称', field: 'MatName', width: 80 },
+                { title: '单位', field: 'UnitNo', width: 60 },
+                { title: '规格', field: 'GuiGe', width: 60 },
+                { title: '数量', field: 'Quantity', width: 80, editor: 'numberbox' },
+                { title: '操作', field: '_', width: 80, fixed: true, formatter: function (value, row) {
+                    var html = '';
+                    html += ' <a href="javascript:;" onclick="removeRow(\'{0}\')">删除</a>'.format(row['Id']);
+                    return html;
+                }}
+            ]],
+            onClickCell: function (index, field) {
+                onClickCell(index, field);
+            },
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+
+    $(function () {
+
+        initTable();
+
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+
+            //创建实体
+            var theData = {
+                ProCode: theEntity.ProCode,
+                Creator: login,
+                MaterielList: theMaterialItems
+            };
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_ProjectMateriel/AddMateriel', theData, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+
+        $('#makeMaterial').click(function () {
+            //生成材料列表
+            var theParam = { ProCode: "", TemplateId: "", CreateCount: 1, CreateRequisition: false };
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theParam, formValues);
+
+            if (theParam.ProCode == undefined || theParam.ProCode == null || theParam.ProCode == "" ||
+                theParam.TemplateId == undefined || theParam.TemplateId == null || theParam.TemplateId == "" ||
+                theParam.CreateCount == undefined || theParam.CreateCount == null || theParam.CreateCount == "" ) {
+                parent.dialogMsg('请选择项目和模板类型!');
+                return;
+            }
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_ProjectMateriel/CreateTempMaterialList', theParam, function (resJson) {
+                theMaterialItems = [];
+                resJson.forEach(function (currentValue) {
+                    theMaterialItems.push(currentValue);
+                });
+                initTable();
+            });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+    });
+
+    //如下代码
+    $.extend($.fn.datagrid.methods, {
+        editCell: function (jq, param) {
+            return jq.each(function () {
+                var opts = $(this).datagrid('options');
+                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor1 = col.editor;
+                    if (fields[i] != param.field) {
+                        col.editor = null;
+                    }
+                }
+                $(this).datagrid('beginEdit', param.index);
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor = col.editor1;
+                }
+            });
+        }
+    });
+
+    var editIndex = undefined;
+    function endEditing() {
+        if (editIndex == undefined) { return true }
+        if ($('#dataTable').datagrid('validateRow', editIndex)) {
+            $('#dataTable').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index, field) {
+        if (endEditing()) {
+            $('#dataTable').datagrid('selectRow', index)
+                .datagrid('editCell', { index: index, field: field });
+            editIndex = index;
+        }
+    }
+
+    //移除行
+    function removeRow(id) {
+        var index = 0;
+        theMaterialItems.forEach(function(item) {
+            if (item.Id == id) {
+                theMaterialItems.splice(index, 1);
+            }
+            index++;               
+        });
+        initTable();
+    }
+
+</script>

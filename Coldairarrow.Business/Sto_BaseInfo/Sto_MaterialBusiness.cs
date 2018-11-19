@@ -59,6 +59,12 @@ namespace Coldairarrow.Business.Sto_BaseInfo
         //    return GetTheUser(userId).DepartmentIdList;
         //}
 
+        public Sto_Material QueryMaterial(string matNo)
+        {
+            var query = this.GetIQueryable().Where(p => p.MatNo == matNo).SingleOrDefault();
+            return query;
+        }
+
 
         /// <summary>
         /// Ìí¼ÓÊı¾İ

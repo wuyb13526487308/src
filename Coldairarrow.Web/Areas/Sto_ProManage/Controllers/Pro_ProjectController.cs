@@ -6,10 +6,9 @@ using System.Web.Mvc;
 
 namespace Coldairarrow.Web
 {
-    public class Pro_TemplateController : BaseMvcController
+    public class Pro_ProjectController : BaseMvcController
     {
-        Pro_TemplateBusiness _pro_TemplateBusiness = new Pro_TemplateBusiness();
-        static SystemCache _systemCache = new SystemCache();
+        Pro_ProjectBusiness _pro_ProjectBusiness = new Pro_ProjectBusiness();
 
         #region 视图功能
 
@@ -20,7 +19,7 @@ namespace Coldairarrow.Web
 
         public ActionResult Form(string id)
         {
-            var theData = id.IsNullOrEmpty() ? new Pro_TemplateModel() : _pro_TemplateBusiness.GetTheData(id);
+            var theData = id.IsNullOrEmpty() ? new Pro_Project() : _pro_ProjectBusiness.GetTheData(id);
 
             return View(theData);
         }
@@ -37,14 +36,15 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
         {
-            var dataList = _pro_TemplateBusiness.GetDataList(condition, keyword, pagination);
+            var dataList = _pro_ProjectBusiness.GetDataList(condition, keyword, pagination);
 
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 
-        public ActionResult GetAllDataList()
+        public ActionResult GetNormalProjectList()
         {
-            var dataList = _pro_TemplateBusiness.GetDataList("", "", new Pagination() { PageIndex =1,PageRows=int.MaxValue});
+            var dataList = _pro_ProjectBusiness.GetAllDataList();
+            //var q = from p in dataList where
             return Content(dataList.ToJson());
         }
 
@@ -52,22 +52,22 @@ namespace Coldairarrow.Web
 
         #region 提交数据
 
-
         /// <summary>
         /// 保存
         /// </summary>
         /// <param name="theData">保存的数据</param>
-        public ActionResult SaveData(Pro_TemplateModel theData)
+        public ActionResult SaveData(Pro_Project theData)
         {
             if(theData.Id.IsNullOrEmpty())
             {
                 theData.Id = Guid.NewGuid().ToSequentialGuid();
-
-                _pro_TemplateBusiness.AddData(theData);
+                theData.CreateDate = DateTime.Now;
+                theData.Status = "0";
+                _pro_ProjectBusiness.AddData(theData);
             }
             else
             {
-                _pro_TemplateBusiness.UpdateData(theData);
+                _pro_ProjectBusiness.UpdateData(theData);
             }
 
             return Success();
@@ -79,7 +79,7 @@ namespace Coldairarrow.Web
         /// <param name="theData">删除的数据</param>
         public ActionResult DeleteData(string ids)
         {
-            _pro_TemplateBusiness.DeleteData(ids.ToList<string>());
+            _pro_ProjectBusiness.DeleteData(ids.ToList<string>());
 
             return Success("删除成功！");
         }

@@ -79,8 +79,14 @@
     <Compile Include="Sto_BaseInfo\Sto_StoreUnit.cs" />
     <Compile Include="Sto_BaseInfo\Sto_Supplier.cs" />
     <Compile Include="Sto_BaseInfo\Sto_Unit.cs" />
+    <Compile Include="Sto_ProManage\Pro_GetMaterial.cs" />
+    <Compile Include="Sto_ProManage\Pro_MaterialRequisition.cs" />
+    <Compile Include="Sto_ProManage\Pro_MaterialRequisitionItem.cs" />
+    <Compile Include="Sto_ProManage\Pro_Project.cs" />
+    <Compile Include="Sto_ProManage\Pro_ProjectMateriel.cs" />
     <Compile Include="Sto_ProManage\Pro_Template.cs" />
     <Compile Include="Sto_ProManage\Pro_TemplateItem.cs" />
+    <Compile Include="Sto_ProManage\Pro_UseMateriel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

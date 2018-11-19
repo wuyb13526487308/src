@@ -1,0 +1,135 @@
+@using Coldairarrow.Entity.Sto_ProManage;
+@using Coldairarrow.Util;
+@using Coldairarrow.Business.Base_SysManage;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Pro_UseMateriel)Model;
+    var objStr = Html.Raw(obj.ToJson());
+
+    var projectList = "[]";
+    if (obj.ProCode != null || obj.ProCode != "")
+    {
+        projectList = $"['{obj.ProName}']";
+    }
+
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>项目编号</th>
+                <td>
+                    <input name="ProCode" id="ProCode" value="@obj.ProCode" class="easyui-textbox" disabled="disabled" data-options="width:'200px',required:true">
+                </td>
+                <th>工程项目</th>
+                <td>
+                    <input id="ProName" name="ProName" class="easyui-combobox" data-options="
+                        width:200,
+                        valueField: 'ProName',
+                        textField: 'ProName',
+                        multiple:false,
+                        value:@projectList,
+                        url: '@Url.Content("~/")Sto_ProManage/Pro_Project/GetNormalProjectList',
+                        onSelect:function(record){
+                           //alert(record.ProCode);
+                           $('#ProCode').textbox('setValue',record.ProCode);
+                        }
+                    ">
+                </td>
+            </tr>
+            <tr>
+                <th>材料编号</th>
+                <td>
+                    <input name="MatNo" id="MatNo" value="@obj.MatNo" class="easyui-searchbox" data-options="width:'200px',required:true">
+                </td>
+                <th>材料名称</th>
+                <td>
+                    <input name="MatName" id="MatName" value="@obj.MatName" class="easyui-textbox" disabled="disabled" data-options="width:'200px'">
+                </td>
+            </tr>
+            <tr>
+                <th>规格</th>
+                <td>
+                    <input name="GuiGe" id="GuiGe" value="@obj.GuiGe" class="easyui-textbox" disabled="disabled" data-options="width:'200px'">
+                </td>
+                <th>单位</th>
+                <td>
+                    <input name="UnitNo" id="UnitNo" value="@obj.UnitNo" class="easyui-textbox" disabled="disabled" data-options="width:'200px'">
+                </td>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <td>
+                    <input name="Quantity" id="Quantity" value="@obj.Quantity" class="easyui-numberbox" data-options="width:'200px',required:true,precision:2">
+                </td>
+                <th>用料日期</th>
+                <td>
+                    <input name="UseDate" value="@obj.UseDate" class="easyui-datebox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+    var operatorName = '@Base_UserBusiness.GetCurrentUser().RealName';
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            theEntity.Creator = operatorName;
+
+            $.postJSON(rootUrl + 'Sto_ProManage/Pro_UseMateriel/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+
+
+        $('#MatNo').textbox('textbox').keydown(function (e) {
+            if (e.keyCode == 13) {
+                //rootUrl + 'Sto_BaseInfo/Sto_Material/QueryByMatNo/' + $('#MatNo').val()
+                var matNo = $('#MatNo').val();
+                //alert('enter' + matNo);
+                $.getJSON(rootUrl + 'Sto_BaseInfo/Sto_Material/QueryByMatNo?matNo=' + matNo, function (resJson) {
+                    if (resJson == null) {
+                        alert('物料不存在');
+                        return;
+                    }
+                    //alert('enter' + resJson.MatNo);
+                    $('#MatName').textbox('setValue', resJson.MatName);
+                    $('#GuiGe').textbox('setValue', resJson.GuiGe);
+                    $('#UnitNo').textbox('setValue', resJson.UnitNo);
+                    $('#Quantity').next('span').find('input').focus();
+                });
+
+
+            }
+        });
+    });
+</script>
