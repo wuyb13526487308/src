@@ -1,0 +1,109 @@
+@using Coldairarrow.Entity.Sto_StockManage;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Sto_StockOut)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>OutNo</th>
+                <td>
+                    <input name="OutNo" value="@obj.OutNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>OutDate</th>
+                <td>
+                    <input name="OutDate" value="@obj.OutDate" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>OutOperID</th>
+                <td>
+                    <input name="OutOperID" value="@obj.OutOperID" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>
+                    <input name="State" value="@obj.State" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Auditor</th>
+                <td>
+                    <input name="Auditor" value="@obj.Auditor" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>AuditDate</th>
+                <td>
+                    <input name="AuditDate" value="@obj.AuditDate" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>OutType</th>
+                <td>
+                    <input name="OutType" value="@obj.OutType" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>ApplyNo</th>
+                <td>
+                    <input name="ApplyNo" value="@obj.ApplyNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>StoreId</th>
+                <td>
+                    <input name="StoreId" value="@obj.StoreId" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockOut/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

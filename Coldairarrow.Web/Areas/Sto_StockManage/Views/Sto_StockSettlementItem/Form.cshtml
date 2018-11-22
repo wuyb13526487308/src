@@ -1,0 +1,115 @@
+@using Coldairarrow.Entity.Sto_StockManage;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Sto_StockSettlementItem)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>SettNo</th>
+                <td>
+                    <input name="SettNo" value="@obj.SettNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>StoreId</th>
+                <td>
+                    <input name="StoreId" value="@obj.StoreId" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>MatNo</th>
+                <td>
+                    <input name="MatNo" value="@obj.MatNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>GuiGe</th>
+                <td>
+                    <input name="GuiGe" value="@obj.GuiGe" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>UnitNo</th>
+                <td>
+                    <input name="UnitNo" value="@obj.UnitNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>B_Price</th>
+                <td>
+                    <input name="B_Price" value="@obj.B_Price" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>B_Quantity</th>
+                <td>
+                    <input name="B_Quantity" value="@obj.B_Quantity" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>UpToTime</th>
+                <td>
+                    <input name="UpToTime" value="@obj.UpToTime" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>E_Quantity</th>
+                <td>
+                    <input name="E_Quantity" value="@obj.E_Quantity" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>E_Price</th>
+                <td>
+                    <input name="E_Price" value="@obj.E_Price" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockSettlementItem/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

@@ -91,6 +91,13 @@
     <Compile Include="Sto_ProManage\Pro_TemplateItemBusiness.cs" />
     <Compile Include="Sto_ProManage\Pro_TemplateModelCache.cs" />
     <Compile Include="Sto_ProManage\Pro_UseMaterielBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockInBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockInItemBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockOutBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockOutItemBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockSettlementBusiness.cs" />
+    <Compile Include="Sto_StockManage\Sto_StockSettlementItemBusiness.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

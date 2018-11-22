@@ -1,0 +1,97 @@
+@using Coldairarrow.Entity.Sto_StockManage;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Sto_StockOutItem)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>OutNo</th>
+                <td>
+                    <input name="OutNo" value="@obj.OutNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>MatNo</th>
+                <td>
+                    <input name="MatNo" value="@obj.MatNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>MatName</th>
+                <td>
+                    <input name="MatName" value="@obj.MatName" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>GuiGe</th>
+                <td>
+                    <input name="GuiGe" value="@obj.GuiGe" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>UnitNo</th>
+                <td>
+                    <input name="UnitNo" value="@obj.UnitNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>
+                    <input name="Price" value="@obj.Price" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>
+                    <input name="Quantity" value="@obj.Quantity" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockOutItem/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>

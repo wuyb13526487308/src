@@ -78,6 +78,13 @@
     <Build Include="dbo\Tables\Pro_ProjectMateriel.sql" />
     <Build Include="dbo\Tables\Pro_UseMateriel.sql" />
     <Build Include="dbo\Tables\Pro_GetMaterial.sql" />
+    <Build Include="dbo\Tables\Sto_Stock.sql" />
+    <Build Include="dbo\Tables\Sto_StockIn.sql" />
+    <Build Include="dbo\Tables\Sto_StockInItem.sql" />
+    <Build Include="dbo\Tables\Sto_StockOut.sql" />
+    <Build Include="dbo\Tables\Sto_StockOutItem.sql" />
+    <Build Include="dbo\Tables\Sto_StockSettlement.sql" />
+    <Build Include="dbo\Tables\Sto_StockSettlementItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="11.GasStoreDatabase.refactorlog" />

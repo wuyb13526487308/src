@@ -73,3 +73,43 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Pro_GetMaterial]'
 DROP TABLE [Pro_GetMaterial]
 ;
 GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_Stock]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_Stock]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockIn]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockIn]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockInItem]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockInItem]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockOut]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockOut]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockOutItem]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockOutItem]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockSettlement]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockSettlement]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_StockSettlementItem]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_StockSettlementItem]
+;
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id('[Sto_Material]') AND OBJECTPROPERTY(id, 'IsUserTable') = 1) 
+DROP TABLE [Sto_Material]
+;
+GO

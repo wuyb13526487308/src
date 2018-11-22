@@ -18,3 +18,7 @@ ALTER TABLE [Sto_Material]
  ADD CONSTRAINT [PK_Sto_Material]
 	PRIMARY KEY CLUSTERED ([Id])
 ;
+GO
+ALTER TABLE [Sto_Material] 
+ ADD CONSTRAINT [unique_Num] UNIQUE NONCLUSTERED ([MatNo])
+;

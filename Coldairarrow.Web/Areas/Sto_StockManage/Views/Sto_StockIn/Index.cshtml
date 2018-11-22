@@ -1,0 +1,330 @@
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    //导入权限检查
+    var proAddPermission = PermissionManage.OperatorHasPermissionValue("proMateriel.add");
+    var proEditPermission = PermissionManage.OperatorHasPermissionValue("proMateriel.edit");
+    var proDeletePermission = PermissionManage.OperatorHasPermissionValue("proMateriel.delete");
+
+
+}
+@section toolbar{
+    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">创建入库单</a>
+    <a id="auditor" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">审核</a>
+    <a id="un_auditor" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">反审核</a>
+
+    @*<a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>*@
+
+}
+@section search{
+    <div class="search_wrapper">
+        <div class="search_item">
+            <label class="search_label">查询类别</label>
+            <select name="condition" class="easyui-combobox" data-options="width:100">
+                <option value="">请选择</option>
+
+                <option value="InNo">入库单号</option>
+                <option value="InOperID">操作员</option>
+                <option value="Context">备注</option>
+                <option value="Auditor">审核人</option>
+                <option value="StoreId">仓库</option>
+            </select>
+            <input name="keyword" class="easyui-textbox" style="width:150px" />
+        </div>
+        <div class="search_submit">
+            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+
+        </div>
+    </div>
+}
+<div id="dataTable">
+</div>
+<script>
+    var addPermission = @proAddPermission.ToString().ToString().ToLower();
+    var editPermission =@proEditPermission.ToString().ToLower();//编辑权限
+    var deletePermission = @proDeletePermission.ToString().ToLower();
+
+
+    var rootUrl = '@Url.Content("~/")';
+    var formWidth = 750;
+    var formHeight = 520;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            url: rootUrl + 'Sto_StockManage/Sto_StockIn/GetDataList',
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+
+                { title: '入库单号', field: 'InNo', width: 200 },
+                { title: '入库日期', field: 'InDate', width: 200 },
+                { title: '操作员', field: 'InOperID', width: 200 },
+                { title: '备注', field: 'Context', width: 200 },
+                {
+                    title: '状态', field: 'State', width: 200, formatter: function (value, row) {
+                        var mapping = {// 预算  1 建设  2 已结算 3
+
+                            '0': '录入',
+                            '1': '已审核',
+                            '2': '作废'
+                        };
+                        return mapping[value];
+                    } },
+                { title: '审核人', field: 'Auditor', width: 200 },
+                { title: '审核日期', field: 'AuditDate', width: 200 },
+                {
+                    title: '所属仓库', field: 'StoreId', width: 200,
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            valueField: 'StoreNo',
+                            textField: 'StoreName',
+                            method: 'get',
+                            url: rootUrl + 'Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin',
+                            formatter: function (row) {
+                                alert(opts);
+                                var opts = $(this).combobox('options');
+                                return row[opts.textField];
+                            },
+                        }
+                    }
+                },
+                {
+                    title: '操作', field: '_', width: 150, fixed: true, formatter: function (value, row) {
+                        var html = '';
+                        if (editPermission) {
+                            html += '<a href="javascript:;" onclick="editData(\'{0}\')">编辑</a>'.format(row['Id']);
+                        }
+                        if (editPermission) {
+                            html += ' | ';
+                        }
+                        if (deletePermission) {
+                            html += ' <a href="javascript:;" onclick="deleteData(\'{0}\')">删除</a>'.format(row['Id']);
+                        }
+
+                        if (row.State == 0) {
+                            if (editPermission) {
+                                html += ' | <a href="javascript:;" onclick="auditorData(\'{0}\')">审核</a>'.format(row['Id']);
+                            }
+                        }
+                        else if (row.State == 1) {
+                            if (editPermission) {
+                                html += ' | <a href="javascript:;" onclick="un_auditorData(\'{0}\')">反审核</a>'.format(row['Id']);
+                            }
+                        }
+                        return html;
+                    }
+                }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    $(function () {
+        initTable();
+
+        //添加数据
+        $('#add').click(function () {
+            dialogOpen({
+                id: 'form',
+                title: '添加数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_StockManage/Sto_StockIn/Form',
+            });
+        });
+
+        //修改数据
+        $('#edit').click(function () {
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length || selected.length > 1) {
+                dialogError('请选择一条记录修改!');
+                return;
+            }
+            var id = selected[0].Id;
+
+            dialogOpen({
+                id: 'form',
+                title: '修改数据',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_StockManage/Sto_StockIn/Form?id=' + id,
+            });
+        });
+
+        //删除数据
+        $('#delete').click(function () {
+            var checked = $("#dataTable").datagrid("getChecked");
+            if (!checked || !checked.length) {
+                dialogError('请选择要删除的记录!');
+                return;
+            }
+            var ids = $.map(checked, function (item) {
+                return item['Id'];
+            });
+
+            dialogComfirm('确认删除吗？', function () {
+                $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+                    if (resJson.Success) {
+                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                        $('#dataTable').datagrid('reload');
+                        dialogMsg('删除成功!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+
+        //审核
+        $('#auditor').click(function () {
+            var checked = $("#dataTable").datagrid("getChecked");
+            if (!checked || !checked.length) {
+                dialogError('请选择要审核的入库单!');
+                return;
+            }
+
+            var ids = $.map(checked, function (item) {
+                return item['Id'];
+            });
+            dialogComfirm('确认审核吗？', function () {
+                $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/AuditorStockIn', { ids: JSON.stringify(ids) }, function (resJson) {
+                    if (resJson.Success) {
+                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                        $('#dataTable').datagrid('reload');
+                        dialogMsg('审核完成!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+
+        $('#un_auditor').click(function () {
+            var checked = $("#dataTable").datagrid("getChecked");
+            if (!checked || !checked.length) {
+                dialogError('请选择要反审核的入库单!');
+                return;
+            }
+
+            var ids = $.map(checked, function (item) {
+                return item['Id'];
+            });
+
+
+            dialogComfirm('确认审核吗？', function () {
+                $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/UnAuditorStockIn', { ids: JSON.stringify(ids) }, function (resJson) {
+                    if (resJson.Success) {
+                        $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                        $('#dataTable').datagrid('reload');
+                        dialogMsg('反审核完成!');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            });
+        });
+    });
+
+    function editData(id) {
+        dialogOpen({
+            id: 'form',
+            title: '修改数据',
+            width: formWidth,
+            height: formHeight,
+            url: rootUrl + 'Sto_StockManage/Sto_StockIn/Form?id=' + id,
+        });
+    }
+
+    function deleteData(id) {
+        var ids = [id];
+        var data = $("#dataTable").datagrid("getData");
+        var selectData;
+        data.rows.forEach(function (item, index) {
+            if (item.Id == id) {
+                selectData = item;               
+            }            
+        });
+
+        dialogComfirm('删除入库单:[' + selectData.InNo + '],确认删除吗？', function () {
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
+                if (resJson.Success) {
+                    $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                    $('#dataTable').datagrid('reload');
+                    dialogMsg('删除成功!');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    }
+
+    function auditorData(id) {
+        var ids = [id];
+        var data = $("#dataTable").datagrid("getData");
+        var selectData;
+        data.rows.forEach(function (item, index) {
+            if (item.Id == id) {
+                selectData = item;
+            }
+        });
+        dialogComfirm('确认审核入库单:[' + selectData.InNo + ']吗？', function () {
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/AuditorStockIn', { ids: JSON.stringify(ids) }, function (resJson) {
+                if (resJson.Success) {
+                    $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                    $('#dataTable').datagrid('reload');
+                    dialogMsg('审核完成!');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    }
+
+    function un_auditorData(id) {
+        var ids = [id];
+        var data = $("#dataTable").datagrid("getData");
+        var selectData;
+        data.rows.forEach(function (item, index) {
+            if (item.Id == id) {
+                selectData = item;
+            }
+        });
+        dialogComfirm('确认反审核入库单:[' + selectData.InNo + ']吗？', function () {
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/UnAuditorStockIn', { ids: JSON.stringify(ids) }, function (resJson) {
+                if (resJson.Success) {
+                    $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
+                    $('#dataTable').datagrid('reload');
+                    dialogMsg('反审核完成!');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    }
+</script>

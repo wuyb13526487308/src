@@ -1,0 +1,296 @@
+@using Coldairarrow.Entity.Sto_StockManage;
+@using Coldairarrow.Business.Base_SysManage;
+@using Coldairarrow.Business.Sto_StockManage;
+@using Coldairarrow.Util;
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (StockInModel)Model;
+    var objStr = Html.Raw(obj.ToJson());
+
+    if (obj.InOperID == null)
+    {
+        obj.InOperID = Base_UserBusiness.GetCurrentUser().RealName;
+    }
+
+    var objStockItemStr = Html.Raw(obj.StockInItems.ToJson());
+    //仓库列表
+    string storeIdList = "[]";
+    if (!obj.Id.IsNullOrEmpty())
+    {
+        storeIdList = string.Format("['{0}']", obj.StoreId);
+    }
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>入库单号</th>
+                <td>
+                    <input name="InNo" value="@obj.InNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+                <th>入库日期</th>
+                <td>
+                    <input name="InDate" value="@obj.InDate" class="easyui-datebox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>仓库</th>
+                <td>
+                    <input name="StoreId" value="@obj.StoreId" class="easyui-combobox" editable='false' data-options="
+                        width:200,
+                        valueField: 'StoreNo',
+                        textField: 'StoreName',
+                        multiple:false,
+                        required:true,
+                        value:@storeIdList,
+                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin'
+                    ">
+                </td>
+                <th>操作员</th>
+                <td>
+                    <input name="InOperID" value="@obj.InOperID" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td>
+                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
+                </td>
+                <th>状态</th>
+                <td>
+                    <input name="State" value="@obj.State" class="easyui-combobox" readonly="readonly" editable="false" data-options="
+		                valueField: 'value',
+		                textField: 'label',
+		                data: [{
+			                label: '录入',
+			                value: '0'
+		                },{
+			                label: '已审核',
+			                value: '1'
+		                },{
+			                label: '作废',
+			                value: '2'
+		                }]" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div style="height:300px">
+    <div id="dataTable">
+    </div>
+</div>
+<div id="tb" style="height:auto">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>
+</div>
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+    var theStockItems =@objStockItemStr;
+    var stockInState = @obj.State;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theStockItems,
+            method: 'POST',
+            singleSelect: true,
+            toolbar: '#tb',
+            idField: 'Id',
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 100,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+                {
+                    title: '材料编码', field: 'MatNo', width: 200, editor: {
+                        type: 'textbox', options: {
+                            //required: true
+                        }
+                    }
+                },
+                { title: '材料名称', field: 'MatName', width: 200 },
+                { title: '规格', field: 'GuiGe', width: 200 },
+                { title: '单位', field: 'UnitNo', width: 200 },
+                {
+                    title: '价格', field: 'Price', width: 200, editor: {
+                        type: 'textbox', options: {
+                            //required: true
+                        }
+                    }
+                },
+                {
+                    title: '数量', field: 'Quantity', width: 200, editor: {
+                        type: 'textbox', options: {
+                            //required: true
+                        }
+                    }
+                },
+                { title: '备注', field: 'Context', width: 200, editor: 'textbox'  }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onClickCell: onClickCell,
+            onEndEdit: onEndEdit,
+            onBeforeSelect: function () {
+                return false;
+            },
+            onBeginEdit: function (rowIndex, rowData) {
+                var ed = $('#dataTable').datagrid('getEditors', rowIndex);
+                ed[0].target.numberbox({
+                    onChange: function (newValue, oldValue) {
+                        queryMaterial(rowIndex,rowData, newValue, ed);
+                        //alert('newValue=' + newValue + ' oldValue=' + oldValue);
+                    }
+                });
+            }
+        });
+    }
+
+    function queryMaterial(rowIndex,rowData, matNo, editor) {
+        $.getJSON(rootUrl + 'Sto_BaseInfo/Sto_Material/QueryByMatNo?matNo=' + matNo, function (resJson) {
+            if (resJson == null) {
+                alert('物料不存在');
+                return;
+            }
+            rowData.MatNo = matNo;
+            rowData.MatName = resJson.MatName;
+            rowData.GuiGe = resJson.GuiGe;
+            rowData.UnitNo = resJson.UnitNo;
+
+            accept();
+            $('#dataTable').datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
+            //$(editor[1].target).next('span').find('input').focus();
+            $(editor[1].target).focus();
+        });
+    }
+
+    $(function () {
+        initTable();
+        if (stockInState != 0) {
+            $('#saveForm').linkbutton('disable');
+        }
+        else {
+            $('#saveForm').click(function () {
+                if (!$('#dataForm').form('enableValidation').form('validate'))
+                    return;
+
+                accept();
+
+                var formValues = $('#dataForm').getValues();
+                $.extend(theEntity, formValues);
+                theEntity.StockInItems = theStockItems;
+
+                //在这里检查价格和数量是否录入
+                var isOk = true;
+                theStockItems.forEach(function (item, index) {
+                    if (item.MatNo == '')
+                        isOk = false;
+                    if (item.Price == '')
+                        isOk = false;
+                    if (item.Quantity == '')
+                        isOk = false;
+                });
+                if (!isOk) {
+                    alert('价格或数量没有录入，请补充完整。');
+                    return;
+                }
+                //alert(JSON.stringify(theEntity));
+
+                $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockIn/SaveData', theEntity, function (resJson) {
+                    if (resJson.Success) {
+                        parent.$('#dataTable').datagrid('reload');
+                        parent.dialogMsg('保存成功!');
+                        parent.dialogClose('form');
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            }); 
+        }
+
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+    });
+
+    var editIndex = undefined;
+    function endEditing() {
+        if (editIndex == undefined) { return true }
+        if ($('#dataTable').datagrid('validateRow', editIndex)) {
+            $('#dataTable').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index, field) {
+        if (editIndex != index) {
+            if (endEditing()) {
+                $('#dataTable').datagrid('selectRow', index).datagrid('beginEdit', index);
+                var ed = $('#dataTable').datagrid('getEditor', { index: index, field: field });
+                if (ed) {
+                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                }
+                editIndex = index;
+            } else {
+                setTimeout(function () {
+                    $('#dataTable').datagrid('selectRow', editIndex);
+                }, 0);
+            }
+        }
+    }
+    function onEndEdit(index, row) {
+        //var ed = $(this).datagrid('getEditor', {
+        //    index: index,
+        //    field: 'productid'
+        //});
+    }
+    function append() {
+        if (endEditing()) {
+
+            $('#dataTable').datagrid('appendRow', { MatNo: '', MatName: '', GuiGe: '', UnitNo: '', Price: '', Quantity: '', Context: '' });
+            editIndex = $('#dataTable').datagrid('getRows').length - 1;
+            $('#dataTable').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
+        }
+    }
+
+    function removeit() {
+        if (editIndex == undefined) { return }
+        $('#dataTable').datagrid('cancelEdit', editIndex)
+            .datagrid('deleteRow', editIndex);
+        editIndex = undefined;
+    }
+    function accept() {
+        if (endEditing()) {
+            $('#dataTable').datagrid('acceptChanges');
+        }
+    }
+    function reject() {
+        $('#dataTable').datagrid('rejectChanges');
+        editIndex = undefined;
+    }
+
+</script>
