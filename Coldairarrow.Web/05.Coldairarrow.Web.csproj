@@ -733,6 +733,7 @@
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockIn\Index.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_Stock\Form.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_Stock\Index.cshtml" />
+    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\FormPro.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
