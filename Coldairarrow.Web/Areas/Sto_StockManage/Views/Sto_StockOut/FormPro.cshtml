@@ -1,104 +1,208 @@
 @using Coldairarrow.Entity.Sto_StockManage;
 @using Coldairarrow.Util;
+@using Coldairarrow.Business.Sto_ProManage;
 
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
 
-    var obj = (Sto_StockOut)Model;
+    var obj = (Coldairarrow.Business.Sto_ProManage.MaterialRequisitionModel)Model;
+
     var objStr = Html.Raw(obj.ToJson());
+
+    var objTemplateItemStr = Html.Raw(obj.MReqItemList.ToJson());
+
+    var strStatus = "-";
+    if (obj.Status == 0)
+    {
+        strStatus = "创建";
+    }
+    else if (obj.Status == 1)
+    {
+        strStatus = "已领料";
+    }
+    //仓库列表
+    string storeIdList = "[]";
+    if (!obj.Id.IsNullOrEmpty())
+    {
+        //storeIdList = string.Format("['{0}']", obj.StoreId);
+    }
 }
 @* 工程领料界面 *@
-
 <form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
     <table class="table_base">
         <colgroup>
             <col style="width:80px;" />
         </colgroup>
         <tbody>
-            
             <tr>
-                <th>OutNo</th>
+                <th>领料单编号</th>
                 <td>
-                    <input name="OutNo" value="@obj.OutNo" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input id="pmr_no" name="PMR_No" class="easyui-textbox" data-options="prompt:'输入领料单编号并回车',width:'200px',required:true">
+                </td>
+                <th>申请人</th>
+                <td>
+                    <input id="Creator" name="Creator" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>OutDate</th>
+                <th>申请时间</th>
                 <td>
-                    <input name="OutDate" value="@obj.OutDate" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input id="CreateDate" name="CreateDate" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>状态</th>
+                <td>
+                    <input id="Status" name="Status" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+
+            <tr>
+                <th>项目编号</th>
+                <td>
+                    <input id="ProCode" name="ProCode" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>项目名称</th>
+                <td>
+                    <input id="ProName" name="ProName" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
-                <th>OutOperID</th>
+                <th>仓库</th>
                 <td>
-                    <input name="OutOperID" value="@obj.OutOperID" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input id="StoreId" name="StoreId" class="easyui-combobox" editable='false' data-options="
+                        width:200,
+                        valueField: 'StoreNo',
+                        textField: 'StoreName',
+                        multiple:false,
+                        required:true,
+                        value:@storeIdList,
+                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin'
+                    ">
                 </td>
-            </tr>
-            <tr>
-                <th>Context</th>
+                <th>领料人</th>
                 <td>
-                    <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>State</th>
-                <td>
-                    <input name="State" value="@obj.State" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>Auditor</th>
-                <td>
-                    <input name="Auditor" value="@obj.Auditor" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>AuditDate</th>
-                <td>
-                    <input name="AuditDate" value="@obj.AuditDate" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>OutType</th>
-                <td>
-                    <input name="OutType" value="@obj.OutType" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>ApplyNo</th>
-                <td>
-                    <input name="ApplyNo" value="@obj.ApplyNo" class="easyui-textbox" data-options="width:'200px',required:true">
-                </td>
-            </tr>
-            <tr>
-                <th>StoreId</th>
-                <td>
-                    <input name="StoreId" value="@obj.StoreId" class="easyui-textbox" data-options="width:'200px',required:true">
+                    <input id="LLMan" name="LLMan" class="easyui-textbox"  data-options="width:'200px',required:true">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
+<div style="height:350px">
+    <div id="dataTable">
+    </div>
+</div>
 
 @section foottoolbar{
-    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">确认领料</a>
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 }
-
 <script>
     var rootUrl = '@Url.Content("~/")';
     var theEntity = @objStr;
 
+    var theMaterialItems = @objTemplateItemStr;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theMaterialItems,
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            //height:300,
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: '材料编号', field: 'MatNo', width: 50 },
+                { title: '材料名称', field: 'MatName', width: 80 },
+                { title: '单位', field: 'UnitNo', width: 60 },
+                { title: '规格', field: 'GuiGe', width: 60 },
+                { title: '数量', field: 'Quantity', width: 80, editor: 'numberbox' },
+                {
+                    title: '操作', field: '_', width: 80, fixed: true, formatter: function (value, row) {
+                        var html = '';
+                        html += ' <a href="javascript:;" onclick="removeRow(\'{0}\')">删除</a>'.format(row['Id']);
+                        return html;
+                    }
+                }
+            ]],
+            onClickCell: function (index, field) {
+                onClickCell(index, field);
+            },
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+
     $(function () {
+
+        initTable();
+
+        $('#pmr_no').textbox('textbox').keydown(function (e) {
+            if (e.keyCode == 13) {
+                var mrNo = $('#pmr_no').textbox('getValue');
+                $.getJSON(rootUrl + 'Sto_ProManage/Pro_MaterialRequisition/QueryRequistion?mrNo=' + mrNo, function (resJson) {
+                    if (resJson == null) {
+                        alert('领料单不存在');
+                        return;
+                    }
+                    theEntity = resJson;
+
+                    //alert('enter=' + resJson.PMR_No);
+                    theMaterialItems = resJson.MReqItemList;
+                    initTable();
+                    $('#Creator').textbox('setValue', resJson.Creator);
+                    $('#CreateDate').textbox('setValue', resJson.CreateDate);
+                    var status = '-';
+                    if (resJson.Status == 0) {
+                        status = "创建";
+                    }
+                    else if (resJson.Status == 1) {
+                        status = "已领料";
+                    }
+
+                    $('#Status').textbox('setValue', status);
+                    $('#ProCode').textbox('setValue', resJson.ProCode);
+                    $('#ProName').textbox('setValue', resJson.ProName);
+
+
+                    //$('#Quantity').next('span').find('input').focus();
+                });
+            }
+        });            
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+
         $('#saveForm').click(function () {
             if (!$('#dataForm').form('enableValidation').form('validate'))
                 return;
 
-            var formValues = $('#dataForm').getValues();
-            $.extend(theEntity, formValues);
-            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockOut/SaveData', theEntity, function (resJson) {
+            var theData = {
+                MaterialRequisitionModel: theEntity,
+                StoreId: $('#StoreId').combobox('getValue'),
+                Picker: $('#LLMan').textbox('getValue')
+            };
+
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockOut/ProMaterial', theData, function (resJson) {
                 if (resJson.Success) {
                     parent.$('#dataTable').datagrid('reload');
-                    parent.dialogMsg('保存成功!');
+                    parent.dialogMsg('出库成功!');
+                    //这里可以实现打印出库单
+
                     parent.dialogClose('form');
                 }
                 else {
@@ -107,4 +211,45 @@
             });
         });
     });
+
+    //如下代码
+    $.extend($.fn.datagrid.methods, {
+        editCell: function (jq, param) {
+            return jq.each(function () {
+                var opts = $(this).datagrid('options');
+                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor1 = col.editor;
+                    if (fields[i] != param.field) {
+                        col.editor = null;
+                    }
+                }
+                $(this).datagrid('beginEdit', param.index);
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor = col.editor1;
+                }
+            });
+        }
+    });
+
+    var editIndex = undefined;
+    function endEditing() {
+        if (editIndex == undefined) { return true }
+        if ($('#dataTable').datagrid('validateRow', editIndex)) {
+            $('#dataTable').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index, field) {
+        if (endEditing()) {
+            $('#dataTable').datagrid('selectRow', index)
+                .datagrid('editCell', { index: index, field: field });
+            editIndex = index;
+        }
+    }
 </script>

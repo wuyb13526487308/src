@@ -51,6 +51,23 @@ namespace Coldairarrow.Business.Sto_ProManage
             return mrd;
         }
 
+        /// <summary>
+        /// 根据申请单编码获取数申请单
+        /// </summary>
+        /// <param name="mrNo"></param>
+        /// <returns></returns>
+        public MaterialRequisitionModel GetMaterialRequistion(string mrNo)
+        {
+            MaterialRequisitionModel theData = null;// new MaterialRequisitionModel ();
+            var query = this.GetIQueryable().Where(p => p.PMR_No == mrNo).ToList();
+            if(query.Count > 0)
+            {
+                theData = query[0].ToJson().ToObject<MaterialRequisitionModel>();
+                theData.MReqItemList = new Pro_MaterialRequisitionItemBusiness().GetIQueryable().Where(p => p.MR_Id == theData.Id).ToList();
+            }
+            return theData;
+        }
+
         ///// <summary>
         ///// 添加数据
         ///// </summary>

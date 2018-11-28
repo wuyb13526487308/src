@@ -1,0 +1,111 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+
+    //仓库列表
+    string storeIdList = "[]";
+
+}
+
+@section toolbar{
+}
+@section search{
+    <div class="search_wrapper">
+        <div class="search_item">
+            <label class="search_label">仓库</label>
+            <input id="StoreId" name="StoreId" editable="false" class="easyui-combobox" data-options="
+                        width:150,
+                        valueField: 'StoreNo',
+                        textField: 'StoreName',
+                        multiple:false">
+
+            <label class="search_label">出库单号</label>
+            <input name="OutNo" class="easyui-textbox" style="width:150px" />
+            <label class="search_label">出库时间</label>
+            <input name="B_OutDate" type="text" class="easyui-datebox" style="width:110px"> 至
+            <input name="E_OutDate" type="text" class="easyui-datebox" style="width:110px">
+
+        </div>
+        <div class="search_submit">
+            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+        </div>
+    </div>
+}
+    <div id="dataTable">
+    </div>
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var formWidth = 800;
+    var formHeight = 570;
+    var storeList = [];
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            url: rootUrl + 'Sto_StockManage/Sto_StockOut/GetStockOutList',
+            method: 'POST',
+            //queryParams: { 'id': id },
+            //idField: 'Id',
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+                { title: '仓库', field: 'StoreName', width: 100 },
+                { title: '出库单号', field: 'OutNo', width: 200 },
+                { title: '出库时间', field: 'OutDate', width: 200 },
+                { title: '出库操作员', field: 'OutOperID', width: 100 },
+                { title: '材料编码', field:'MatNo',width:100},
+                { title: '材料名称', field: 'MatName', width: 100 },
+                { title: '规格', field: 'GuiGe', width: 100 },
+                { title: '单位', field: 'UnitNo', width: 100 },
+                { title: '价格', field: 'Price', width: 100 },
+                { title: '数量', field: 'Quantity', width: 100 },
+                {
+                    title: '出库类型', field: 'OutType', width: 100, formatter: function (value, row) {
+                        var mapping = {
+
+                            '0': '工程领料',
+                            '1': '',
+                            '2': ''
+                        };
+                        return mapping[value];
+                    }
+                },
+                { title: '申请编号', field: 'ApplyNo', width: 200 },
+                { title: '备注', field: 'Context', width: 100 }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    function loadStoreCombox() {
+        $.getJSON(rootUrl + 'Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin', function (resJson) {
+           storeList.push({ StoreNo: '', StoreName : '全部' });
+           resJson.forEach(function (item) { 
+               storeList.push({ StoreNo:item.StoreNo, StoreName:item.StoreName });
+           });
+           // alert('hello' + JSON.stringify(storeList));
+           $('#StoreId').combobox('loadData', storeList);
+       });
+
+    }
+
+    $(function () {
+        loadStoreCombox();
+        initTable();
+    });
+    </script>

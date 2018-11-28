@@ -43,6 +43,12 @@ namespace Coldairarrow.Web
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 
+
+        public ActionResult QueryRequistion(string mrNo)
+        {
+            return Content(_pro_MaterialRequisitionBusiness.GetMaterialRequistion(mrNo).ToJson());
+        }
+
         #endregion
 
         #region 提交数据

@@ -74,11 +74,11 @@
                 { title: '领料人', field: 'Picker', width: 200 },
                 {
                     title: '状态', field: 'Status', width: 200, formatter: function (value, row) {
-                        var mapping = {// 预算  1 建设  2 已结算 3
+                        var mapping = {
 
                             '0': '创建',
-                            '1': '已领料',
-                            '2': '-'
+                            '1': '',
+                            '2': '已领料'
                         };
                         return mapping[value];
                     }
@@ -86,6 +86,8 @@
                 {
                     title: '操作', field: '_', width: 100, fixed: true, formatter: function (value, row) {
                         var html = '';
+                        if (row.Status == 2)
+                            return html;
                         if (editPermission) {
                             html += '<a href="javascript:;" onclick="editData(\'{0}\')">编辑</a>'.format(row['Id']);
                         }

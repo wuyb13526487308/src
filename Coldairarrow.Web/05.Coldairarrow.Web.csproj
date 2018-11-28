@@ -720,7 +720,7 @@
     <Content Include="Areas\Sto_ProManage\Views\Pro_GetMaterial\Index.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOutItem\Form.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOutItem\Index.cshtml" />
-    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\Form.cshtml" />
+    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\FormShow.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\Index.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockSettlementItem\Form.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockSettlementItem\Index.cshtml" />
@@ -734,6 +734,7 @@
     <Content Include="Areas\Sto_StockManage\Views\Sto_Stock\Form.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_Stock\Index.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\FormPro.cshtml" />
+    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\StockOutList.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />

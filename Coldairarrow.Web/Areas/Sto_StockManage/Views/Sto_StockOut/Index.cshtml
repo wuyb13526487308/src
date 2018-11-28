@@ -16,10 +16,9 @@
 
                 <option value="OutNo">出库单号</option>
                 <option value="OutOperID">操作员</option>
-                <option value="Context">Context</option>
-                <option value="Auditor">Auditor</option>
-                <option value="ApplyNo">ApplyNo</option>
-                <option value="StoreId">StoreId</option>
+                <option value="Context">备注</option>
+                <option value="ApplyNo">申请单号</option>
+                <option value="StoreId">仓库编号</option>
             </select>
             <input name="keyword" class="easyui-textbox" style="width:150px" />
         </div>
@@ -32,8 +31,8 @@
 </div>
 <script>
     var rootUrl = '@Url.Content("~/")';
-    var formWidth = 500;
-    var formHeight = 550;
+    var formWidth = 800;
+    var formHeight = 570;
 
     function initTable() {
         $('#dataTable').datagrid({
@@ -57,14 +56,28 @@
 
                 { title: '出库单号', field: 'OutNo', width: 200 },
                 { title: '出库时间', field: 'OutDate', width: 200 },
-                { title: '出库操作员', field: 'OutOperID', width: 200 },
+                { title: '出库操作员', field: 'OutOperID', width: 100 },
+                { title: '审核人', field: 'Auditor', width: 100 },
+                {
+                    title: '出库类型', field: 'OutType', width: 100, formatter: function (value, row) {
+                        var mapping = {
+
+                            '0': '工程领料',
+                            '1': '',
+                            '2': ''
+                        };
+                        return mapping[value];
+                    }
+                },
+                { title: '申请编号', field: 'ApplyNo', width: 200 },
                 { title: '备注', field: 'Context', width: 200 },
-                { title: '状态', field: 'State', width: 200 },
-                { title: '审核人', field: 'Auditor', width: 200 },
-                { title: '审核时间', field: 'AuditDate', width: 200 },
-                { title: '出库类型', field: 'OutType', width: 200 },
-                { title: '领料单编号', field: 'ApplyNo', width: 200 },
-                { title: '仓库', field: 'StoreId', width: 200 }
+                { title: '仓库', field: 'StoreId', width: 200 },
+                {
+                    title: '操作', field: '_', width: 150, fixed: true, formatter: function (value, row) {
+                        var html = '<a href="javascript:;" onclick="showData(\'{0}\')">查看</a>'.format(row['Id']);
+                        return html;
+                    }
+                }
             ]],
             onBeforeLoad: function (param) {
 
@@ -75,8 +88,29 @@
         });
     }
 
+    function showData(id) {
+        dialogOpen({
+            id: 'form',
+            title: '出库单记录',
+            width: formWidth,
+            height: formHeight,
+            url: rootUrl + 'Sto_StockManage/Sto_StockOut/FormShow?id=' + id,
+        });
+    }
+
+
     $(function () {
         initTable();
+
+        $('#add_pro').click(function () {
+            dialogOpen({
+                id: 'form',
+                title: '工程领料',
+                width: formWidth,
+                height: formHeight,
+                url: rootUrl + 'Sto_StockManage/Sto_StockOut/FormPro',
+            });
+        });
 
         //添加数据
         $('#add').click(function () {

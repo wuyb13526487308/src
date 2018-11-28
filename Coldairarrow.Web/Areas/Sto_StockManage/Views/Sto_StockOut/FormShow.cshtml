@@ -1,0 +1,133 @@
+@using Coldairarrow.Business.Sto_StockManage;
+@using Coldairarrow.Util;
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (StockOutModel)Model;
+
+    var objStr = Html.Raw(obj.ToJson());
+
+    var objTemplateItemStr = Html.Raw(obj.StockOutItems.ToJson());
+    //仓库列表
+    string storeIdList = "[]";
+    if (!obj.Id.IsNullOrEmpty())
+    {
+        storeIdList = string.Format("['{0}']", obj.StoreId);
+    }
+
+    var strOutType = "工程领料";
+    if (obj.OutType == 0)
+    {
+        strOutType = "工程领料";
+    }
+
+}
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+
+            <tr>
+                <th>出库单编号</th>
+                <td>
+                    <input name="ProCode" value="@obj.OutNo" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>出库时间</th>
+                <td>
+                    <input name="ProName" value="@obj.OutDate" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>出库类型</th>
+                <td>
+                    <input name="ProName" value="@strOutType" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+                <th>申请单编号</th>
+                <td>
+                    <input name="PMR_No" value="@obj.ApplyNo" class="easyui-textbox" editable="false" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>仓库</th>
+                <td>
+                    <input id="StoreId" name="StoreId" class="easyui-combobox" editable='false' data-options="
+                        width:200,
+                        valueField: 'StoreNo',
+                        textField: 'StoreName',
+                        multiple:false,
+                        required:true,
+                        value:@storeIdList,
+                        url: '@Url.Content("~/")Sto_BaseInfo/Sto_Storage/GetDataList_NoPagin'
+                    ">
+                </td>
+                <th>领料人</th>
+                <td>
+                    <input id="LLMan" value="@obj.Context" name="LLMan" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</form>
+<div style="height:350px">
+    <div id="dataTable">
+    </div>
+</div>
+@section foottoolbar{
+    <a id="closeForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    var theMaterialItems = @objTemplateItemStr;
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            data: theMaterialItems,
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            //height:300,
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: '材料编号', field: 'MatNo', width: 50 },
+                { title: '材料名称', field: 'MatName', width: 80 },
+                { title: '单位', field: 'UnitNo', width: 60 },
+                { title: '规格', field: 'GuiGe', width: 60 },
+                { title: '单价', field: 'Price', width: 80 },
+                { title: '数量', field: 'Quantity', width: 80 },
+                { title: '备注', field: 'Context', width: 80 }
+            ]],
+            onClickCell: function (index, field) {
+                onClickCell(index, field);
+            },
+            onBeforeLoad: function (param) {
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    $(function () {
+        initTable();
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+
+    });
+</script>
