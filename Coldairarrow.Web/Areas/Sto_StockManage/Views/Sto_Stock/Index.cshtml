@@ -1,5 +1,8 @@
 @{
     Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    string storeIdList = "[]";
+
 }
 
 @section toolbar{
@@ -11,22 +14,36 @@
 @section search{
     <div class="search_wrapper">
         <div class="search_item">
-            <label class="search_label">查询类别</label>
-            <select name="condition" class="easyui-combobox" data-options="width:100">
-                <option value="">请选择</option>
-                
-                <option value="StoreId">StoreId</option>
-                <option value="StoreUnitId">StoreUnitId</option>
-                <option value="MatNo">MatNo</option>
-                <option value="MatName">MatName</option>
-                <option value="GuiGe">GuiGe</option>
-                <option value="UnitNo">UnitNo</option>
-                <option value="Price">Price</option>
-            </select>
-            <input name="keyword" class="easyui-textbox" style="width:150px" />
+            <label class="search_label">仓库</label>
+            <input id="StoreId" name="StoreId" editable="false" class="easyui-combobox" data-options="
+                        width:150,
+                        valueField: 'code',
+                        textField: 'name',
+                        multiple:false">
+            <label class="search_label">分类</label>
+            <input id="bigClass" name="BigClass" editable="false" class="easyui-combobox" data-options="
+                        width:150,
+                        valueField: 'code',
+                        textField: 'name',
+                        multiple:false">
+            <label class="search_label">规格</label>
+            <input id="guiGe" name="GuiGe" editable="false" class="easyui-combobox" data-options="
+                        width:150,
+                        valueField: 'code',
+                        textField: 'name',
+                        multiple:false">            
+            <label class="search_label">单位</label>
+            <input id="unitNo" name="UnitNo" editable="false" class="easyui-combobox" data-options="
+                        width:150,
+                        valueField: 'code',
+                        textField: 'name',
+                        multiple:false">
+            <label class="search_label">物料编码</label>
+            <input name="MatNo" class="easyui-textbox" style="width:150px" />
+
         </div>
         <div class="search_submit">
-            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchParamGrid(this,'#dataTable')">查询</a>
         </div>
     </div>
 }
@@ -59,14 +76,16 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: '仓库', field: 'StoreId', width: 200 },
-                { title: '库位', field: 'StoreUnitId', width: 200 },
-                { title: '材料编码', field: 'MatNo', width: 200 },
-                { title: '材料名称', field: 'MatName', width: 200 },
-                { title: '规格', field: 'GuiGe', width: 200 },
-                { title: '单位', field: 'UnitNo', width: 200 },
-                { title: '数量', field: 'Quantity', width: 200 },
-                { title: '单价', field: 'Price', width: 200 },
+                { title: '仓库', field: 'StoreId', width: 150 },
+                { title: '编码', field: 'MatNo', width: 100 },
+                { title: '名称', field: 'MatName', width: 200 },
+                { title: '分类', field: 'MatName', width: 200 },
+                { title: '规格', field: 'GuiGe', width: 100 },
+                { title: '单位', field: 'UnitNo', width: 100 },
+                { title: '数量', field: 'Quantity', width: 100 },
+                { title: '单价', field: 'Price', width: 100 },
+                { title: '上限', field: 'Price', width: 100 },
+                { title: '下限', field: 'Price', width: 100 },
                 { title: 'UpToTime', field: 'UpToTime', width: 200 }
             ]],
             onBeforeLoad: function (param) {
@@ -79,60 +98,13 @@
     }
 
     $(function () {
+        //加载仓库列表
+        loadCombox('store', 'StoreId');
+        loadCombox('bigClass', 'bigClass');
+        loadCombox('unit', 'unitNo');
+
         initTable();
-
-        ////添加数据
-        //$('#add').click(function () {
-        //    dialogOpen({
-        //        id: 'form',
-        //        title: '添加数据',
-        //        width: formWidth,
-        //        height: formHeight,
-        //        url: rootUrl + 'Sto_StockManage/Sto_Stock/Form',
-        //    });
-        //});
-
-        ////修改数据
-        //$('#edit').click(function () {
-        //    var selected = $("#dataTable").datagrid("getChecked");
-        //    if (!selected || !selected.length || selected.length > 1) {
-        //        dialogError('请选择一条记录修改!');
-        //        return;
-        //    }
-        //    var id = selected[0].Id;
-
-        //    dialogOpen({
-        //        id: 'form',
-        //        title: '修改数据',
-        //        width: formWidth,
-        //        height: formHeight,
-        //        url: rootUrl + 'Sto_StockManage/Sto_Stock/Form?id=' + id,
-        //    });
-        //});
-
-        ////删除数据
-        //$('#delete').click(function () {
-        //    var checked = $("#dataTable").datagrid("getChecked");
-        //    if (!checked || !checked.length) {
-        //        dialogError('请选择要删除的记录!');
-        //        return;
-        //    }
-        //    var ids = $.map(checked, function (item) {
-        //        return item['Id'];
-        //    });
-
-        //    dialogComfirm('确认删除吗？', function () {
-        //        $.postJSON(rootUrl + 'Sto_StockManage/Sto_Stock/DeleteData', { ids: JSON.stringify(ids) }, function (resJson) {
-        //            if (resJson.Success) {
-        //                $('#dataTable').datagrid('clearSelections').datagrid('clearChecked');
-        //                $('#dataTable').datagrid('reload');
-        //                dialogMsg('删除成功!');
-        //            }
-        //            else {
-        //                dialogError(resJson.Msg);
-        //            }
-        //        });
-        //    });
-        //});
     });
+
+
 </script>

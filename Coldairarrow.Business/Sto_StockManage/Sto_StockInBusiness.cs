@@ -48,19 +48,40 @@ namespace Coldairarrow.Business.Sto_StockManage
         /// <param name="newData">数据</param>
         public void AddData(StockInModel newData)
         {
+            Sto_StockBusiness _stockBus = new Sto_StockBusiness();
             if (newData.Id.IsNullOrEmpty())
             {
                 newData.Id = Guid.NewGuid().ToSequentialGuid();
                 //生成入库单编号
                 this.BeginTransaction();
                 this._StockInItemBusiness.BeginTransaction();
+                _stockBus.BeginTransaction();
 
                 foreach (Sto_StockInItem item in newData.StockInItems)
                 {
                     item.Id = Guid.NewGuid().ToSequentialGuid();
                     item.InNo = newData.InNo;
-                   
+                    //检查是否存在期初库存，如没有期初库存记录，默认添加期初为0的期初库存
+                   var count = _stockBus.GetIQueryable().Where(p => p.MatNo == item.MatNo).Count();
+                    if (count == 0)
+                    {
+                        Sto_Stock stock = new Sto_Stock()
+                        {
+                            Id = Guid.NewGuid().ToSequentialGuid(),
+                            MatNo = item.MatNo,
+                            GuiGe = item.GuiGe,
+                            MatName = item.MatName,
+                            Quantity = 0,
+                            StoreId = newData.StoreId,
+                            UnitNo = item.UnitNo,
+                            StoreUnitId = "",
+                            Price = item.Price,
+                            UpToTime = DateTime.Now
+                        };
+                        _stockBus.Insert(stock);
+                    }
                 }
+
                 this._StockInItemBusiness.BulkInsert(newData.StockInItems);
                 Sto_StockIn stockIn = new Sto_StockIn()
                 {
@@ -85,6 +106,10 @@ namespace Coldairarrow.Business.Sto_StockManage
 
                         throw new Exception("保存数据失败");
                     }
+                    else
+                    {
+                        _stockBus.EndTransaction();
+                    }
                 }                    
             }
             else
@@ -98,6 +123,8 @@ namespace Coldairarrow.Business.Sto_StockManage
         /// </summary>
         public void UpdateData(StockInModel theData)
         {
+            Sto_StockBusiness _stockBus = new Sto_StockBusiness();
+
             var oldStockInItems = this._StockInItemBusiness.GetIQueryable().Where(p => p.InNo == theData.InNo).ToList();
             var itemIds = (from p in oldStockInItems select p.Id).ToList<string>();
             List<string> thisItemIds = new List<string>();
@@ -114,14 +141,34 @@ namespace Coldairarrow.Business.Sto_StockManage
 
             this.BeginTransaction();
             this._StockInItemBusiness.BeginTransaction();
+            _stockBus.BeginTransaction();
 
-            foreach(Sto_StockInItem item in theData.StockInItems)
+            foreach (Sto_StockInItem item in theData.StockInItems)
             {
                 if (item.Id.IsNullOrEmpty())
                 {
                     item.Id = Guid.NewGuid().ToSequentialGuid();
                     item.InNo = theData.InNo;
                     this._StockInItemBusiness.Insert(item);
+                    //检查是否存在期初库存，如没有期初库存记录，默认添加期初为0的期初库存
+                    var count = _stockBus.GetIQueryable().Where(p => p.MatNo == item.MatNo).Count();
+                    if (count == 0)
+                    {
+                        Sto_Stock stock = new Sto_Stock()
+                        {
+                            Id = Guid.NewGuid().ToSequentialGuid(),
+                            MatNo = item.MatNo,
+                            GuiGe = item.GuiGe,
+                            MatName = item.MatName,
+                            Quantity = 0,
+                            StoreId = theData.StoreId,
+                            UnitNo = item.UnitNo,
+                            StoreUnitId = "",
+                            Price = item.Price,
+                            UpToTime = DateTime.Now
+                        };
+                        _stockBus.Insert(stock);
+                    }
                 }
                 else
                 {

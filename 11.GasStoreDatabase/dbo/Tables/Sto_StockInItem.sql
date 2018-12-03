@@ -8,7 +8,8 @@
 	[UnitNo] varchar(50),
 	[Price] money,
 	[Quantity] numeric(10,2) NOT NULL,
-	[Context] varchar(200)
+	[Context] varchar(200),
+	[BigClass] varchar(50)
 )
 ;
 GO

@@ -8,8 +8,9 @@
 	[GuiGe] varchar(50),
 	[UnitNo] varchar(50),
 	[Quantity] numeric(10,2),
-	[Price] varchar(50),
-	[UpToTime] datetime
+	[Price] NUMERIC(10, 2),
+	[UpToTime] datetime,
+	[BigClass] varchar(50)
 )
 ;
 GO

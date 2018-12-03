@@ -9,6 +9,18 @@ function searchGrid(searchBtnObj, gridSelector) {
     $(gridSelector).datagrid("load", params);
 }
 
+function searchParamGrid(searchBtnObj, gridSelector) {
+    var $wrapper = $(searchBtnObj).closest("div.search_wrapper");
+    if (!$wrapper || !$wrapper.length) {
+        return;
+    }
+    var obj =$wrapper.getValues();
+    var params = {
+        param: JSON.stringify(obj)
+    };
+    $(gridSelector).datagrid("load", params);
+}
+
 //搜索树表格
 function searchTreeGrid(searchBtnObj, gridSelector) {
     var $wrapper = $(searchBtnObj).closest("div.search_wrapper");
@@ -125,4 +137,16 @@ function init_yearMonth(id, value) {
             db.datebox('hidePanel').datebox('setValue', now.getFullYear() + '-' + (now.getMonth() + 1));
         });
     }
+}
+
+//在combobox控件中加载列表项
+function loadCombox(paramType, combox) {
+    $.getJSON(rootUrl + 'base/getparam?paramType=' + paramType, function (resJson) {
+        var storeList = [];
+        storeList.push({ code: '', name: '全部' });
+        resJson.forEach(function (item) {
+            storeList.push({ code: item.Code, name: item.Name });
+        });
+        $('#' + combox).combobox('loadData', storeList);
+    });
 }

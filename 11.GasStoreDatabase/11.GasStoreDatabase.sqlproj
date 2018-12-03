@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{e81ca93d-6b5f-41ce-a135-2bfd489520cf}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -60,6 +60,7 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="Scripts\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Pro_Template.sql" />
@@ -85,8 +86,12 @@
     <Build Include="dbo\Tables\Sto_StockOutItem.sql" />
     <Build Include="dbo\Tables\Sto_StockSettlement.sql" />
     <Build Include="dbo\Tables\Sto_StockSettlementItem.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Stock.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="11.GasStoreDatabase.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="11.GasStoreDatabase.publish.xml" />
   </ItemGroup>
 </Project>

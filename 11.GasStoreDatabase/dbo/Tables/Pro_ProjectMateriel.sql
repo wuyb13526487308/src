@@ -6,8 +6,8 @@
 	[MatNo] varchar(50) NOT NULL,
 	[MatName] varchar(50),
 	[GuiGe] varchar(50),
-	[UnitNo] VARCHAR(50),
-	[PlanQuantity] NUMERIC(10, 2),
+	[UnitNo] varchar(50),
+	[PlanQuantity] numeric(10,2),
 	[Context] varchar(500)
 )
 ;

@@ -3,9 +3,11 @@ using Coldairarrow.Business.Base_SysManage;
 using Coldairarrow.DataRepository;
 using Coldairarrow.Entity.Base_SysManage;
 using Coldairarrow.Util;
+using Coldairarrow.Web.App_Start;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -19,8 +21,12 @@ namespace Coldairarrow.Web
         /// </summary>
         protected void Application_Start()
         {
+            //注册接口路由
+            GlobalConfiguration.Configure(WebApiConfig.Register); 
+            
             //注册路由
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
 
             //注册全局异常捕捉器
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

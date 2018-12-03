@@ -57,5 +57,10 @@ namespace Coldairarrow.Entity.Sto_StockManage
         /// </summary>
         public String Context { get; set; }
 
+        /// <summary>
+        /// BigClass
+        /// </summary>
+        public String BigClass { get; set; }
+
     }
 }

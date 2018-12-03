@@ -55,12 +55,17 @@ namespace Coldairarrow.Entity.Sto_StockManage
         /// <summary>
         /// Price
         /// </summary>
-        public String Price { get; set; }
+        public Decimal? Price { get; set; }
 
         /// <summary>
         /// UpToTime
         /// </summary>
         public DateTime? UpToTime { get; set; }
+
+        /// <summary>
+        /// BigClass
+        /// </summary>
+        public String BigClass { get; set; }
 
     }
 }

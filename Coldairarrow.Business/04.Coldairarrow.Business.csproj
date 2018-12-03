@@ -75,6 +75,7 @@
     <Compile Include="Common\BusHelper.cs" />
     <Compile Include="Common\Operator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sto_BaseInfo\BaseParmBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_BigClassBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_MaterialBusiness.cs" />
     <Compile Include="Sto_BaseInfo\Sto_MaterialUnitBusiness.cs" />

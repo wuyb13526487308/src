@@ -11,7 +11,8 @@
 	[UpToTime] datetime NOT NULL,
 	[E_Quantity] datetime NOT NULL,
 	[E_Price] money NOT NULL,
-	[Context] varchar(200)
+	[Context] varchar(200),
+	[BigClass] varchar(50)
 )
 ;
 GO

@@ -31,13 +31,11 @@ namespace Coldairarrow.Web
         /// <summary>
         /// 获取数据列表
         /// </summary>
-        /// <param name="condition">查询类型</param>
-        /// <param name="keyword">关键字</param>
+        /// <param name="param">查询参数:json字符串格式：{StoreId:value1,BigClass:value2,GuiGe:value3,UnitNo:value4,MatNo:value5}</param>
         /// <returns></returns>
-        public ActionResult GetDataList(string condition, string keyword, Pagination pagination)
+        public ActionResult GetDataList(string param,  Pagination pagination)
         {
-            var dataList = _sto_StockBusiness.GetDataList(condition, keyword, pagination);
-
+            var dataList = _sto_StockBusiness.GetDataList(param, pagination);
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
         }
 

@@ -8,7 +8,8 @@
 	[State] smallint,
 	[Auditor] varchar(50),
 	[AuditDate] datetime,
-	[StoreId] varchar(50) NOT NULL
+	[StoreId] varchar(50) NOT NULL,
+	[StoreUnitId] varchar(50)
 )
 ;
 GO
