@@ -1,0 +1,27 @@
+﻿@model IList<Tweet>
+
+@{
+    ViewBag.Title = "DataBinding";
+}
+
+<script type="text/javascript">
+//<![CDATA[
+    var App = {
+        timeout: 30
+    };
+    function timer_Tick() {
+        App.timeout -= 1;
+        if (App.timeout < 1) {
+            App.timeout = 30;
+            gvDataBinding.PerformCallback();
+        }
+        $("#lblLoading").text("Refresh in " + App.timeout + " sec");
+    }
+    $(document).ready(function () {
+        window.setInterval(timer_Tick, 1000);
+    });
+// ]]>    
+</script>
+
+@Html.Partial("DataBindingPartial", Model)
+

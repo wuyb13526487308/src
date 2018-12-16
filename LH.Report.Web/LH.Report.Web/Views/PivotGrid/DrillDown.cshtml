@@ -1,0 +1,45 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+    var rowIndex;
+    var columnIndex;
+
+    function OnCloseDrillDownPopup(s, e) {
+        rowIndex = null;
+        columnIndex = null;
+    }
+    function OnPivotGridCellClick(s, e) {
+        rowIndex = e.RowIndex;
+        columnIndex = e.ColumnIndex;
+        
+        drillDownGridView.PerformCallback({ "IsResetGridViewPageIndex": true });
+        ShowDrillDownPopup();
+    }
+    function OnGridViewBeginCallback(s, e) {
+        e.customArgs["RowIndex"] = rowIndex;
+        e.customArgs["ColumnIndex"] = columnIndex;
+        pivotGrid.FillStateObject(e.customArgs);
+    }
+    function ShowDrillDownPopup() {
+        var mainElement = pivotGrid.GetMainElement();
+        drillDownPopup.ShowAtPos(ASPxClientUtils.GetAbsoluteX(mainElement), ASPxClientUtils.GetAbsoluteY(mainElement));
+    }
+</script>
+
+<label>Click on the Cell to Get the Drill Down Result.</label>
+@Html.Partial("DrillDownPivotGridPartial", Model)
+
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "drillDownPopup";
+        settings.Modal = true;
+        settings.AllowDragging = true;
+        settings.Left = 200;
+        settings.Top = 200;
+        settings.HeaderText = "Drill Down Window";
+        settings.ClientSideEvents.Closing = "OnCloseDrillDownPopup";
+
+        settings.SetContent(() => {
+            Html.RenderAction("DrillDownGridViewPartial");
+        });
+    }).GetHtml()

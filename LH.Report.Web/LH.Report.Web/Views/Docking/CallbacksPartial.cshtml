@@ -1,0 +1,27 @@
+﻿@{ string ownerZoneUID = (string)ViewData["OwnerZoneUID"]; }
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "employeesPanel";
+        settings.CallbackRouteValues = new { Controller = "Docking", Action = "CallbacksPartial" };
+        settings.PanelUID = "dockPanel";
+        settings.OwnerZoneUID = ownerZoneUID;
+        settings.HeaderText = "Employees";
+        settings.ShowCloseButton = false;
+        settings.Height = 410;
+        settings.Width = 340;
+        settings.LoadContentViaCallback = LoadPanelContentViaCallback.OnDockStateChange;
+        settings.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['OwnerZoneUID'] = s.GetZoneUID(); }";
+        if(ownerZoneUID != "") {
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                    Html.Partial(ownerZoneUID == "developmentDepartmentZone" ? "DevelopmentDepartmentEmployeesPartial" : "DesignDepartmentEmployeesPartial")
+                );
+            });
+        }
+        else {
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(Html.Partial("FloatModeContentPartial"));
+            });
+        }
+    }
+).GetHtml()

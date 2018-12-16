@@ -1,0 +1,61 @@
+﻿@functions{
+    void UpdateTimeRulers(MVCxScheduler scheduler){
+        UpdateClientTimeRuler(scheduler.OptionsBehavior.ClientTimeZoneId, scheduler.DayView);
+        UpdateClientTimeRuler(scheduler.OptionsBehavior.ClientTimeZoneId, scheduler.WorkWeekView);
+        UpdateServerTimeRuler(scheduler.DayView);
+        UpdateServerTimeRuler(scheduler.WorkWeekView);
+    }
+    void UpdateClientTimeRuler(string timeZoneId, DevExpress.Web.ASPxScheduler.DayView view) {
+        TimeRuler ruler = view.TimeRulers[2];
+        ruler.TimeZone.Id = timeZoneId;
+        ruler.Caption = String.Format("Client: {0}", TimeZoneInfo.FindSystemTimeZoneById(timeZoneId).DisplayName);
+    }
+    void UpdateServerTimeRuler(DevExpress.Web.ASPxScheduler.DayView view) {
+        view.TimeRulers[1].TimeZone.Id = SchedulerTimeZoneHelper.Instance.CurrentTimeZone.Id;
+    }
+}
+@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "TimeZonesPartial" };
+        settings.ActiveViewType = SchedulerViewType.Day;
+        settings.Start = new DateTime(2010, 7, 13);
+        settings.Width = Unit.Percentage(100);
+
+        settings.Views.DayView.ResourcesPerPage = 2;
+        settings.Views.DayView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+
+        MVCxTimeRulerCollection rules = new MVCxTimeRulerCollection();
+        rules.Add(ruler => {
+            ruler.TimeZone.Id = TimeZoneId.Greenwich;
+            ruler.Caption = "Greenwich";
+            ruler.ShowMinutes = true;
+        });
+        rules.Add(ruler => {
+            ruler.Caption = "Server";
+            ruler.ShowMinutes = true;
+        });
+        rules.Add(ruler => {
+            ruler.ShowMinutes = true;
+        });
+        settings.Views.DayView.TimeRulers.Assign(rules);
+        settings.Views.WorkWeekView.TimeRulers.Assign(rules);
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+
+        settings.PreRender = (sender, e) => {
+            MVCxScheduler scheduler = sender as MVCxScheduler;
+            if (scheduler != null)
+                UpdateTimeRulers(scheduler);
+        };
+        settings.AfterExecuteCallbackCommand = (sender, e) => {
+            MVCxScheduler scheduler = sender as MVCxScheduler;
+            if (scheduler != null)
+                UpdateTimeRulers(scheduler);
+        };
+    }).Bind(Model.Appointments, Model.Resources).GetHtml()

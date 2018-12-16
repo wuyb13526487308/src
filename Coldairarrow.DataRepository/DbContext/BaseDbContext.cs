@@ -108,7 +108,16 @@ namespace Coldairarrow.DataRepository
             List<Type> allTypes = new List<Type>();
             assemblies.ForEach(aAssembly =>
             {
-                allTypes.AddRange(aAssembly.GetTypes());
+                var _types = aAssembly.GetTypes();
+                try
+                {
+                    if (_types != null)
+                        allTypes.AddRange(_types);
+                }
+                catch(Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
             });
             List<Type> types = allTypes
                 .Where(x => x.GetCustomAttribute(typeof(TableAttribute), false) != null && x.FullName.Contains(GlobalSwitch.DefaultEntityNamespace))

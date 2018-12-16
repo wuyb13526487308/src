@@ -1,0 +1,19 @@
+﻿@if(!Utils.CurrentDemo.HideSourceCode) {
+    @Html.DevExpress().TabControl(
+        settings => {
+            settings.Name = "TabControl";
+            settings.EnableTheming = false;
+            settings.EnableClientSideAPI = true;
+            settings.ControlStyle.CssClass = "TabControl";
+            settings.ControlStyle.TabSpacing = 1;
+            settings.ControlStyle.Paddings.PaddingTop = 0; // TODO remove after light render will be introduced
+            settings.Styles.EnableDefaultAppearance = false;
+            settings.TabAlign = TabAlign.Right;
+
+            settings.Tabs.Add("Demo", "Demo");
+            settings.Tabs.Add("Code", "Code");
+
+            settings.ClientSideEvents.Init = "DXDemo.InitDemoView";
+            settings.ClientSideEvents.ActiveTabChanged = "DXDemo.DemoViewChanged";
+        }).GetHtml()
+}

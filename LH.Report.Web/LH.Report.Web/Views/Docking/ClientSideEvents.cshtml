@@ -1,0 +1,144 @@
+﻿@{
+    DockPanelClientSideEvents panelEvents = new DockPanelClientSideEvents();
+    panelEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+    panelEvents.BeforeDock = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeforeDock_for_Panel'); }";
+    panelEvents.AfterDock = "function(s, e) { DXEventMonitor.Trace(s, e, 'AfterDock_for_Panel'); }";
+    panelEvents.BeforeFloat = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeforeFloat_for_Panel'); }";
+    panelEvents.AfterFloat = "function(s, e) { DXEventMonitor.Trace(s, e, 'AfterFloat_for_Panel'); }";
+    panelEvents.StartDragging = "function(s, e) { DXEventMonitor.Trace(s, e, 'StartDragging_for_Panel'); }";
+    panelEvents.EndDragging = "function(s, e) { DXEventMonitor.Trace(s, e, 'EndDragging_for_Panel'); }";
+    panelEvents.CloseUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'CloseUp_for_Panel'); }";
+    panelEvents.PopUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'PopUp_for_Panel'); }";
+}
+<script type="text/javascript">
+// <![CDATA[
+    function ShowHiddenDockPanels() {
+        var panels = manager.GetPanels();
+        for(var i = 0; i < panels.length; i++)
+            panels[i].Show();
+        SetShowHiddenPanelsButtonEnable(false);
+    }
+    function SetShowHiddenPanelsButtonEnable(enable) {
+        btnShowHiddenPanels.SetEnabled(enable);
+    }
+    function GetPanelImageID(panel) {
+        return panel.panelUID + 'Image';
+    }
+    function SetImageUrl(imageId, url) {
+        $("#" + imageId).attr("src", url);
+    }
+
+    function OnAfterDock(panel) {
+        SetImageUrl(GetPanelImageID(panel), '../Content/Docking/Images/ClientSideEvents/Docked.png');
+    }
+    function OnAfterFloat(panel) {
+        SetImageUrl(GetPanelImageID(panel), '../Content/Docking/Images/ClientSideEvents/Float.png');
+    }
+    function OnStartPanelDraging(panel) {
+        SetImageUrl(GetPanelImageID(panel), '../Content/Docking/Images/ClientSideEvents/Undocked.png');
+    }
+    function OnEndPanelDraging(panel) {
+        if(panel.IsDocked())
+            OnAfterDock(panel)
+        else
+            OnAfterFloat(panel);
+    }
+// ]]>
+</script>
+@Html.DevExpress().Button(
+    settings => {
+        settings.Name = "btnShowHiddenPanels";
+        settings.Text = "Show hidden dock panels";
+        settings.ClientEnabled = false;
+        settings.ClientSideEvents.Click = "function(s, e) { ShowHiddenDockPanels(); }";
+    }
+).GetHtml()
+<br />
+<div style="padding-bottom: 20px;">
+    @Html.DevExpress().DockManager(
+        settings => {
+            settings.Name = "manager";
+            settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+            settings.ClientSideEvents.BeforeDock = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeforeDock_for_Manager'); }";
+            settings.ClientSideEvents.AfterDock = "function(s, e) { OnAfterDock(e.panel); DXEventMonitor.Trace(s, e, 'AfterDock_for_Manager'); }";
+            settings.ClientSideEvents.BeforeFloat = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeforeFloat_for_Manager'); }";
+            settings.ClientSideEvents.AfterFloat = "function(s, e) { OnAfterFloat(e.panel); DXEventMonitor.Trace(s, e, 'AfterFloat_for_Manager'); }";
+            settings.ClientSideEvents.StartPanelDragging = "function(s, e) { OnStartPanelDraging(e.panel); DXEventMonitor.Trace(s, e, 'StartPanelDragging_for_Manager'); }";
+            settings.ClientSideEvents.EndPanelDragging = "function(s, e) { OnEndPanelDraging(e.panel); DXEventMonitor.Trace(s, e, 'EndPanelDragging_for_Manager'); }";
+            settings.ClientSideEvents.PanelCloseUp = "function(s, e) { SetShowHiddenPanelsButtonEnable(true); DXEventMonitor.Trace(s, e, 'PanelCloseUp_for_Manager'); }";
+            settings.ClientSideEvents.PanelPopUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'PanelPopUp_for_Manager'); }";
+        }
+    ).GetHtml()
+    @Html.DevExpress().DockPanel(
+        settings => {
+            settings.Name = "panel1";
+            settings.PanelUID = "panel1";
+            settings.OwnerZoneUID = "zone";
+            settings.HeaderText = "Panel 1";
+            settings.VisibleIndex = 0;
+            settings.ClientSideEvents.Assign(panelEvents);
+            settings.Styles.Content.Paddings.Assign(new Paddings(13, 13, 13, 0));
+            settings.Height = 178;
+            settings.Width = 182;
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "<img id=\"panel1Image\" src=\"" + Url.Content("~/Content/Docking/Images/ClientSideEvents/Docked.png") + "\" alt=\"\"/>"
+                );
+            });
+        }
+    ).GetHtml()
+    @Html.DevExpress().DockPanel(
+        settings => {
+            settings.Name = "panel2";
+            settings.PanelUID = "panel2";
+            settings.OwnerZoneUID = "zone";
+            settings.HeaderText = "Panel 2";
+            settings.VisibleIndex = 1;
+            settings.ClientSideEvents.Assign(panelEvents);
+            settings.Styles.Content.Paddings.Assign(new Paddings(13, 13, 13, 0));
+            settings.Height = 178;
+            settings.Width = 182;
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "<img id=\"panel2Image\" src=\"" + Url.Content("~/Content/Docking/Images/ClientSideEvents/Docked.png") + "\" alt=\"\"/>"
+                );
+            });
+        }
+    ).GetHtml()
+    @Html.DevExpress().DockPanel(
+        settings => {
+            settings.Name = "panel3";
+            settings.PanelUID = "panel3";
+            settings.OwnerZoneUID = "zone";
+            settings.HeaderText = "Panel 3";
+            settings.VisibleIndex = 2;
+            settings.ClientSideEvents.Assign(panelEvents);
+            settings.Styles.Content.Paddings.Assign(new Paddings(13, 13, 13, 0));
+            settings.Height = 178;
+            settings.Width = 182;
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "<img id=\"panel3Image\" src=\"" + Url.Content("~/Content/Docking/Images/ClientSideEvents/Docked.png") + "\" alt=\"\"/>"
+                );
+            });
+        }
+    ).GetHtml()
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "zone";
+            settings.ZoneUID = "zone";
+            settings.PanelSpacing = 3;
+            settings.Width = 606;
+            settings.Height = 178;
+            settings.ControlStyle.CssClass = "zone";
+            settings.Orientation = DockZoneOrientation.Horizontal;
+            settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+            settings.ClientSideEvents.AfterDock = "function(s, e) { DXEventMonitor.Trace(s, e, 'AfterDock_for_Zone'); }";
+            settings.ClientSideEvents.BeforeDock = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeforeDock_for_Zone'); }";
+        }
+    ).GetHtml()
+</div>
+<br />
+@Html.Partial("EventMonitor")
+
+

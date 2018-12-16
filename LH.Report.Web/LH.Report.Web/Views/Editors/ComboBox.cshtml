@@ -1,0 +1,62 @@
+﻿<div class="editorsPanel">
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().ComboBox(
+                settings => {
+                    settings.Name = "comboBox1";
+                    settings.Width = 180;
+                    settings.SelectedIndex = 0;
+                    settings.Properties.DisplayFormatString = "DXp v. {0}";
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("2010.2");
+                    settings.Properties.Items.Add("2011.1");
+                    settings.Properties.Items.Add("2011.2");
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            DisplayFormatString = "DXp v. {0}"
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+                @Html.DevExpress().ComboBox(
+                    settings => {
+                        settings.Name = "comboBox2";
+                        settings.Width = 180;
+                        settings.SelectedIndex = 0;
+                        settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                        settings.Properties.TextField = "ProductName";
+                        settings.Properties.ValueField = "ProductName";
+                    }
+                ).BindList(ViewData["Products"]).GetHtml()
+        </div>
+        <label>
+            IncrementalFilteringMode = StartsWith<br /> 
+            DropDownStyle = DropDown
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.Partial("ComboBoxPartial")
+        </div>
+        <label>
+            EnableCallbackMode = true<br /> 
+            CallbackPageSize = 15<br /> 
+            DropDownStyle = DropDownList
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.Partial("MultiColumnComboBoxPartial")
+        </div>
+        <label>
+            EnableCallbackMode = true<br /> 
+            CallbackPageSize = 30<br /> 
+            IncrementalFilteringMode = StartsWith<br /> 
+            DropDownStyle = DropDownList<br /> 
+            Columns = [ContactName, CompanyName, Country, Phone]
+        </label>
+    </div>
+</div>

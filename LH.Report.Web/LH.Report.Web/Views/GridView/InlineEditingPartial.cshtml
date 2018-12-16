@@ -1,0 +1,64 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+        settings =>
+        {
+            settings.Name = "gvEditing";
+            settings.KeyFieldName = "ProductID";
+            settings.CallbackRouteValues = new { Controller = "GridView", Action = "InlineEditingPartial" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GridView", Action = "InlineEditingAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GridView", Action = "InlineEditingUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GridView", Action = "InlineEditingDeletePartial" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.NewButton.Visible = true;
+            settings.CommandColumn.DeleteButton.Visible = true;
+            settings.CommandColumn.EditButton.Visible = true;
+
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add(column => {
+                column.FieldName = "CategoryID";
+                column.Caption = "Category";
+
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+                comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+                comboBoxProperties.TextField = "CategoryName";
+                comboBoxProperties.ValueField = "CategoryID";
+                comboBoxProperties.ValueType = typeof(int);
+            });
+            settings.Columns.Add("QuantityPerUnit");
+            settings.Columns.Add(column => {
+                column.FieldName = "UnitPrice";
+
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+                spinEditProperties.DisplayFormatString = "c";
+                spinEditProperties.DisplayFormatInEditMode = true;
+                spinEditProperties.MinValue = 0;
+                spinEditProperties.MaxValue = 1000000;
+                spinEditProperties.SpinButtons.ShowLargeIncrementButtons = true;
+            });
+            settings.Columns.Add(column => {
+                column.FieldName = "UnitsInStock";
+
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+                spinEditProperties.NumberType = SpinEditNumberType.Integer;
+                spinEditProperties.MinValue = 0;
+                spinEditProperties.MaxValue = 10000;
+            });
+            settings.Columns.Add("Discontinued", MVCxGridViewColumnType.CheckBox);
+
+            settings.PreRender = (sender, e) => {
+                ((MVCxGridView)sender).StartEdit(1);
+            };
+        });
+
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

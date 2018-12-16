@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().GridView( 
+    settings =>
+    {
+        settings.Name = "gridView";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "FilterBuilderPartial" };
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add("SalesPerson");
+        settings.Columns.Add("Country");
+        settings.Columns.Add("OrderDate", MVCxGridViewColumnType.DateEdit);
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add(column => {
+            column.FieldName = "Total";
+            column.PropertiesEdit.DisplayFormatString = "c";
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        });
+        settings.CustomUnboundColumnData = (sender, e) => {
+            if (e.Column.FieldName == "Total") {
+                decimal price = (decimal)e.GetListSourceFieldValue("UnitPrice");
+                int quantity = Convert.ToInt32(e.GetListSourceFieldValue("Quantity"));
+                e.Value = price * quantity;
+            }
+        };
+        
+        settings.PreRender = (sender, e) => {
+            MVCxGridView gridView = sender as MVCxGridView;
+            if (gridView != null)
+                gridView.FilterExpression = "Quantity > 100";
+        };
+    }).Bind(Model).GetHtml()

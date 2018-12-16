@@ -1,0 +1,125 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function () {
+        $("#cbClientVisible").click(
+            function () {
+                pcClientSideAPI.SetVisible($("#cbClientVisible").attr("checked"));
+            }
+        );
+        $("#cmbTabs").change(
+            function () {
+                ShowProperties();
+            }
+        );
+        $("#cbTabEnabled").click(
+            function () {
+                GetTabByValue().SetEnabled($("#cbTabEnabled").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbTabVisible").click(
+            function () {
+                GetTabByValue().SetVisible($("#cbTabVisible").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbTabActive").click(
+            function () {
+                pcClientSideAPI.SetActiveTab(GetTabByValue());
+                ShowProperties();
+            }
+        );
+        $("#btnApply").click(
+            function () {
+                pcClientSideAPI.SetTabContentHTML(pcClientSideAPI.GetActiveTab(), $("#taHtmlContent").val());
+            }
+        );
+        $("#cmbTabs").val(pcClientSideAPI.GetActiveTab().name);
+        ShowProperties();
+        ShowTabContent(pcClientSideAPI.GetActiveTab());
+    });
+    function GetTabByValue() {
+        return pcClientSideAPI.GetTabByName($("#cmbTabs").val());
+    }
+    function ShowProperties() {
+        var tab = GetTabByValue();
+        var activeTab = pcClientSideAPI.GetActiveTab();
+        $("#cbTabEnabled").attr("checked", tab.GetEnabled());
+        $("#cbTabVisible").attr("checked", tab.GetVisible());
+        if (!activeTab)
+            $("#cbTabActive").attr("checked", false);
+        else if (activeTab.name == tab.name)
+            $("#cbTabActive").attr("checked", true);
+        else
+            $("#cbTabActive").attr("checked", false);
+    }
+    function ShowTabContent(tab) {
+        $("#taHtmlContent").val($.trim(pcClientSideAPI.GetTabContentHTML(tab)));
+    }
+    function ActiveTabChanged(s, e) {
+        var tab = GetTabByValue();
+        $("#cbTabActive").attr("checked", e.tab.name == tab.name);
+        ShowTabContent(e.tab);
+    }
+    function TabClick(s, e) {
+        $("#cmbTabs").val(e.tab.name);
+        ShowProperties();
+        ShowTabContent(e.tab);
+    }
+// ]]>
+</script>
+<div style="height: 126px;">
+    @Html.DevExpress().PageControl(
+        settings =>
+        {
+            settings.Name = "pcClientSideAPI";
+            settings.EnableClientSideAPI = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Height = 126;
+            settings.TabPages.Add("Page1", "Page1").SetContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    "<div style=\"padding-top: 24px; font: 18pt Trebuchet MS;\">" +
+                        "<b>Page Content</b> <span style=\"color: red;\">Sample</span>" +
+                    "</div>"
+                );
+            });
+            settings.TabPages.Add("Page2", "Page2").SetContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    "<div style=\"padding-top: 24px; font: 24pt Trebuchet MS;\">" +
+                        "<b>Page Content</b> <span style=\"color: green;\">Sample</span>" +
+                    "</div>"
+                );
+            });
+            settings.TabPages.Add("Page3", "Page3").SetContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    "<div style=\"padding-top: 24px; font: 32pt Trebuchet MS;\">" +
+                        "<b>Page Content</b> <span style=\"color: blue;\">Sample</span>" +
+                    "</div>"
+                );
+            });
+
+            settings.ClientSideEvents.ActiveTabChanged = "ActiveTabChanged";
+            settings.ClientSideEvents.TabClick = "TabClick";
+        }).GetHtml()
+</div>
+<br />
+<div id="tabControlClientSideAPIPanel" class="horizOptionsPanel">
+    <div><input type="checkbox" id="cbClientVisible" checked="checked" /><label class="checkBox" for="cbClientVisible">ClientVisible</label></div>
+    <div><label>&nbsp;</label></div>
+    <div><label for="cmbTabs">Choose page:</label>
+    <select id="cmbTabs">
+        <option>Page1</option>
+        <option>Page2</option>
+        <option>Page3</option>
+    </select></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbTabEnabled" checked="checked" /><label class="checkBox" for="cbTabEnabled">Enabled</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbTabVisible" checked="checked" /><label class="checkBox" for="cbTabVisible">Visible</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbTabActive" checked="checked" /><label class="checkBox" for="cbTabActive">Active</label></div>
+    <div><label for="taHtmlContent">Html code:</label>
+    <textarea id="taHtmlContent" rows="6" cols="72" style="width:600px;"></textarea></div>
+    <div><label>&nbsp;</label></div>
+    <input type="button" id="btnApply" value="Apply" />
+    </div>

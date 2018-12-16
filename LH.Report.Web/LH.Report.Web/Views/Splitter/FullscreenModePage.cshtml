@@ -1,0 +1,76 @@
+﻿@using DevExpress.Web.Demos
+@{ Layout = null; }
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Fullscreen Mode - ASP.NET MVC Splitter Extension</title>
+    <style type="text/css">
+        .paneTable
+        {
+            font-size: 14px;
+            height: 100%;
+            width: 100%;
+        }
+        .paneTable td
+        {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.Splitter }
+    )
+</head>
+<body>
+    @Html.DevExpress().GetScripts(
+           new Script { ExtensionType = ExtensionType.Splitter }
+    )
+    @Html.DevExpress().Splitter(
+        settings => {
+            settings.Name = "splFullScreenMode";
+            settings.Orientation = Orientation.Vertical;
+            settings.FullscreenMode = true;
+
+            settings.Panes.Add(pane => {
+                pane.Size = 80;
+                pane.PaneStyle.BackColor = Color.FromArgb(0xDBF4DE);
+                pane.SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<table class=\"paneTable\"><tr><td>This pane can contain a page's header and a site menu.</td></tr></table>"
+                    );
+                });
+            });
+            settings.Panes.Add(pane => {
+                pane.Panes.Add(navigationPane => {
+                    navigationPane.Size = 300;
+                    navigationPane.PaneStyle.BackColor = Color.FromArgb(0xF3EAFB);
+                    navigationPane.SetContent(() => {
+                        ViewContext.Writer.Write(
+                            "<table class=\"paneTable\"><tr><td>This pane can be used for navigation purposes.</td></tr></table>"
+                        );
+                    });
+                });
+                pane.Panes.Add(contentPane => {
+                    contentPane.Panes.Add(mainContentPane => {
+                        mainContentPane.PaneStyle.BackColor = Color.FromArgb(0xF4F0DB);
+                        mainContentPane.SetContent(() => {
+                            ViewContext.Writer.Write(
+                                "<table class=\"paneTable\"><tr><td>This is the main content pane.</td></tr></table>"
+                            );
+                        });
+                    });
+                    contentPane.Panes.Add(footerPane => {
+                        footerPane.Size = 60;
+                        footerPane.PaneStyle.BackColor = Color.FromArgb(0xDBEBF4);
+                        footerPane.SetContent(() => {
+                            ViewContext.Writer.Write(
+                                "<table class=\"paneTable\"><tr><td>This is the footer pane.</td></tr></table>"
+                            );
+                        });
+                    });
+                });
+            });
+        }).GetHtml()
+</body>
+</html>

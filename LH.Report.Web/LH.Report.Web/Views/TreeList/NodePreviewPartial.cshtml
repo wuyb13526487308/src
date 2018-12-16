@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "NodePreviewPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.ShowPreview = true;
+        settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+        settings.Settings.SuppressOuterGridLines = true;
+        
+        settings.AutoGenerateColumns = false;
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        settings.PreviewFieldName = "Notes";
+
+        settings.Columns.Add("Common_Name", "Name");
+        settings.Columns.Add("Category");
+        settings.Columns.Add("Species_Name", "Species Name");
+
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+        settings.SettingsPager.Mode = TreeListPagerMode.ShowPager;
+        settings.SettingsPager.PageSize = 3;
+        settings.SettingsPager.Position = PagerPosition.Top;
+
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+        settings.Styles.PagerTopPanel.BorderBottom.BorderStyle = BorderStyle.Solid;
+    }
+).Bind(Model).GetHtml()

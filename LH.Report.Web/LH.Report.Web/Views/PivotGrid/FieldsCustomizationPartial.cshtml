@@ -1,0 +1,80 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "pivotGrid";
+        settings.CallbackRouteValues = new { Controller = "PivotGrid", Action = "FieldsCustomizationPartial" };
+        settings.OptionsView.ShowHorizontalScrollBar = true;
+        settings.OptionsCustomization.AllowDrag = true;
+        settings.OptionsCustomization.AllowDragInCustomizationForm = true;
+        settings.CustomizationFieldsLeft = 600;
+        settings.CustomizationFieldsTop = 400;
+        settings.Width = Unit.Percentage(100);
+
+        if (Session["FieldsCustomizationDemoOptions"] != null) {
+            PivotGridFieldsCustomizationDemoOptions options = (PivotGridFieldsCustomizationDemoOptions)Session["FieldsCustomizationDemoOptions"];
+            settings.OptionsCustomization.CustomizationFormStyle = options.CustomizationFormStyle;
+            settings.OptionsCustomization.CustomizationFormLayout = options.CustomizationFormLayout;
+            settings.OptionsCustomization.AllowDrag = options.AllowDragFields;
+            settings.OptionsCustomization.AllowDragInCustomizationForm = options.AllowDragFieldsInCustomizationForm;
+        }
+        
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 0;
+            field.Caption = "Order Quarter";
+            field.FieldName = "OrderDate";
+            field.GroupInterval = PivotGroupInterval.DateQuarter;
+            field.ValueFormat.FormatString = "Qtr {0}";
+            field.ValueFormat.FormatType = FormatType.Numeric;
+            field.UnboundFieldName = "UnboundColumn0";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 1;
+            field.Caption = "Category Name";
+            field.FieldName = "CategoryName";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 0;
+            field.FieldName = "Country";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 0;
+            field.Caption = "Order Amount";
+            field.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            field.UnboundFieldName = "OrderAmount";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 1;
+            field.FieldName = "Quantity";
+        });
+        settings.Fields.Add(field => {
+            field.AreaIndex = 0;
+            field.Caption = "Order Year";
+            field.FieldName = "OrderDate";
+            field.GroupInterval = PivotGroupInterval.DateYear;
+            field.UnboundFieldName = "OrderYear";
+        });
+        settings.Fields.Add(field => {
+            field.AreaIndex = 1;
+            field.Caption = "Product Name";
+            field.FieldName = "ProductName";
+            field.Visible = false;
+        });
+        settings.Fields.Add(field => {
+            field.AreaIndex = 1;
+            field.Caption = "Sales Person";
+            field.FieldName = "Sales_Person";
+            field.Visible = false;
+            field.SummaryDisplayType = PivotSummaryDisplayType.AbsoluteVariation;
+        });
+
+        settings.CustomUnboundFieldData = (sender, e) => {
+            if (object.ReferenceEquals(e.Field, ((MVCxPivotGrid)sender).Fields["Order Amount"])) {
+                e.Value = Convert.ToDouble(e.GetListSourceColumnValue("UnitPrice")) * Convert.ToDouble(e.GetListSourceColumnValue("Quantity"));
+            }
+        };
+    }).Bind(Model).GetHtml()

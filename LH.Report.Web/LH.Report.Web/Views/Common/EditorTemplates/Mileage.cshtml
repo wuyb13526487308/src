@@ -1,0 +1,16 @@
+﻿<div class="line">
+    @Html.DevExpress().LabelFor(model => model, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().TrackBarFor(
+        model => model,
+        settings => {
+            settings.Width = Unit.Pixel(250);
+            settings.Properties.ScalePosition = ScalePosition.LeftOrTop;
+            settings.Properties.ValueToolTipPosition = ValueToolTipPosition.RightOrBottom;
+            settings.Properties.MaxValue = 120;
+            
+            settings.ShowModelErrors = true;
+            settings.ControlStyle.CssClass = "editor";
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+        }
+    ).GetHtml()
+</div>

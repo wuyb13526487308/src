@@ -1,0 +1,12 @@
+﻿<div class="line">
+    @Html.DevExpress().LabelFor(model => model, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().TextBoxFor(
+        model => model,
+        settings => {
+            settings.Width = Unit.Pixel(250);
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+        }
+    ).GetHtml()
+</div>

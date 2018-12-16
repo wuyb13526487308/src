@@ -1,0 +1,7 @@
+﻿@Html.DevExpress().TabControl(
+    settings =>
+    {
+        settings.Name = "tcDataBinding";
+        settings.NavigateUrlField = "id";
+        settings.NavigateUrlFormatString = "?id={0}";
+    }).BindToXML(Server.MapPath("~/App_Data/Technologies.xml"), "//product").GetHtml()

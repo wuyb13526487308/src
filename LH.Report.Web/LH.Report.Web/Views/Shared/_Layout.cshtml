@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>@Utils.GetCurrentDemoPageTitle()</title>
+    @{
+        if (ViewData["MetaContent"] != null) {
+            @Html.Raw((string)ViewData["MetaContent"])
+        }
+    }
+    @Html.Partial("HeadPartial")
+</head>
+<body>
+    <div class="RightSide"></div>
+    <div class="LayoutContainer">        
+        <div class="LayoutLeft">
+            <div class="LayoutLeftInner">
+                <div class="TitleLogo">
+                    <a href="@Url.Content("~/")"> @Html.Partial("TitleLogoPartial") </a>
+                </div>
+                <div class="Navigation">
+                    @Html.Partial("NavigationPartial")
+                </div>
+            </div>
+        </div>
+        <div class="LayoutRight">
+            <div class="LayoutRightInner">
+                <div class="TopButtons">
+                    <div style="float: right">
+                        @if(!Utils.IsIntro) {                        
+                            <div class="TabsArea">
+                                @Html.Partial("TabsPartial")
+                            </div>                            
+                        }
+                        @if(Utils.CanChangeTheme) {
+                            @Html.Partial("ThemeSelectorPartial")
+                        }
+                        <a class="DemoSprite Button" id="DownloadButton" href="@DemosModel.Current.DownloadUrl">
+                            Free Trial
+                        </a>
+                        <a class="DemoSprite Button" id="BuyButton" href="@DemosModel.Current.BuyUrl">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <b class="Clear"></b>
+                            
+                @if(Utils.IsIntro) {
+                    <div class="IntroVersion">
+                        <span class="Light">Last version:</span>
+                        @Utils.GetVersionText()
+                    </div>
+                    <div class="IntroBannerShadow"></div>
+                    <div class="IntroBanner">                            
+                        <div class="Grad">
+                            <div class="Left">
+                                @Html.Partial("BannerScreensPartial")
+                            </div>
+                            <div class="Right">
+                                <h1>@Utils.CurrentIntro.BannerTitle</h1>
+                                <h3>@Utils.CurrentIntro.BannerText</h3>
+                                <div class="DemoSprite Link LearnLink">
+                                    <a href="@DemosModel.Current.LearnMoreUrl">Learn more on devexpress.com</a>
+                                </div>                                    
+                                <div class="DemoSprite Link DocLink">
+                                    <a href="@DemosModel.Current.DocUrl">Online documentation</a>
+                                </div>
+                                <div class="DemoSprite Link VideoLink">
+                                    <a href="@DemosModel.Current.VideosUrl">Related videos</a>
+                                </div>
+                            </div>
+                            <b class="Clear"></b>
+                        </div>
+                    </div>
+
+                    <div class="HilightArea">
+                        <h2>Featured Demos</h2>
+                        @{ var featuredDemos = Utils.GenerateFeaturedDemos(); }                        
+                        @foreach(var h in featuredDemos) {
+                        <div class="@(h == featuredDemos[0] ? "First" : (h == featuredDemos[featuredDemos.Count - 1] ? "Last" : "")) Item">    
+                            <div class="Shadow"></div>
+                            <div class="ImageWrap">
+                                <a href="@Url.Content(h.NavigateUrl)">
+                                    <img src="@Url.Content(h.ImageUrl)" alt="" />
+                                </a>
+                            </div>                            
+                            <div class="Title">
+                                <a href="@Url.Content(h.NavigateUrl)">
+                                    @h.Title
+                                </a>
+                            </div>
+                            @if(!String.IsNullOrEmpty(h.Description)) {
+                            <div>
+                                @h.Description
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <b class="Clear"></b>
+
+                    <div class="IntroArea">
+                        <h2>
+                            @Utils.CurrentIntro.DescriptionTitle
+                        </h2>
+                        <div class="TextContent">
+                            @Html.Raw(Utils.CurrentIntro.Description)
+                        </div>
+                        <div class="TextContent">
+                            <div class="FeaturesArea">
+                                @Html.Partial("FeaturesPartial")
+                            </div>
+                            @if(!string.IsNullOrEmpty(Utils.CurrentIntro.DescriptionFooter)) {
+                                @Html.Raw(Utils.CurrentIntro.DescriptionFooter)
+                            } else {
+                            <p>
+                                To view any of the demos within these web pages, use the menu on the left hand side
+                                of this page. If you would like to explore the capabilities of these libraries further,
+                                we offer a free evaluation version and all of our products are backed by a 60 day
+                                no questions asked money back guarantee. For assistance, feel free to contact us
+                                at <a href="mailto:support@devexpress.com">support@devexpress.com</a>
+                            </p>
+                            }
+                        </div>
+                    </div>
+                    @RenderBody()
+                } else {
+                    <h1 class="DemoTitle">
+                        @Html.Raw(Utils.CurrentDemoTitleHtml)
+                    </h1>
+                    <div id="DemoArea">
+                        @RenderBody()                        
+                        @if(!String.IsNullOrEmpty(Utils.CurrentDemo.Description)) {
+                        <h2 class="DescriptionTitle">
+                            Description
+                        </h2>
+                        <div class="TextContent">
+                            @Html.Raw(Utils.CurrentDemo.Description)
+                        </div>
+                        }
+                    </div>
+                    <div id="CodeArea">
+                        @Html.Partial("CodePartial")                        
+                    </div>
+                }
+            </div>                
+        </div>     
+        <div class="LayoutFooterSpacing"></div>
+    </div>
+    <div class="LayoutFooter">
+        <div class="LayoutLeft">
+            <div class="FooterLeftInner">
+                @Html.Partial("FooterLogoPartial")                
+            </div>
+        </div>
+        <div class="LayoutRight">
+            <div class="FooterRightInner">
+                @Html.Partial("FooterTextPartial")
+                <div class="Copyright">
+                    Copyright &copy; 2006-@DateTime.Now.Year
+                    Developer Express Inc.
+                </div>
+            </div>
+        </div>            
+    </div>        
+</body>    
+</html>

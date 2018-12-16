@@ -1,0 +1,69 @@
+﻿@{
+    TreeListMultipleSelectionDemoOptions options = (TreeListMultipleSelectionDemoOptions)Session["SelectionOptions"]; 
+}
+
+@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "MultipleNodeSelectionPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.AutoGenerateColumns = false;
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        settings.RootValue = 0;
+
+        settings.Columns.Add("Name", "Department");
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Budget";
+                column.PropertiesEdit.DisplayFormatString = "{0:C}";
+            }
+        );
+        settings.Columns.Add("Location");
+
+        settings.SettingsBehavior.AutoExpandAllNodes = true;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+        
+        settings.SettingsCookies.Enabled = true;
+        settings.SettingsCookies.StoreExpandedNodes = true;
+        settings.SettingsCookies.StoreSelection = true;
+
+        settings.SettingsSelection.Enabled = true;
+        settings.SettingsSelection.Recursive = options.EnableRecursiveSelection;
+        settings.SettingsSelection.AllowSelectAll = options.AllowSelectAll;
+
+        settings.ClientSideEvents.SelectionChanged = "function(s, e) { s.PerformCallback(); }";
+        
+        settings.DataBound = (s, e) => {
+            MVCxTreeList treeList = (MVCxTreeList)s;
+            TreeListNodeIterator iterator = treeList.CreateNodeIterator();
+            TreeListNode node = iterator.Current;
+            string selectMode = options.SelectMode;
+            while(node != null) {
+                if(node != treeList.RootNode) {
+                    switch(selectMode) {
+                        case "Child":
+                            node.AllowSelect = !node.HasChildren;
+                            break;
+                        case "Parent":
+                            node.AllowSelect = node.HasChildren;
+                            break;
+                        case "DepthOverTwo":
+                            node.AllowSelect = node.Level > 2;
+                            break;
+                        default:
+                            node.AllowSelect = true;
+                            break;
+                    }    
+                }
+                node = iterator.GetNext();
+            }
+        };
+
+        settings.PreRender = (s, e) => {
+            if(options.SelectMode != "All")
+                ((MVCxTreeList)s).UnselectAll();    
+        };
+    }
+).Bind(Model).GetHtml()

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+  <siteMapNode url="javascript:void(0);" title="FIFA World Cup 2010">
+    <siteMapNode url="javascript:void(1);" title="Group A">
+      <siteMapNode url="javascript:void(2);" title="France" SpriteImage="WorldCup_france">
+        <siteMapNode url="javascript:void(3);" title="Uruguay" result="0:0" />
+        <siteMapNode url="javascript:void(4);" title="Mexico" result="0:2" />
+        <siteMapNode url="javascript:void(5);" title="South Africa" result="1:2" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(6);" title="Mexico" SpriteImage="WorldCup_mexico">
+        <siteMapNode url="javascript:void(7);" title="South Africa" result="1:1" />
+        <siteMapNode url="javascript:void(8);" title="France" result="2:0" />
+        <siteMapNode url="javascript:void(9);" title="Uruguay" result="0:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(10);" title="South Africa" SpriteImage="WorldCup_southafrica">
+        <siteMapNode url="javascript:void(11);" title="Mexico" result="1:1" />
+        <siteMapNode url="javascript:void(12);" title="Uruguay" result="0:3" />
+        <siteMapNode url="javascript:void(13);" title="France" result="2:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(14);" title="Uruguay" SpriteImage="WorldCup_uruguay">
+        <siteMapNode url="javascript:void(15);" title="France" result="0:0" />
+        <siteMapNode url="javascript:void(16);" title="South Africa" result="3:0" />
+        <siteMapNode url="javascript:void(17);" title="Mexico" result="1:0" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(18);" title="Group B">
+      <siteMapNode url="javascript:void(19);" title="Argentina" SpriteImage="WorldCup_argentina">
+        <siteMapNode url="javascript:void(20);" title="Nigeria" result="1:0" />
+        <siteMapNode url="javascript:void(21);" title="Korea Republic" result="4:1" />
+        <siteMapNode url="javascript:void(22);" title="Greece" result="2:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(23);" title="Greece" SpriteImage="WorldCup_greece">
+        <siteMapNode url="javascript:void(24);" title="Korea Republic" result="0:2" />
+        <siteMapNode url="javascript:void(25);" title="Nigeria" result="2:1" />
+        <siteMapNode url="javascript:void(26);" title="Argentina" result="0:2" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(27);" title="Korea Republic" SpriteImage="WorldCup_southkorea">
+        <siteMapNode url="javascript:void(28);" title="Greece" result="2:0" />
+        <siteMapNode url="javascript:void(29);" title="Argentina" result="1:4" />
+        <siteMapNode url="javascript:void(30);" title="Nigeria" result="2:2" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(31);" title="Nigeria" SpriteImage="WorldCup_nigeria">
+        <siteMapNode url="javascript:void(32);" title="Argentina" result="0:1" />
+        <siteMapNode url="javascript:void(33);" title="Greece" result="1:2" />
+        <siteMapNode url="javascript:void(34);" title="Korea Republic" result="2:2" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(35);" title="Group C">
+      <siteMapNode url="javascript:void(36);" title="Algeria" SpriteImage="WorldCup_algeria">
+        <siteMapNode url="javascript:void(37);" title="Slovenia" result="0:1" />
+        <siteMapNode url="javascript:void(38);" title="England" result="0:0" />
+        <siteMapNode url="javascript:void(39);" title="USA" result="0:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(40);" title="England" SpriteImage="WorldCup_england">
+        <siteMapNode url="javascript:void(41);" title="USA" result="1:1" />
+        <siteMapNode url="javascript:void(42);" title="Algeria" result="0:0" />
+        <siteMapNode url="javascript:void(43);" title="Slovenia" result="1:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(44);" title="Slovenia" SpriteImage="WorldCup_slovenia">
+        <siteMapNode url="javascript:void(45);" title="Algeria" result="1:0" />
+        <siteMapNode url="javascript:void(46);" title="USA" result="2:2" />
+        <siteMapNode url="javascript:void(47);" title="England" result="0:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(48);" title="USA" SpriteImage="WorldCup_usa">
+        <siteMapNode url="javascript:void(49);" title="England" result="1:1" />
+        <siteMapNode url="javascript:void(50);" title="Slovenia" result="2:2" />
+        <siteMapNode url="javascript:void(51);" title="Algeria" result="1:0" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(52);" title="Group D">
+      <siteMapNode url="javascript:void(53);" title="Australia" SpriteImage="WorldCup_australia">
+        <siteMapNode url="javascript:void(54);" title="Germany" result="0:4" />
+        <siteMapNode url="javascript:void(55);" title="Ghana" result="1:1" />
+        <siteMapNode url="javascript:void(56);" title="Serbia" result="2:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(57);" title="Germany" SpriteImage="WorldCup_germany">
+        <siteMapNode url="javascript:void(58);" title="Australia" result="4:0" />
+        <siteMapNode url="javascript:void(59);" title="Serbia" result="0:1" />
+        <siteMapNode url="javascript:void(60);" title="Ghana" result="1:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(61);" title="Ghana" SpriteImage="WorldCup_ghana">
+        <siteMapNode url="javascript:void(62);" title="Serbia" result="1:0" />
+        <siteMapNode url="javascript:void(63);" title="Australia" result="1:1" />
+        <siteMapNode url="javascript:void(64);" title="Germany" result="0:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(65);" title="Serbia" SpriteImage="WorldCup_serbia">
+		<siteMapNode url="javascript:void(66);" title="Ghana" result="0:1" />
+        <siteMapNode url="javascript:void(67);" title="Germany" result="1:0" />
+        <siteMapNode url="javascript:void(68);" title="Australia" result="1:2" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(69);" title="Group E">
+      <siteMapNode url="javascript:void(70);" title="Cameroon" SpriteImage="WorldCup_cameroon">
+        <siteMapNode url="javascript:void(71);" title="Japan" result="0:1" />
+        <siteMapNode url="javascript:void(72);" title="Denmark" result="1:2" />
+        <siteMapNode url="javascript:void(73);" title="Netherlands" result="1:2" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(74);" title="Denmark" SpriteImage="WorldCup_denmark">
+        <siteMapNode url="javascript:void(75);" title="Netherlands" result="0:2" />
+        <siteMapNode url="javascript:void(76);" title="Cameroon" result="2:1" />
+        <siteMapNode url="javascript:void(77);" title="Japan" result="1:3" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(78);" title="Netherlands" SpriteImage="WorldCup_netherlands">
+        <siteMapNode url="javascript:void(79);" title="Denmark" result="2:0" />
+        <siteMapNode url="javascript:void(80);" title="Japan" result="1:0" />
+        <siteMapNode url="javascript:void(81);" title="Cameroon" result="2:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(82);" title="Japan" SpriteImage="WorldCup_japan">
+        <siteMapNode url="javascript:void(83);" title="Cameroon" result="1:0" />
+        <siteMapNode url="javascript:void(84);" title="Netherlands" result="0:1" />
+        <siteMapNode url="javascript:void(85);" title="Denmark" result="3:1" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(86);" title="Group F">
+      <siteMapNode url="javascript:void(87);" title="Italy" SpriteImage="WorldCup_italy">
+        <siteMapNode url="javascript:void(88);" title="Paraguay" result="1:1" />
+        <siteMapNode url="javascript:void(89);" title="New Zealand" result="1:1" />
+        <siteMapNode url="javascript:void(90);" title="Slovakia" result="2:3" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(91);" title="New Zealand" SpriteImage="WorldCup_newzealand">
+        <siteMapNode url="javascript:void(92);" title="Slovakia" result="1:1" />
+        <siteMapNode url="javascript:void(93);" title="Italy" result="1:1" />
+        <siteMapNode url="javascript:void(94);" title="Paraguay" result="0:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(95);" title="Paraguay" SpriteImage="WorldCup_paraguay">
+        <siteMapNode url="javascript:void(96);" title="Italy" result="1:1" />
+        <siteMapNode url="javascript:void(97);" title="Slovakia" result="2:0" />
+        <siteMapNode url="javascript:void(98);" title="New Zealand" result="0:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(99);" title="Slovakia" SpriteImage="WorldCup_slovakia">
+        <siteMapNode url="javascript:void(100);" title="New Zealand" result="1:1" />
+        <siteMapNode url="javascript:void(101);" title="Paraguay" result="0:2" />
+        <siteMapNode url="javascript:void(102);" title="Italy" result="3:2" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(103);" title="Group G">
+      <siteMapNode url="javascript:void(104);" title="Brazil" SpriteImage="WorldCup_brazil">
+        <siteMapNode url="javascript:void(105);" title="Korea DPR" result="2:1" />
+        <siteMapNode url="javascript:void(106);" title="Côte d'Ivoire" result="3:1" />
+        <siteMapNode url="javascript:void(107);" title="Portugal" result="0:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(108);" title="Côte d'Ivoire" SpriteImage="WorldCup_ivorycoast">
+        <siteMapNode url="javascript:void(109);" title="Portugal" result="0:0" />
+        <siteMapNode url="javascript:void(110);" title="Brazil" result="1:3" />
+        <siteMapNode url="javascript:void(111);" title="Korea DPR" result="3:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(112);" title="Korea DPR" SpriteImage="WorldCup_northkorea">
+        <siteMapNode url="javascript:void(113);" title="Brazil" result="1:2" />
+        <siteMapNode url="javascript:void(114);" title="Portugal" result="0:7" />
+        <siteMapNode url="javascript:void(115);" title="Côte d'Ivoire" result="0:3" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(116);" title="Portugal" SpriteImage="WorldCup_portugal">
+        <siteMapNode url="javascript:void(117);" title="Côte d'Ivoire" result="0:0" />
+        <siteMapNode url="javascript:void(118);" title="Korea DPR" result="7:0" />
+        <siteMapNode url="javascript:void(119);" title="Brazil" result="0:0" />
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="javascript:void(120);" title="Group H">
+      <siteMapNode url="javascript:void(121);" title="Chile" SpriteImage="WorldCup_chile">
+        <siteMapNode url="javascript:void(122);" title="Honduras" result="1:0" />
+        <siteMapNode url="javascript:void(123);" title="Switzerland" result="1:0" />
+        <siteMapNode url="javascript:void(124);" title="Spain" result="1:2" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(125);" title="Honduras" SpriteImage="WorldCup_honduras">
+        <siteMapNode url="javascript:void(126);" title="Chile" result="0:1" />
+        <siteMapNode url="javascript:void(127);" title="Spain" result="0:2" />
+        <siteMapNode url="javascript:void(128);" title="Switzerland" result="0:0" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(129);" title="Spain" SpriteImage="WorldCup_spain">
+        <siteMapNode url="javascript:void(130);" title="Switzerland" result="0:1" />
+        <siteMapNode url="javascript:void(131);" title="Honduras" result="2:0" />
+        <siteMapNode url="javascript:void(132);" title="Chile" result="2:1" />
+      </siteMapNode>
+      <siteMapNode url="javascript:void(133);" title="Switzerland" SpriteImage="WorldCup_switzerland">
+        <siteMapNode url="javascript:void(134);" title="Spain" result="1:0" />
+        <siteMapNode url="javascript:void(135);" title="Chile" result="0:1" />
+        <siteMapNode url="javascript:void(136);" title="Honduras" result="0:0" />
+      </siteMapNode>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

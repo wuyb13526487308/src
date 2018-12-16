@@ -1,0 +1,49 @@
+﻿@Html.DevExpress().Splitter(
+    settings =>
+    {
+        settings.Name = "splScrolling";
+        settings.Height = 400;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Panes.Add(pane => {
+            pane.ScrollBars = ScrollBars.Vertical;
+            pane.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "The ASPxperience Suite is our next-generation collection of web development tools" +
+                    "designed to bring advanced capabilities including navigation, data layout management" +
+                    "and application flow control into web applications. It has been written from ground" +
+                    "up to extend your development arsenal with components that natively support the" +
+                    "ASP.NET 2 Framework and provide complete out-of-the-box AJAX support.<br />" +
+                    "<br />" +
+                    "Controls included into the ASPxperience Suite generate minimum possible HTML code," +
+                    "can load scripts on demand, optimize style usage, provide full client-side API where" +
+                    "appropriate. These and even more features are implemented in our shared web development" +
+                    "framework which is the base for every web component we produce. Please refer to" +
+                    "the Shared Framework Features page for more information on these features as well" +
+                    "as reasons why controls from the ASPxperience Suite have no equal in the marketplace.<br />"
+                );
+            });
+        });
+        settings.Panes.Add(pane => {
+            pane.ScrollBars = ScrollBars.Auto;
+            pane.Size = Unit.Percentage(20);
+            pane.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "As of today, the ASPxperience Suite includes almost twenty ASP.NET components. Please" +
+                    "use links in the navigation bar to learn more about each included product.<br />" +
+                    "<br />" +
+                    "We know that when it comes to web development libraries, you have numerous choices" +
+                    "in the marketplace and we also know that each control vendor claims that their library" +
+                    "is the best. Fact is that with so many options and so many claims, it can be difficult" +
+                    "to tell truth from fiction. Of course, once released, we will offer a trial version" +
+                    "so you can fully evaluate this product and like all other Developer Express products," +
+                    "we will warrant it with a 60 day no questions as money back guarantee.<br />" +
+                    "<br />" +
+                    "To discover features of controls included into the ASPxperience Suite, you can try" +
+                    "them online in our online demo center. To download trial versions of our ASP.NET" +
+                    "components, please visit our download center. To order your copy of ASPxperience" +
+                    "Suite, please visit our order page.<br />"
+                );
+            });
+        });
+    }).GetHtml()

@@ -1,0 +1,5 @@
+﻿.DataViewItemTop { margin-bottom: 16px; }
+.DataViewItemTop a { font-size: 10px; color: #666666; text-decoration: underline; }
+.DataViewItemTitle { font-size: 13px; margin: 6px 0px; }        
+.DataViewItemTitle a { color: blue; text-decoration: underline; }        
+.DataViewItemPrice { color: black; font-size: 14px; font-weight: bold; }

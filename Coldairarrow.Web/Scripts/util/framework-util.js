@@ -150,3 +150,25 @@ function loadCombox(paramType, combox) {
         $('#' + combox).combobox('loadData', storeList);
     });
 }
+
+//打印票据
+function printTicket(rootUrl, type, value) {
+
+    var theData = { type: type, key: value };
+    $.getJSON(rootUrl + 'base/report?type=' + type + '&key=' + value, function (resJson) {
+        if (resJson.Success) {
+            Desktop.tabs.add('_panel_' + resJson.Msg, '出库统计', ''+resJson.Data);
+            //dialogOpen({
+            //    id: 'form',
+            //    title: '打印预览',
+            //    width: 800,
+            //    height: 500,
+            //    url: resJson.Data,
+            //});
+        }
+        else {
+            dialogError(resJson.Msg);
+        }
+    });
+
+}

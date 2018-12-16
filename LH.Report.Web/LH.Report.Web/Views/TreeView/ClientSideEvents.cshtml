@@ -1,0 +1,40 @@
+﻿@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvClientSideEvents";
+        settings.AllowSelectNode = true;
+        settings.Height = 320;
+        settings.AllowCheckNodes = true;
+
+        settings.Nodes.Add(node => {
+            node.Text = "Arrays";
+                    
+            node.Nodes.Add("Associative array");
+            node.Nodes.Add("Multimap");
+            node.Nodes.Add("Set");
+            node.Nodes.Add("Multiset");
+            node.Nodes.Add("Hash table");
+        });
+        settings.Nodes.Add(node => {
+            node.Text = "Lists";
+
+            node.Nodes.Add("Double-ended queue");
+            node.Nodes.Add("Linked list");
+            node.Nodes.Add("Queue");
+            node.Nodes.Add("Stack");
+            node.Nodes.Add("Circular queue/buffer");
+        });
+                
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.ExpandedChanging = "function(s, e) { DXEventMonitor.Trace(s, e, 'ExpandedChanging'); }";
+        settings.ClientSideEvents.ExpandedChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ExpandedChanged'); }";
+        settings.ClientSideEvents.NodeClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'NodeClick'); }";
+        settings.ClientSideEvents.CheckedChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'CheckedChanged'); }";
+
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.ExpandAll();
+        };
+    }).GetHtml()
+<br />
+@Html.Partial("EventMonitor")

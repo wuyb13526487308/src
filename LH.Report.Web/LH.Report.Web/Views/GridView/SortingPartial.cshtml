@@ -1,0 +1,13 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "SortingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ContactName").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country");
+    }).Bind(Model).GetHtml()

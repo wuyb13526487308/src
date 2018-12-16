@@ -1,0 +1,107 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function () {
+        $("#cbClientVisible").click(
+            function () {
+                splClientSideAPI.SetVisible($("#cbClientVisible").attr("checked"));
+            }
+        );
+        $("#cbAllowResize").click(
+            function () {
+                splClientSideAPI.SetAllowResize($("#cbAllowResize").attr("checked"));
+            }
+        );
+        $("#cmbSecondPaneUrl").change(
+            function () {
+                splClientSideAPI.GetPaneByName('Second').SetContentUrl($("#cmbSecondPaneUrl").val());
+            }
+        );
+        $("#cmbFirstPaneWidth").change(
+            function () {
+                splClientSideAPI.GetPaneByName('First').SetSize($("#cmbFirstPaneWidth").val());
+            }
+        );
+        $("#cmbPane").change(
+            function () {
+                selectedPane = $("#cmbPane").val();
+                UpdateButtonState();
+            }
+        );
+        $("#btnCollapseExpand").click(
+            function () {
+                var pane = splClientSideAPI.GetPaneByName(selectedPane);
+                var secondPane = splClientSideAPI.GetPaneByName((selectedPane == "First") ? "Second" : "First");
+
+                var allowCollapse = !pane.IsCollapsed() && !secondPane.IsCollapsed();
+                var allowExpand = pane.IsCollapsed();
+                if (isCollapseButton && allowCollapse)
+                    pane.Collapse(secondPane);
+                else if (!isCollapseButton && allowExpand)
+                    pane.Expand();
+            }
+        );
+    });
+
+    var selectedPane = "First";
+    var isCollapseButton = true;
+
+    function UpdateButtonState() {
+        var pane = splClientSideAPI.GetPaneByName(selectedPane);
+        var secondPane = splClientSideAPI.GetPaneByName((selectedPane == "First") ? "Second" : "First");
+
+        if (secondPane.IsCollapsed()) {
+            isCollapseButton = true;
+            $("#btnCollapseExpand").attr("disabled", "disabled");
+        }
+        else {
+            isCollapseButton = !pane.IsCollapsed();
+            $("#btnCollapseExpand").removeAttr("disabled");
+        }
+
+        $("#btnCollapseExpand").val(isCollapseButton ? "Collapse pane" : "Expand pane");
+    }
+// ]]>
+</script>
+<div id="splitterClientSideAPIPanel" class="horizOptionsPanel" style="height:120px;">
+    <div><input type="checkbox" id="cbClientVisible" checked="checked" /><label class="checkBox" for="cbClientVisible">ClientVisible</label></div>
+    <div><input type="checkbox" id="cbAllowResize" checked="checked" /><label class="checkBox" for="cbAllowResize">AllowResize</label></div>
+    <div><label for="cmbSecondPaneUrl">ContentUrl for the second pane:</label>
+    <select id="cmbSecondPaneUrl">
+        <option value="@DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage1" })">SamplePage1</option>
+        <option value="@DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage2" })">SamplePage2</option>
+        <option value="@DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage3" })">SamplePage3</option>
+    </select></div>
+    <div><label for="cmbFirstPaneWidth">Width of the first pane:</label>
+    <select id="cmbFirstPaneWidth">
+        <option value="20%">20%</option>
+        <option value="300px">300px</option>
+        <option value="400px">400px</option>
+    </select></div>
+    <div><label for="cmbPane">Collapse/Expand panes:</label>
+    <select id="cmbPane">
+        <option value="First">First pane</option>
+        <option value="Second">Second pane</option>
+    </select>
+    <input id="btnCollapseExpand" type="button" value="Collapse pane" /></div>
+    <div><label>&nbsp;</label></div>
+</div>
+@Html.DevExpress().Splitter(
+    settings =>
+    {
+        settings.Name = "splClientSideAPI";
+        settings.Height = 400;
+        settings.Width = Unit.Percentage(100);
+        settings.ShowCollapseBackwardButton = true;
+        settings.ShowCollapseForwardButton = true;
+
+        settings.Panes.Add(pane => {
+            pane.Name = "First";
+                
+            pane.Size = Unit.Percentage(20);
+            pane = settings.Panes.Add("Second");
+            pane.ContentUrl = DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage1" });
+        });
+                
+        settings.ClientSideEvents.PaneCollapsed = "UpdateButtonState";
+        settings.ClientSideEvents.PaneExpanded = "UpdateButtonState";
+    }).GetHtml()

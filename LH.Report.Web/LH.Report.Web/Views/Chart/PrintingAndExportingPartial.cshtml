@@ -1,0 +1,43 @@
+﻿@{
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.EnableClientSideAPI = true;
+    settings.CallbackRouteValues = new { Controller = "Chart", Action = "PrintingAndExportingPartial" };
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Microsoft Corp. Annual Revenue",
+        Font = new Font("Tahoma", 18)
+    });
+
+    
+    settings.Titles.Add(new ChartTitle() {
+        Text = "From www.microsoft.com",
+        TextColor = Color.Gray,
+        Font = new Font("Tahoma", 8),
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom
+    });
+
+    Series annualSeries = new Series("Annual", DevExpress.XtraCharts.ViewType.Bar);
+    annualSeries.ArgumentDataMember = "Year";
+    annualSeries.ValueDataMembers[0] = "AnnualRevenue";
+    settings.Series.Add(annualSeries);
+
+    Series summarySeries = new Series("Summary", DevExpress.XtraCharts.ViewType.Line);
+    summarySeries.ArgumentDataMember = "Year";
+    summarySeries.ValueDataMembers[0] = "SummaryRevenue";
+    summarySeries.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    ((LineSeriesView)summarySeries.View).LineMarkerOptions.Size = 20;
+    settings.Series.Add(summarySeries);
+
+    AxisY axisY = ((XYDiagram)settings.Diagram).AxisY;
+    axisY.Title.Text = "Millions of Dollars";
+    axisY.Title.Visible = true;
+    axisY.GridLines.MinorVisible = true;
+} 
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

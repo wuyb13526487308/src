@@ -1,0 +1,26 @@
+﻿<script type="text/javascript">
+    var popupHeaderText;
+
+    function ShowNotes(dateString) {
+        popupHeaderText = dateString;
+        popup.Hide();
+        popup.PerformCallback();
+        popup.SetHeaderText(popupHeaderText);
+    }
+    function OnPopupBeginCallback(s, e) {
+        e.customArgs["DateString"] = popupHeaderText;
+    }
+    function OnPopupEndCallback(s, e) {
+        popup.Show();
+    }
+</script>
+
+<p>
+    Click a highlighted date
+</p>
+<div style="float: left">
+    @Html.Partial("CalendarPartial")
+</div>
+<div id="popupAnchor" style="float: left; margin-left: 5px">
+</div>
+@Html.Partial("CalendarPopupPartial")

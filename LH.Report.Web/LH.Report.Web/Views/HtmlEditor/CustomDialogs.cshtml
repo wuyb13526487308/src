@@ -1,0 +1,64 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    function OnCustomDialogOpened() {
+        RestoreInsertTemplateFormDialogState();
+    }
+
+    function OnCustomDialogClosed(s, e) {
+        if (e.name == "InsertTemplate" && (e.status == "ok" || e.status == "dbl")) {
+            if (e.data) {
+                if (e.data.overwrite)
+                    heCustomDialogs.SetHtml(e.data.html)
+                else
+                    heCustomDialogs.ExecuteCommand(ASPxClientCommandConsts.PASTEHTML_COMMAND, e.data.html);
+            }
+            SaveInsertTemplateFormDialogState();
+        }
+    }
+
+    function OnCustomDialogClosing(s, e) {
+        if (e.name == "InsertTemplate" && e.status == "ok") {
+            RetrieveTemplateHtml(e.status);
+            e.handled = true;
+        }
+    }
+
+    function OnGridRowDblClick(s, e) {
+        RetrieveTemplateHtml("dbl");
+    }
+
+    function RetrieveTemplateHtml(status) {
+        gvTemplates.GetRowValues(
+                gvTemplates.GetFocusedRowIndex(),
+                "Html",
+                function (html) {
+                    ASPxClientHtmlEditor.CustomDialogComplete(
+                        status,
+                        {
+                            "html": html,
+                            "overwrite": overwriteCheckBox.GetChecked()
+                        }
+                    );
+                }
+            );
+    }
+
+    var insertTemplateFormDialogState = {};
+
+    function SaveInsertTemplateFormDialogState() {
+        insertTemplateFormDialogState.focusedRow = gvTemplates.GetFocusedRowIndex();
+        insertTemplateFormDialogState.overwrite = overwriteCheckBox.GetChecked();
+    }
+
+    function RestoreInsertTemplateFormDialogState() {
+        if (insertTemplateFormDialogState.focusedRow)
+            gvTemplates.SetFocusedRowIndex(insertTemplateFormDialogState.focusedRow);
+
+        if (insertTemplateFormDialogState.overwrite != undefined)
+            overwriteCheckBox.SetChecked(insertTemplateFormDialogState.overwrite);
+    }
+    // ]]>
+</script>
+@using (Html.BeginForm()){
+    Html.RenderPartial("CustomDialogsPartial");
+}

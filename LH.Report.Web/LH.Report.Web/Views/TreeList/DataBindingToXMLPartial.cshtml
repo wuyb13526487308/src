@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "DataBindingToXMLPartial" };
+
+        settings.AutoGenerateColumns = false;
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        
+        settings.Columns.Add("title", "Page Title");
+
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+        
+        settings.PreRender = (sender, e) => {
+            ((MVCxTreeList)sender).ExpandToLevel(1);
+        };
+    }
+).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/SiteMap.xml"), "/*/*/*").GetHtml()

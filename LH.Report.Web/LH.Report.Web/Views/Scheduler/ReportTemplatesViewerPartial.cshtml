@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().ReportViewer(
+    settings => {
+        settings.Name = "reportViewer";
+        settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "ReportTemplatesViewerPartial" };
+        settings.AutoSize = false;
+        settings.Height = Unit.Pixel(650);
+        settings.Width = Unit.Percentage(100);
+        settings.ClientSideEvents.BeginCallback = "ReportViewerBeginCallback";
+        settings.Report = Model;
+    }).GetHtml()

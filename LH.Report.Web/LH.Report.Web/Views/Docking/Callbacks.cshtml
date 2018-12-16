@@ -1,0 +1,25 @@
+﻿@using(Html.BeginForm()) {
+    @Html.Partial("CallbacksPartial")
+    <div style="float: left">
+        @Html.DevExpress().DockZone(
+            settings => {
+                settings.Name = "developmentDepartmentZone";
+                settings.ZoneUID = "developmentDepartmentZone";
+                settings.Height = 410;
+                settings.Width = 340;
+                settings.ControlStyle.BackgroundImage.ImageUrl = Url.Content("~/Content/Docking/Images/Callbacks/bgDevelopmentDep.png");
+            }
+        ).GetHtml()
+    </div>
+    <div style="padding-left: 13px; float: left">
+        @Html.DevExpress().DockZone(
+            settings => {
+                settings.Name = "designDepartmentZone";
+                settings.ZoneUID = "designDepartmentZone";
+                settings.Height = 410;
+                settings.Width = 340;
+                settings.ControlStyle.BackgroundImage.ImageUrl = Url.Content("~/Content/Docking/Images/Callbacks/bgDesignDep.png");
+            }
+        ).GetHtml()
+    </div>
+}

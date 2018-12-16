@@ -1,0 +1,53 @@
+﻿@using (Html.BeginForm()){
+        HtmlEditorFeaturesDemoOptions options = Session["Options"] as HtmlEditorFeaturesDemoOptions;
+        if (options == null) {
+            options = new HtmlEditorFeaturesDemoOptions();
+        }
+    <div class="vertComponentContainer">
+        @Html.Partial("FeaturesPartial")
+    </div>
+    <div class="vertOptionsPanel" id="htmlEditorFeaturesPanel">
+        <div>
+            @Html.CheckBox("AllowScripts", options.AllowScripts, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowScripts">AllowScripts</label>
+        </div>
+        <div>
+            @Html.CheckBox("AllowIFrames", options.AllowIFrames, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowIFrames">AllowIFrames</label>
+        </div>
+        <div>
+            @Html.CheckBox("AllowFormElements", options.AllowFormElements, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowFormElements">AllowFormElements</label>
+        </div>
+        <div>
+            @Html.CheckBox("UpdateDeprecatedElements", options.UpdateDeprecatedElements, new { @class = "leftMost" })
+            <label class="checkBox" for="UpdateDeprecatedElements">UpdateDeprecatedElements</label>
+        </div>
+        <div>
+            @Html.CheckBox("UpdateBoldItalic", options.UpdateBoldItalic, new { @class = "leftMost" })
+            <label class="checkBox" for="UpdateBoldItalic">UpdateBoldItalic</label>
+        </div>
+        <div>
+            <label for="EnterMode">EnterMode:</label>
+            @Html.DropDownList("EnterMode", typeof(HtmlEditorEnterMode), options.EnterMode)
+        </div>
+        <div>
+            <label for="EnterMode">AllowContextMenu:</label>
+            @Html.DropDownList("AllowContextMenu", typeof(DefaultBoolean), options.AllowContextMenu)
+        </div>
+        <div>
+            @Html.CheckBox("AllowDesignView", options.AllowDesignView, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowDesignView">AllowDesignView</label>
+        </div>
+        <div>
+            @Html.CheckBox("AllowHtmlView", options.AllowHtmlView, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowHtmlView">AllowHtmlView</label>
+        </div>
+        <div>
+            @Html.CheckBox("AllowPreview", options.AllowPreview, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowPreview">AllowPreview</label>
+        </div>
+            
+        <input type="submit" value="Apply" />
+    </div>
+}

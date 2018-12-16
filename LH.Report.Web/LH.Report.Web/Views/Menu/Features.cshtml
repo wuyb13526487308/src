@@ -1,0 +1,77 @@
+﻿@using DevExpress.Web.Demos
+
+@{
+    MenuFeaturesDemoOptions options = (MenuFeaturesDemoOptions)ViewData["Options"];
+}
+
+@using (Html.BeginForm()) {
+    <div class="vertComponentContainer" style="width: 282px;">
+        @Html.DevExpress().Menu(
+            settings =>
+            {
+                settings.Name = "mFeatures";
+                settings.AllowSelectItem = options.AllowSelectItem;
+                settings.EnableHotTrack = options.EnableHotTrack;
+                settings.EnableAnimation = options.EnableAnimation;
+                settings.AppearAfter = options.AppearAfter;
+                settings.DisappearAfter = options.DisappearAfter;
+                settings.MaximumDisplayLevels = options.MaximumDisplayLevels;
+                settings.ShowPopOutImages = DefaultBoolean.True;
+
+                settings.Items.Add(item => {
+                    item.Text = "Home";
+                    item.Items.Add(subItem => {
+                        subItem.Text = "News";
+                        subItem.Items.Add("For Developers");
+                        subItem.Items.Add("Website News");
+                    });
+                    item.Items.Add("Our Mission");
+                    item.Items.Add("Our Customers");
+                });
+                settings.Items.Add(item => {
+                    item.Text = "Products";
+                    item.Items.Add("Subscriptions / Packs");
+                    item.Items.Add(".NET Windows Forms Components");
+                    item.Items.Add("Reporting / Printing Suites");
+                    item.Items.Add("VCL Components and Tools");
+                    item.Items.Add("ASP.NET Components");
+                });
+                settings.Items.Add(item => {
+                    item.Text = "Support";
+                    item.Items.Add("Knowledge Base");
+                    item.Items.Add("Documentation");
+                    item.Items.Add("Support Center");
+                    item.Items.Add("Newsgroups");
+                    item.Items.Add("Best Practicies");
+                });
+            }).GetHtml()
+    </div>
+    <div class="vertOptionsPanel">
+        <div>
+            @Html.CheckBox("AllowSelectItem", options.AllowSelectItem, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowSelectItem">AllowSelectItem</label>
+        </div>
+        <div>
+            @Html.CheckBox("EnableHottrack", options.EnableHotTrack, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableHottrack">EnableHottrack</label>
+        </div>
+        <div>
+            @Html.CheckBox("EnableAnimation", options.EnableAnimation, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableAnimation">EnableAnimation</label>
+        </div>
+        <div>
+            <label for="AppearAfter">AppearAfter (ms):</label>@Html.TextBox("AppearAfter", options.AppearAfter, new { size = "10" })
+            @Html.ValidationMessage("AppearAfter", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label for="DisappearAfter">DisappearAfter (ms):</label>@Html.TextBox("DisappearAfter", options.DisappearAfter, new { size = "10" })
+            @Html.ValidationMessage("DisappearAfter", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label for="MaximumDisplayLevels">MaximumDisplayLevels:</label>@Html.TextBox("MaximumDisplayLevels", options.MaximumDisplayLevels, new { size = "10" })
+            @Html.ValidationMessage("MaximumDisplayLevels", new { @class = "validationMessage" })
+        </div>
+            
+        <input type="submit" value="Apply" />
+    </div>
+}

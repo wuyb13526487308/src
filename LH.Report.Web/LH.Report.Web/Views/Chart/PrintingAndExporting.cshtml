@@ -1,0 +1,46 @@
+﻿@model List<RevenueEntry>
+
+<div style="margin-bottom:8px">
+    @{
+        MenuSettings settings = new MenuSettings();
+        settings.Name = "toolbar";
+        settings.ShowAsToolbar = true;
+
+        settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuPrint", "~/Content/ChartIcons/BtnPrint.png") {
+            ToolTip = "Print the chart"
+        });
+
+        settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuSaveToDisk", "~/Content/ChartIcons/BtnSave.png") {
+            ToolTip = "Export a chart and save it to the disk",
+            BeginGroup = true
+        });
+
+        settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuSaveToWindow", "~/Content/ChartIcons/BtnSaveWindow.png") {
+            ToolTip = "Export a chart and show it in a new window"
+        });
+
+        MVCxMenuItem mnuFormat = new MVCxMenuItem();
+        mnuFormat.Name = "mnuFormat";
+        ComboBoxSettings cbFormatSettings = new ComboBoxSettings();
+        cbFormatSettings.Name = "cbFormat";
+        cbFormatSettings.SelectedIndex = 0;
+        cbFormatSettings.Width = 60;
+        foreach (string format in ChartDemoHelper.GetExportFormats()) {
+            cbFormatSettings.Properties.Items.Add(format);
+        }
+        mnuFormat.SetTextTemplateContent(c => {
+            Html.DevExpress().ComboBox(cbFormatSettings).Render();
+        });
+        DevExpress.Web.ASPxMenu.MenuItemStyle itemStyle = new DevExpress.Web.ASPxMenu.MenuItemStyle();
+        itemStyle.Assign(mnuFormat.ItemStyle);
+        itemStyle.Paddings.Padding = new Unit(2, UnitType.Pixel);
+        itemStyle.Paddings.PaddingBottom = new Unit(1, UnitType.Pixel);
+        mnuFormat.ItemStyle.Assign(itemStyle);
+        settings.Items.Add(mnuFormat);
+            
+        settings.ClientSideEvents.ItemClick = "function(s, e) { if (e.item.name == 'mnuPrint') chart.Print(); if (e.item.name == 'mnuSaveToDisk') chart.SaveToDisk(cbFormat.GetText()); if (e.item.name == 'mnuSaveToWindow') chart.SaveToWindow(cbFormat.GetText()); }";
+    }    
+    
+    @Html.DevExpress().Menu(settings).GetHtml()
+</div>
+@Html.Partial("PrintingAndExportingPartial", Model)

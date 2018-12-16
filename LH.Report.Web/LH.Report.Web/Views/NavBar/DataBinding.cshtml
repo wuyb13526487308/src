@@ -1,0 +1,9 @@
+﻿@model DevExpress.Web.Demos.CategoriesData
+
+@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "nbDataBindingToModel";
+        settings.AutoCollapse = true;
+        settings.Width = 260;
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,171 @@
+﻿<script type="text/javascript"> 
+//<![CDATA[
+    var popupButton = "@Url.Content("~/Content/PopupControl/Features/Button.gif")";
+    var closeButton = "@Url.Content("~/Content/PopupControl/Features/ButtonPressed.gif")";
+    function SetImageState(value) {
+        $("#imgButton").attr("src", value ? closeButton : popupButton);
+    }
+// ]]>
+</script>
+@using (Html.BeginForm()){
+    PopupControlFeaturesDemoOptions options = (PopupControlFeaturesDemoOptions)ViewData["Options"];
+    <div class="vertComponentContainer">
+        <div>
+            <img id="imgButton" alt="" src="@Url.Content("~/Content/PopupControl/Features/Button.gif")" style="cursor:pointer; width: 103px; height: 28px;" />
+        </div>
+            @Html.DevExpress().PopupControl(
+                settings =>
+                {
+                    settings.Name = "pcFeatures";
+                    settings.PopupElementID = "imgButton";
+                    switch(options.ScrollBars) { 
+                        case ScrollBars.Horizontal:
+                            settings.Width = 150;
+                            break;
+                        case ScrollBars.Vertical:
+                            settings.Width = 372;
+                            break;
+                        default:
+                            settings.Width = 330;
+                            break;
+                    }
+                    settings.Height = 250;
+                    settings.MinHeight = 150;
+                    settings.MinWidth = 150;
+                    settings.MaxHeight = 800;
+                    settings.MaxWidth = 800;
+
+                    settings.ShowCloseButton = options.ShowCloseButton;
+                    settings.ShowShadow = options.ShowShadow;
+                    settings.ShowFooter = options.ShowFooter;
+                    settings.ShowHeader = options.ShowHeader;
+                    settings.PopupHorizontalAlign = options.PopupHorizontalAlign;
+                    settings.PopupVerticalAlign = options.PopupVerticalAlign;
+                    settings.PopupHorizontalOffset = options.PopupHorizontalOffset;
+                    settings.PopupVerticalOffset = options.PopupVerticalOffset;
+                    settings.Opacity = (0 <= options.Opacity && options.Opacity < 100) ? options.Opacity : -1;
+                    settings.PopupAnimationType = options.PopupAnimationType;
+                    settings.AllowDragging = options.AllowDragging;
+                    settings.DragElement = options.DragElement;
+                    settings.AllowResize = options.AllowResize;
+                    settings.ResizingMode = options.ResizingMode;
+                    settings.ShowSizeGrip = options.ShowSizeGrip;
+                    settings.CloseAction = options.CloseAction;
+                    settings.PopupAction = options.PopupAction;
+                    settings.AppearAfter = options.AppearAfter;
+                    settings.DisappearAfter = options.DisappearAfter;
+                    settings.ScrollBars = options.ScrollBars;
+
+                    settings.FooterText = "Runtime: 142 min";
+                    settings.HeaderText = "Area of Countries";
+                    settings.SetContent(() =>
+                    {
+                        ViewContext.Writer.Write(
+                             "<table border=\"0\" cellpadding=\"4\" cellspacing=\"0\">" +
+                                "<tr>" +
+                                    "<td valign=\"top\">" +
+                                        "<img src=\"" + Url.Content("~/Content/PopupControl/Features/CountriesArea.png") + "\" alt=\"Area of Countries\" />" +
+                                    "</td>" +
+                                "</tr>" +
+                                "<tr>" +
+                                    "<td valign=\"top\" style=\"color: #666666;font-family: Tahoma; font-size: 10px;\">" +
+                                           "This is the Pie 3D series view, which is useful when it's necessary to compare the percentage" +
+                                           "values of different point arguments in the same series, and to show these values as easy" +
+                                           "to understand pie slices." +
+                                    "</td>" +
+                                "</tr>" +
+                            "</table>"
+                        );                    
+                    });
+                        
+                    settings.ClientSideEvents.CloseUp="function(s, e) { SetImageState(false); }";
+                    settings.ClientSideEvents.PopUp="function(s, e) { SetImageState(true); }";
+                }).GetHtml()
+    </div>
+    <div id="popupControlFeaturesPanel" class="vertOptionsPanel" style="padding-left:400px">
+        <div>
+            <label><strong>Layout</strong></label>
+        </div>
+        <div>
+            @Html.CheckBox("ShowCloseButton", options.ShowCloseButton, new { @class = "leftMost" })
+            <label class="checkBox" for="ShowCloseButton">ShowCloseButton</label>
+            @Html.CheckBox("ShowShadow", options.ShowShadow)
+            <label class="checkBox" for="ShowShadow">ShowShadow</label>
+        </div>
+        <div>            
+            @Html.CheckBox("ShowFooter", options.ShowFooter, new { @class = "leftMost" })
+            <label class="checkBox" for="ShowFooter">ShowFooter</label>
+            @Html.CheckBox("ShowHeader", options.ShowHeader)
+            <label class="checkBox" for="ShowHeader">ShowHeader</label>
+        </div>
+        <div>
+            <label for="PopupHorizontalAlign">PopupHorizontalAlign:</label>
+            @Html.DropDownList("PopupHorizontalAlign", typeof(PopupHorizontalAlign), options.PopupHorizontalAlign)
+        </div>
+        <div>
+            <label for="PopupVerticalAlign">PopupVerticalAlign:</label>
+            @Html.DropDownList("PopupVerticalAlign", typeof(PopupVerticalAlign), options.PopupVerticalAlign)
+        </div>
+        <div>
+            <label for="PopupHorizontalOffset">PopupHorizontalOffset (px):</label>@Html.TextBox("PopupHorizontalOffset", options.PopupHorizontalOffset, new { size = "10" })
+            @Html.ValidationMessage("PopupHorizontalOffset", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label for="PopupVerticalOffset">PopupVerticalOffset (px):</label>@Html.TextBox("PopupVerticalOffset", options.PopupVerticalOffset, new { size = "10" })
+            @Html.ValidationMessage("PopupVerticalOffset", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label for="Opacity">Opacity (%):</label>@Html.TextBox("Opacity", options.Opacity, new { size = "3" })
+            @Html.ValidationMessage("Opacity", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label><strong>Behavior</strong></label>
+        </div>
+        <div>
+            <label for="PopupAnimationType">PopupAnimationType:</label>
+            @Html.DropDownList("PopupAnimationType", typeof(AnimationType), options.PopupAnimationType)
+        </div>
+        <div>            
+            @Html.CheckBox("AllowDragging", options.AllowDragging, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowDragging">AllowDragging</label>
+        </div>
+        <div>
+            <label for="DragElement">DragElement:</label>
+            @Html.DropDownList("DragElement", typeof(DragElement), options.DragElement)
+        </div>
+        <div>            
+            @Html.CheckBox("AllowResize", options.AllowResize, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowResize">AllowResize</label>
+        </div>
+        <div>
+            <label for="ResizingMode">ResizingMode:</label>
+            @Html.DropDownList("ResizingMode", typeof(ResizingMode), options.ResizingMode)
+        </div>
+        <div>
+            <label for="ShowSizeGrip">ShowSizeGrip:</label>
+            @Html.DropDownList("ShowSizeGrip", typeof(ShowSizeGrip), options.ShowSizeGrip)
+        </div>
+        <div>
+            <label for="ScrollBars">ScrollBars:</label>
+            @Html.DropDownList("ScrollBars", typeof(ScrollBars), options.ScrollBars)
+        </div>
+        <div>
+            <label for="CloseAction">CloseAction:</label>
+            @Html.DropDownList("CloseAction", typeof(CloseAction), options.CloseAction)
+        </div>
+        <div>
+            <label for="PopupAction">PopupAction:</label>
+            @Html.DropDownList("PopupAction", typeof(PopupAction), options.PopupAction)
+        </div>
+        <div>
+            <label for="AppearAfter">AppearAfter (ms):</label>@Html.TextBox("AppearAfter", options.AppearAfter, new { size = "10" })
+            @Html.ValidationMessage("AppearAfter", new { @class = "validationMessage" })
+        </div>
+        <div>
+            <label for="DisappearAfter">DisappearAfter (ms):</label>@Html.TextBox("DisappearAfter", options.DisappearAfter, new { size = "10" })
+            @Html.ValidationMessage("DisappearAfter", new { @class = "validationMessage" })
+        </div>
+            
+        <input type="submit" value="Apply" />
+    </div>
+}

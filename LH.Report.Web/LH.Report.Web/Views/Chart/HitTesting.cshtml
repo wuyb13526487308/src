@@ -1,0 +1,181 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    var defaultMessage = "<span style=\"white-space:nowrap\">Move the mouse pointer over the chart to see information on hovered chart elements.</span>";
+
+    $(window).load(function () {
+        $("#hitTestPanel")[0].innerHTML = defaultMessage;
+        $(document).mousemove(OnMouseMove);
+    });
+
+    function GetValueString(value) {
+        if (!(value instanceof Date))
+            return value.toString();
+        var minutes = value.getMinutes();
+        return (value.getUTCMonth() + 1) + "/" + value.getUTCDate() + " " + value.getUTCHours() + ":" + Math.round(minutes / 10).toString() + (minutes % 10).toString();
+    }
+    function OnMouseMove(e) {
+        if (!ASPxClientUtils.GetIsParent(chart.GetMainDOMElement(), e.target))
+            return;
+        var x = e.pageX - $("#chart").offset().left;
+        var y = e.pageY - $("#chart").offset().top;
+        var hitInfo = chart.HitTest(x, y);
+
+        var text = "";
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientXYDiagram) {
+                text += "<br>In diagram";
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientXYDiagramPane) {
+                text += "<br>In non-default pane: " + hitInfo[i].object.name;
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientAxisBase) {
+                text += "<br>In axis: " + hitInfo[i].object.name;
+                if (hitInfo[i].additionalObject instanceof ASPxClientAxisLabelItem)
+                    text += "<br>Label item: " + hitInfo[i].additionalObject.text;
+                if (hitInfo[i].additionalObject instanceof ASPxClientAxisTitle)
+                    text += "<br>Axis title: " + hitInfo[i].additionalObject.text;
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientChartTitle) {
+                text += "<br>In chart title: " + hitInfo[i].object.lines[0];
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientLegend) {
+                text += "<br>In legend";
+                break;
+            }
+        var seriesFound = false;
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientSeries) {
+                text += "<br>In series: " + hitInfo[i].object.name;
+                seriesFound = true;
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].object instanceof ASPxClientSeriesLabel) {
+                text += "<br>In series label";
+                if (!seriesFound)
+                    text += "<br>Series: " + hitInfo[i].object.series.name;
+                break;
+            }
+        for (var i = 0; i < hitInfo.length; i++)
+            if (hitInfo[i].additionalObject instanceof ASPxClientSeriesPoint) {
+                text += "<br>Argument: " + GetValueString(hitInfo[i].additionalObject.argument);
+                if (!hitInfo[i].additionalObject.isEmpty)
+                    text += "<br>Value: " + hitInfo[i].additionalObject.values[0];
+                break;
+            }
+        var hitTestPanel = document.getElementById("hitTestPanel");
+        if (text.length > 0)
+            hitTestPanel.innerHTML = "<span style=\"white-space:nowrap\">Hit-testing results:" + text + "</span>";
+        else
+            hitTestPanel.innerHTML = defaultMessage;
+    }
+// ]]>
+</script>
+<div style="height: 90px" id="hitTestPanel"></div>
+@{
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.EnableClientSideAPI = true;
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 480;
+    settings.Width = 700;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Weather in London"
+    });
+        
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+    settings.Legend.Direction = LegendDirection.LeftToRight;
+
+    Series temperatureSeries = new Series("Temperature (°F)", DevExpress.XtraCharts.ViewType.Line);
+    temperatureSeries.ArgumentScaleType = ScaleType.DateTime;
+    temperatureSeries.ArgumentDataMember = "Date";
+    temperatureSeries.ValueDataMembers[0] = "Temperature";
+    temperatureSeries.LabelsVisibility = DefaultBoolean.True;
+    temperatureSeries.Label.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+    settings.Series.Add(temperatureSeries);
+        
+    XYDiagram diagram = (XYDiagram)settings.Diagram;
+    diagram.Panes.Add(new XYDiagramPane("pane1"));
+    diagram.Panes.Add(new XYDiagramPane("pane2"));
+    diagram.DefaultPane.Weight = 2;
+    diagram.Panes[1].Weight = 1.7;
+
+    diagram.AxisX.DateTimeMeasureUnit = DateTimeMeasurementUnit.Hour;
+    diagram.AxisX.Range.SideMarginsEnabled = false;
+    diagram.AxisX.Range.SetMinMaxValues(new DateTime(2008, 6, 5, 22, 0, 0), new DateTime(2008, 6, 11, 8, 0, 0));
+    diagram.AxisX.DateTimeGridAlignment = DateTimeMeasurementUnit.Hour;
+    diagram.AxisX.Label.Staggered = true;
+    diagram.AxisX.GridLines.Visible = true;
+    diagram.AxisX.Interlaced = true;
+    diagram.AxisX.DateTimeOptions.Format = DateTimeFormat.Custom;
+    diagram.AxisX.DateTimeOptions.FormatString = "dd/MM HH:mm";
+    diagram.AxisY.Range.AlwaysShowZeroLevel = false;
+    diagram.AxisY.GridLines.MinorVisible = true;
+    diagram.AxisY.Title.Text = "Temperature, °F";
+    diagram.AxisY.Title.Visible = true;
+
+    SecondaryAxisY pressureAxis = new SecondaryAxisY("PressureAxis");
+    pressureAxis.Range.AlwaysShowZeroLevel = false;
+    pressureAxis.GridLines.Visible = true;
+    pressureAxis.GridLines.MinorVisible = true;
+    pressureAxis.Alignment = AxisAlignment.Near;
+    pressureAxis.Title.Text = "Pressure, mbar";
+    pressureAxis.Title.Visible = true;
+    diagram.SecondaryAxesY.Add(pressureAxis);
+
+    SecondaryAxisY humidityAxis = new SecondaryAxisY("HumidityAxis");
+    ConstantLine constantLine = new ConstantLine();
+    constantLine.AxisValue = 100;
+    constantLine.ShowInLegend = false;
+    constantLine.Title.Visible = false;
+    humidityAxis.Range.SideMarginsEnabled = false;
+    humidityAxis.Range.SetMinMaxValues(0, 120);
+    humidityAxis.GridLines.Visible = true;
+    humidityAxis.GridLines.MinorVisible = true;
+    humidityAxis.Alignment = AxisAlignment.Near;
+    humidityAxis.ConstantLines.Add(constantLine);
+    humidityAxis.Title.Text = "Humidity, %";
+    humidityAxis.Title.Visible = true;
+    diagram.SecondaryAxesY.Add(humidityAxis);
+        
+    Series pressureSeries = new Series("Pressure (mbar)", DevExpress.XtraCharts.ViewType.Area);
+    settings.Series.Add(pressureSeries);
+    pressureSeries.ArgumentScaleType = ScaleType.DateTime;
+    pressureSeries.ArgumentDataMember = "Date";
+    pressureSeries.ValueDataMembers[0] = "Pressure";
+    pressureSeries.LabelsVisibility = DefaultBoolean.False;
+    AreaSeriesView pressureView = (AreaSeriesView)pressureSeries.View;
+    pressureView.MarkerVisibility = DefaultBoolean.False;
+    pressureView.Transparency = 0;
+    pressureView.Pane = diagram.Panes[0];
+    pressureView.AxisY = pressureAxis;
+
+    Series humiditySeries = new Series("Humidity, %", DevExpress.XtraCharts.ViewType.Bar);
+    settings.Series.Add(humiditySeries);
+    humiditySeries.LabelsVisibility = DefaultBoolean.False;
+    humiditySeries.ArgumentScaleType = ScaleType.DateTime;
+    humiditySeries.ArgumentDataMember = "Date";
+    humiditySeries.ValueDataMembers[0] = "RelativeHummidity";
+    SideBySideBarSeriesView humidityView = ((SideBySideBarSeriesView)humiditySeries.View);
+    humidityView.Pane = diagram.Panes[1];
+    humidityView.AxisY = humidityAxis;
+    humidityView.BarWidth = 1.5;
+                
+    diagram.AxisX.SetVisibilityInPane(false, diagram.DefaultPane);
+    diagram.AxisX.SetVisibilityInPane(false, diagram.Panes[0]);
+    diagram.AxisX.SetVisibilityInPane(true, diagram.Panes[1]);
+}    
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

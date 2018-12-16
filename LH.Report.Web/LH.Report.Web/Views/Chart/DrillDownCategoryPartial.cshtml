@@ -1,0 +1,35 @@
+﻿@{
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.EnableClientSideAPI = true;
+    settings.CallbackRouteValues = new { Controller = "Chart", Action = "DrillDownPartial" };
+    settings.ClientSideEvents.ObjectHotTracked = "function (s, e) { chart.SetCursor(e.hitInfo.inChartTitle ? 'pointer' : 'default'); }";
+    settings.ClientSideEvents.ObjectSelected = "function (s, e) { if(e.hitInfo.inChartTitle) { document.location = '" + DevExpressHelper.GetUrl(new { Controller = "Chart", Action = "DrillDown" }) + "'; } }";
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.Top;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Back to the main view...",
+        Font = new Font("Tahoma", 10, FontStyle.Underline),
+        TextColor = Color.Blue,
+        Alignment = StringAlignment.Near,
+        Antialiasing = false
+    });
+
+    Series series = new Series(ViewData[ChartDemoHelper.CategoryKey].ToString(), DevExpress.XtraCharts.ViewType.Bar);
+    series.SeriesPointsSortingKey = SeriesPointKey.Value_1;
+    series.SeriesPointsSorting = SortingMode.Ascending;
+    series.ArgumentDataMember = "ProductName";
+    series.ValueDataMembers[0] = "UnitPrice";
+    settings.Series.Add(series);
+
+    XYDiagram diagram = (XYDiagram)settings.Diagram;
+    diagram.AxisY.Title.Visible = true;
+    diagram.AxisY.Title.Text = "Price, USD";
+    diagram.AxisX.Label.Angle = 30;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

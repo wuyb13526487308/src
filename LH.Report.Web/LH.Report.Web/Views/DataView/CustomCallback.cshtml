@@ -1,0 +1,38 @@
+﻿<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/DataView/CSS/CustomCallback.css")" />
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function () {
+        SetSortOrderSelectionEnabled();
+        $("#sortField").change(
+            function() {
+                SetSortOrderSelectionEnabled();
+                SortDataView();
+            }
+        );
+        $("#sortOrder").change(
+            function() {
+                SortDataView();
+            }
+        );
+    });
+
+    function SetSortOrderSelectionEnabled() {
+        if(!$("#sortField").val())
+            $("#sortOrder").attr("disabled", "disabled");
+        else {
+            if($("#sortOrder").is(':disabled'))
+                $("#sortOrder").removeAttr("disabled");
+        }
+    }
+    function SortDataView() {
+        var sortCommand = $("#sortField").val() ? " ORDER BY " + $("#sortField").val() + " " + $("#sortOrder").val() : '';
+        dvCameras.PerformCallback({ 'sortCommand': sortCommand });
+    }
+// ]]>
+</script>
+<div style="float: right" class="BottomMargin">
+    <label for="sortField" style="vertical-align: middle">Sort by:</label>
+    @Html.DropDownList("sortField", DataViewDemoHelper.GetSortFields(), new { style = "width:70px; vertical-align: middle" })
+    @Html.DropDownList("sortOrder", DataViewDemoHelper.GetSortOrders(), new { style = "width:100px; vertical-align: middle" })
+</div>
+@Html.Partial("CustomCallbackPartial")

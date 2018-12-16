@@ -1,0 +1,59 @@
+﻿@functions{
+    public void UpdatePivotGridLayout(MVCxPivotGrid pivotGrid){
+        PivotGridDemoHelper.UpdatePivotGridLayoutForSampleReportsDemo(pivotGrid, (PivotGridReportsDemoOptions)Session["ReportOptions"]);
+    }
+}
+
+@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "pivotGrid";
+        settings.CallbackRouteValues = new { Controller = "PivotGrid", Action = "SampleReportsPartial" };
+        settings.CustomActionRouteValues = new { Controller = "PivotGrid", Action = "CustomActionSampleReportsPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.OptionsView.ShowHorizontalScrollBar = true;
+        
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 0;
+            field.FieldName = "CompanyName";
+            field.Caption = "Customer";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 0;
+            field.FieldName = "OrderDate";
+            field.Caption = "Year";
+            field.GroupInterval = PivotGroupInterval.DateYear;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 1;
+            field.FieldName = "OrderDate";
+            field.Caption = "Quarter";
+            field.GroupInterval = PivotGroupInterval.DateQuarter;
+            field.ValueFormat.FormatType = FormatType.Numeric;
+            field.ValueFormat.FormatString = "Qtr {0}";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 0;
+            field.FieldName = "ProductAmount";
+            field.Caption = "Product Amount";
+            field.CellFormat.FormatType = FormatType.Custom;
+            field.CellFormat.FormatString = "c";
+        });
+        settings.Fields.Add(field => {
+            field.AreaIndex = 0;
+            field.FieldName = "ProductName";
+            field.Caption = "Product Name";
+        });
+
+        settings.PreRender = (sender, e) => {
+            UpdatePivotGridLayout((MVCxPivotGrid)sender);
+        };
+        settings.BeforeGetCallbackResult = (sender, e) => {
+            if (ViewBag.IsReloadLayout != null && ViewBag.IsReloadLayout)
+                UpdatePivotGridLayout((MVCxPivotGrid)sender);
+        };
+    }).Bind(Model).GetHtml()

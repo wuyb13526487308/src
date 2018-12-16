@@ -1,0 +1,57 @@
+﻿@{
+    ChartBarViewsDemoOptions options = (ChartBarViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Population: Age Structure"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.geohive.com"
+    });
+
+    settings.SeriesTemplate.ChangeView(options.View);
+    settings.SeriesDataMember = "Age";
+    settings.SeriesTemplate.ArgumentDataMember = "Name";
+    settings.SeriesTemplate.ValueDataMembers[0] = "Population";
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        foreach (Series series in chart.Series)
+            ((ISupportStackedGroup)series.View).StackedGroup = series.Name.Contains("Female") ? "Female" : "Male";
+    };
+    
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+    settings.Legend.Direction = LegendDirection.LeftToRight;
+    settings.Legend.MaxHorizontalPercentage = 70;
+    
+    if (settings.Diagram is XYDiagram) {
+        ((XYDiagram)settings.Diagram).Rotated = options.Rotated;
+        Axis2D axisY = ((XYDiagram)settings.Diagram).AxisY;
+        axisY.Interlaced = true;
+        axisY.Title.Text = "Population, millions";
+        axisY.Title.Visible = true;
+    }
+    else {
+        XYDiagram3D diagram = (XYDiagram3D)settings.Diagram;
+        diagram.AxisX.Label.MaxWidth = 60;
+        diagram.AxisY.Interlaced = true;
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.XYZ;
+        diagram.ZoomPercent = 140;
+        diagram.VerticalScrollPercent = 4;
+    }
+}
+            
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

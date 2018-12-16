@@ -1,0 +1,15 @@
+﻿@model IEnumerable
+
+@Html.DevExpress().RoundPanel(
+    settings => {
+        settings.Name = "roundPanel";
+        settings.HeaderText = "Complex Pivot Table" ;
+        settings.Width = Unit.Percentage(100);
+        settings.SetContent(() => {
+            ViewContext.Writer.Write("<div><div style=\"float:left; padding-right:10px;\">");
+                Html.DevExpress().PivotCustomizationExtension(PivotGridDemoHelper.CompactLayoutPivotGridSettings).Render();
+            ViewContext.Writer.Write("</div><div>");
+                Html.RenderPartial("CompactLayoutPartial", Model);
+            ViewContext.Writer.Write("</div></div>");
+        });
+    }).GetHtml()

@@ -1,0 +1,85 @@
+﻿@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "reportContainer";
+        settings.Modal = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.Width = Unit.Pixel(920);
+        settings.Height = Unit.Pixel(700);
+        settings.HeaderText = "Print Preview";
+        settings.AllowDragging = true;
+        settings.PopupAnimationType = AnimationType.None;
+        
+        settings.SetContent(() => {
+            ViewContext.Writer.Write("<div style=\"width: 670px; height: 35px\">");
+            Html.DevExpress().ReportToolbar(
+                reportToolbarSettings => {
+                    reportToolbarSettings.Name = "reportToolbar";
+                    reportToolbarSettings.ReportViewerName = "reportViewer";
+                    reportToolbarSettings.ShowDefaultButtons = false;
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton(){
+                        ItemKind = ReportToolbarItemKind.Search,
+                        Enabled = false
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarSeparator());
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() { 
+                        ItemKind = ReportToolbarItemKind.PrintReport,
+                        ToolTip = "Print the report"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() { 
+                        ItemKind = ReportToolbarItemKind.PrintPage,
+                        ToolTip = "Print the current page" 
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarSeparator());
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() { 
+                        ItemKind = ReportToolbarItemKind.FirstPage,
+                        ToolTip = "First Page" 
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() {
+                        ItemKind = ReportToolbarItemKind.PreviousPage,
+                        ToolTip = "Previous Page" 
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarLabel() {
+                        Text = "Page"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarComboBox() { 
+                        ItemKind = ReportToolbarItemKind.PageNumber,
+                        Width = Unit.Pixel(65) 
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarLabel() {
+                        Text = "of"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarTextBox() {
+                        IsReadOnly = true,
+                        ItemKind = ReportToolbarItemKind.PageCount
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() {
+                        ItemKind = ReportToolbarItemKind.NextPage,
+                        ToolTip = "Next Page"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() {
+                        ItemKind = ReportToolbarItemKind.LastPage,
+                        ToolTip = "Last Page"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarSeparator());
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() {
+                        ItemKind = ReportToolbarItemKind.SaveToDisk,
+                        ToolTip = "Export a report and save it to the disk"
+                    });
+                    reportToolbarSettings.Items.Add(new ReportToolbarButton() {
+                        ItemKind = ReportToolbarItemKind.SaveToWindow,
+                        ToolTip = "Export a report and show it in a new window"
+                    });
+                    var saveFormatComboBox = new ReportToolbarComboBox(ReportToolbarItemKind.SaveFormat);
+                    saveFormatComboBox.Width = 70;
+                    saveFormatComboBox.Elements.Add(new ListElement() { Text = "Pdf", Value = "pdf" });
+                    saveFormatComboBox.Elements.Add(new ListElement() { Text = "Mht", Value = "mht" });
+                    saveFormatComboBox.Elements.Add(new ListElement() { Text = "Image", Value = "png" });
+                    reportToolbarSettings.Items.Add(saveFormatComboBox);
+                    reportToolbarSettings.Styles.LabelStyle.Margins.MarginLeft = 3;
+                    reportToolbarSettings.Styles.LabelStyle.Margins.MarginRight = 3;
+                }).Render();
+            ViewContext.Writer.Write("</div>");
+            Html.RenderAction("ReportTemplatesViewerPartial");
+        });
+    }).GetHtml()

@@ -1,0 +1,5 @@
+﻿@{
+    PivotGridExportDemoOptions options = (PivotGridExportDemoOptions)Session["ExportOptions"];
+}
+
+@Html.DevExpress().PivotGrid(PivotGridDemoHelper.ExportPivotGridSettings).Bind(Model).GetHtml()

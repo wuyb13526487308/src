@@ -1,0 +1,8 @@
+﻿@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvVirtualMode";
+        settings.CallbackRouteValues = new { Controller = "TreeView", Action = "VirtualModePartial" };
+        settings.Images.NodeImage.Width = 13;
+        settings.Styles.NodeImage.Paddings.PaddingTop = 3;
+    }).BindToVirtualData(TreeViewVirtualModeHelper.CreateChildren).GetHtml()

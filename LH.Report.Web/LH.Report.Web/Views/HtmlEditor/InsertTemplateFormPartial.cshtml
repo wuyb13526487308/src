@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvTemplates";
+        settings.CallbackRouteValues = new { Controller = "HtmlEditor", Action = "InsertTemplateFormPartial" };
+        settings.Width = 400;
+        settings.KeyFieldName = "Name";
+
+        settings.Columns.Add("Name").Visible = false;
+        settings.Columns.Add("ImageUrl", MVCxGridViewColumnType.Image);
+        settings.Columns.Add("Description").Width = Unit.Percentage(100);
+        settings.Columns.Add("Html").Visible = false;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+        settings.Settings.ShowColumnHeaders = false;
+
+        settings.ClientSideEvents.RowDblClick = "OnGridRowDblClick";
+    }).BindToXML(Server.MapPath("~/App_Data/InsertTemplateData.xml"), "//Templates/*", Server.MapPath("~/App_Data/InsertTemplateData.xsl")).GetHtml()

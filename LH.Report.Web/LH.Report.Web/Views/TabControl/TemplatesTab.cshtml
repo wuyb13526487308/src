@@ -1,0 +1,12 @@
+﻿@model MVCxTabPage
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td><img alt="" src="@Url.Content("~/Content/TabControl/UnSelectedLeft.gif")" width="14px" height="31px"/></td>
+        <td style="white-space: nowrap; background-repeat: repeat-x; background-image:url(@Url.Content("~/Content/TabControl/UnSelectedCenter.gif"));">
+            <span style="font-family:tahoma; color:#333333; font-size:8pt">
+                @Model.Text
+            </span>
+        </td>
+        <td><img alt="" src="@Url.Content("~/Content/TabControl/UnSelectedRight.gif")" width="14px" height="31px"/></td>
+    </tr>
+</table>

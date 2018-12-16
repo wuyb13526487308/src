@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "nbCallbacks";
+        settings.CallbackRouteValues = new { Controller = "NavBar", Action = "CallbacksPartial" };
+        settings.Width = 560;
+
+        settings.GroupDataBound = (sender, e) =>
+            {
+                IHierarchyData hierarchyData = (e.Group.DataItem as IHierarchyData);
+                System.Xml.XmlElement xmlElement = hierarchyData.Item as System.Xml.XmlElement;
+                System.Xml.XmlAttributeCollection attributes = xmlElement.Attributes;
+
+                if (xmlElement.Attributes["View"] != null)
+                    e.Group.Text = xmlElement.Attributes["View"].Value;
+                    
+                e.Group.Expanded = e.Group.Index == 0;
+            };
+        settings.SetGroupContentTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>" +
+                    "<td valign=\"top\"><img src=\"" + Url.Content(DataBinder.Eval(c.Group.DataItem, "BigImageUrl").ToString()) + "\" alt=\"" + DataBinder.Eval(c.Group.DataItem, "View") + "\" /></td>" +
+                    "<td valign=\"top\" style=\"padding-left: 10px; color: #9D9D9D;\"><div class=\"hint\">" + DataBinder.Eval(c.Group.DataItem, "Description") + "</div></td>" +
+                "</tr></table>"
+            );
+        });
+    }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Charts.xml"), "//Chart").GetHtml()

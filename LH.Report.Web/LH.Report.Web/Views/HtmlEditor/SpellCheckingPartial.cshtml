@@ -1,0 +1,27 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heSpellChecking";
+        settings.CallbackRouteValues = new { Controller = "HtmlEditor", Action = "SpellCheckingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/CheckSpelling.htm");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+        settings.CssFiles.Add("~/Content/HtmlEditor/DemoCss/SpellChecking.css");
+
+        settings.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "HtmlEditor", Action = "SpellCheckingImageUpload" };
+        settings.SettingsImageUpload.UploadImageFolder = HtmlEditorDemosHelper.UploadDirectory;
+        settings.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDemosHelper.ImageUploadValidationSettings);
+
+        settings.Toolbars.CreateDefaultToolbars();
+        settings.Toolbars[0].Items.Add(new ToolbarCheckSpellingButton(true));
+                        
+        settings.SettingsSpellChecker.Culture = new System.Globalization.CultureInfo("en-us");
+        ASPxSpellCheckerISpellDictionary dictionary = new ASPxSpellCheckerISpellDictionary();
+        dictionary.AlphabetPath = "~/Dictionaries/EnglishAlphabet.txt";
+        dictionary.GrammarPath = "~/Dictionaries/english.aff";
+        dictionary.DictionaryPath = "~/Dictionaries/american.xlg";
+        dictionary.CacheKey = "ispellDic";
+        dictionary.Culture = new System.Globalization.CultureInfo("en-us");
+        dictionary.EncodingName = "Western European (Windows)";
+        settings.SettingsSpellChecker.Dictionaries.Add(dictionary);
+    }).GetHtml()

@@ -47,7 +47,7 @@ body {
     color: #999;
     font: 14px "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu;
     text-align: center;
-    background-color: #14b9d6
+    background-color: #14b9d6 ;
 }
 
 textarea, select, input {

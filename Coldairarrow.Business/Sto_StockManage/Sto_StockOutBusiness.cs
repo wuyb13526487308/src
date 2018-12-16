@@ -26,9 +26,22 @@ namespace Coldairarrow.Business.Sto_StockManage
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<Sto_StockOut> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<StockOutModel> GetDataList(string condition, string keyword, Pagination pagination)
         {
-            var q = GetIQueryable();
+            //var q = GetIQueryable();
+            var whereExpre = LinqHelper.True<StockOutModel>();
+
+            Expression<Func<Sto_StockOut, object, StockOutModel>> selectExpre = (a, b) => new StockOutModel
+            {
+                StoreName = (List<string>)b
+            };
+            selectExpre = selectExpre.BuildExtendSelectExpre();
+
+            var db_MaterialUnitMap = Service.GetIQueryable<Sto_Storage>();
+
+            var q = from a in GetIQueryable().AsExpandable()
+                    let UnitNames = db_MaterialUnitMap.Where(x => x.StoreNo == a.StoreId).Select(x => x.StoreName)
+                    select selectExpre.Invoke(a, UnitNames);
 
             //模糊查询
             if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
@@ -49,27 +62,28 @@ namespace Coldairarrow.Business.Sto_StockManage
             var db = DbFactory.GetRepository();
 
             var where = LinqHelper.True<StockOutListItem>();
-            Expression<Func<Sto_StockOut, Sto_StockOutItem, Sto_Storage, StockOutListItem>> select = (a, b, c) => new StockOutListItem
+            Expression<Func< Sto_StockOutItem,Sto_StockOut, Sto_Storage, Sto_MaterialUnit, StockOutListItem>> select = (a, b, c,d) => new StockOutListItem
             {
-                Id=b.Id,
-                ApplyNo = a.ApplyNo,
-                AuditDate = a.AuditDate,
-                Auditor = a.Auditor,
-                Context = a.Context,
-                OutNo = a.OutNo,
-                OutDate = a.OutDate,
-                OutOperID = a.OutOperID,
-                MatName = b.MatName,
-                MatNo = b.MatNo,
-                GuiGe = b.GuiGe,
-                Price = b.Price,
-                OutType = a.OutType,
-                Quantity = b.Quantity,
-                UnitNo = b.UnitNo,
+                Id=a.Id,
+                ApplyNo = b.ApplyNo,
+                AuditDate = b.AuditDate,
+                Auditor = b.Auditor,
+                Context = b.Context,
+                OutNo = b.OutNo,
+                OutDate = b.OutDate,
+                OutOperID = b.OutOperID,
+                OutType = b.OutType,
+                MatName = a.MatName,
+                MatNo = a.MatNo,
+                GuiGe = a.GuiGe,
+                Price = a.Price,
+                Quantity = a.Quantity,
+                UnitNo = a.UnitNo,
                 StoreId = c.StoreNo,
-                StoreName = c.StoreName
+                StoreName = c.StoreName,
+                UnitName = d.Name
             };
-            //select = select.BuildExtendSelectExpre();
+            select = select.BuildExtendSelectExpre();
 
             /*
                var q = from a in db.GetIQueryable<Dev_Project>().AsExpandable()
@@ -79,12 +93,17 @@ namespace Coldairarrow.Business.Sto_StockManage
                     from c in ac.DefaultIfEmpty()
                     select @select.Invoke(a, b, c);
              */
-            var query = from a in db.GetIQueryable<Sto_StockOut>().AsExpandable()
-                        join b in db.GetIQueryable<Sto_StockOutItem>() on a.OutNo equals b.OutNo into ab
+
+            var db_MaterialUnitMap = Service.GetIQueryable<Sto_MaterialUnit>();
+
+            var query = from a in db.GetIQueryable<Sto_StockOutItem>().AsExpandable()
+                        join b in db.GetIQueryable<Sto_StockOut>() on a.OutNo equals b.OutNo into ab
                         from b in ab.DefaultIfEmpty()
-                        join c in db.GetIQueryable<Sto_Storage>() on a.StoreId equals c.StoreNo into ac
+                        join c in db.GetIQueryable<Sto_Storage>() on b.StoreId equals c.StoreNo into ac
                         from c in ac.DefaultIfEmpty()
-                        select @select.Invoke(a, b, c);
+                        join d in db.GetIQueryable<Sto_MaterialUnit>() on a.UnitNo equals d.UnitNum into ad
+                        from d in ad.DefaultIfEmpty()
+                        select @select.Invoke(a, b, c, d);
 
             //if (!projectName.IsNullOrEmpty())
             //    where = where.And(x => x.ProjectName.Contains(projectName));
@@ -236,17 +255,18 @@ namespace Coldairarrow.Business.Sto_StockManage
     public class StockOutModel : Sto_StockOut
     {
         public List<Sto_StockOutItem> StockOutItems { get; set; } = new List<Sto_StockOutItem>();
+        public List<string> StoreName { get; set; }
     }
 
 
-    public class StockOutListItem
+    public class StockOutListItem : Sto_StockOutItem
     {
-        [Key]
-        public String Id { get; set; }
-        /// <summary>
-        /// OutNo
-        /// </summary>
-        public String OutNo { get; set; }
+        //[Key]
+        //public String Id { get; set; }
+        ///// <summary>
+        ///// OutNo
+        ///// </summary>
+        //public String OutNo { get; set; }
 
         /// <summary>
         /// OutDate
@@ -258,10 +278,10 @@ namespace Coldairarrow.Business.Sto_StockManage
         /// </summary>
         public String OutOperID { get; set; }
 
-        /// <summary>
-        /// Context
-        /// </summary>
-        public String Context { get; set; }
+        ///// <summary>
+        ///// Context
+        ///// </summary>
+        //public String Context { get; set; }
 
         /// <summary>
         /// State
@@ -295,35 +315,37 @@ namespace Coldairarrow.Business.Sto_StockManage
 
         public string StoreName { get; set; }
 
-        /// <summary>
-        /// MatNo
-        /// </summary>
-        public String MatNo { get; set; }
+        ///// <summary>
+        ///// MatNo
+        ///// </summary>
+        //public String MatNo { get; set; }
 
-        /// <summary>
-        /// MatName
-        /// </summary>
-        public String MatName { get; set; }
+        ///// <summary>
+        ///// MatName
+        ///// </summary>
+        //public String MatName { get; set; }
 
-        /// <summary>
-        /// GuiGe
-        /// </summary>
-        public String GuiGe { get; set; }
+        ///// <summary>
+        ///// GuiGe
+        ///// </summary>
+        //public String GuiGe { get; set; }
 
-        /// <summary>
-        /// UnitNo
-        /// </summary>
-        public String UnitNo { get; set; }
+        ///// <summary>
+        ///// UnitNo
+        ///// </summary>
+        //public String UnitNo { get; set; }
 
-        /// <summary>
-        /// Price
-        /// </summary>
-        public String Price { get; set; }
+        public string UnitName { get; set; }
 
-        /// <summary>
-        /// Quantity
-        /// </summary>
-        public Decimal? Quantity { get; set; }
+        ///// <summary>
+        ///// Price
+        ///// </summary>
+        //public String Price { get; set; }
+
+        ///// <summary>
+        ///// Quantity
+        ///// </summary>
+        //public Decimal? Quantity { get; set; }
     }
 
 }

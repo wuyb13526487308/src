@@ -1,0 +1,30 @@
+﻿@functions{
+    public string SortColor(string fieldName) {
+        return ((string)Session["SortCommand"]).Contains(fieldName) ? "dvcSortColor" : "";
+    }
+}
+
+@Html.DevExpress().DataView(
+    settings => {
+        settings.Name = "dvCameras";
+        settings.CallbackRouteValues = new { Controller = "DataView", Action = "CustomCallbackPartial" };
+        settings.CustomActionRouteValues = new { Controller = "DataView", Action = "SortData" };
+        settings.ColumnCount = 2;
+        settings.RowPerPage = 5;
+        settings.Width = Unit.Percentage(100);
+        settings.Style.Add("clear", "both");
+        settings.Styles.Item.Height = Unit.Pixel(50);
+        settings.Styles.Item.Paddings.Assign(new Paddings { PaddingTop = Unit.Pixel(5), PaddingBottom = Unit.Pixel(5) });
+        settings.SetItemTemplateContent(
+            c => { 
+                ViewContext.Writer.Write(
+                    "<img style=\"float: left; height: 100%\" src=\"" + Url.Content("~/Content/NavBar/Cameras/") + DataBinder.Eval(c.DataItem, "ImageFileName").ToString() + "\" alt=\"\" />" +
+                    "<div style=\"padding: 12px 0\">" +
+                        "<label class=\"" + SortColor("Model") + "\" style=\"margin-left: 5px; font-weight: bold\">" + DataBinder.Eval(c.DataItem, "Model").ToString() + "</label><br />" +
+                        "<label class=\"" + SortColor("Pixels") + "\" style=\"margin-left: 5px; font-weight: bold\">" + DataBinder.Eval(c.DataItem, "Pixels").ToString() + " million pixels</label>" + 
+                    "</div>"    
+                );
+            }
+        );
+    }
+).Bind(Model).GetHtml()

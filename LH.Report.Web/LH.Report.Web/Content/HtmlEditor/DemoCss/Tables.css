@@ -1,0 +1,9 @@
+﻿html, body, form {
+	font-family: Tahoma, Arial, Verdana;
+	font-size: small;
+	color: #303440;
+}
+.taskList td, .taskList th
+{
+	font-size: 10pt;
+}

@@ -1,0 +1,60 @@
+﻿@model ValidationSchedule
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@using (Html.BeginForm()) {
+    <table style="height: 100%; border-collapse: collapse" width="100%">
+        <tr valign="top">
+            <td>
+                <div style="background: #73a2bb; color: white; font-weight: bold; padding: 3px; border-bottom: solid 1px #4986a2">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                @Html.DevExpress().Label(
+                                    settings => {
+                                        settings.Text = ViewBag.AppointmentTime;
+                                    }).GetHtml()
+                            </td>
+                            <td align="right">
+                                <img id="closeInplaceEditorForm" src="@Url.Content("~/Content/Scheduler/CustomForms/Close.png")" alt="Close" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <table width="100%" cellpadding="8">
+                    <tr valign="top">
+                        <td>
+                            <b>Subject:</b>
+                        </td>
+                        <td style="width: 100%;">
+                            @Html.DevExpress().TextBox(
+                                settings => {
+                                    settings.Name = "Subject";
+                                    settings.Width = Unit.Percentage(100);
+                                    settings.ShowModelErrors = true;
+                                }).Bind(Model.Subject).GetHtml()
+                            <div style="font-size: 8pt; margin-top: 4px;">
+                                for instance, Meeting with friends
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr valign="bottom">
+            <td style="padding: 8px;">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <input type="button" value="Update" id="saveInplaceFormData" />
+                        </td>
+                        <td align="right">
+                            <span id="moreInformation" style="cursor: pointer; color: blue; text-decoration: underline;">More Information&hellip;</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}

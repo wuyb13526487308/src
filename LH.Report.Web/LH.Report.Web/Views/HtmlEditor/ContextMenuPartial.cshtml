@@ -1,0 +1,39 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings =>
+    {
+        settings.Name = "heContextMenu";
+        settings.CallbackRouteValues = new { Controller = "HtmlEditor", Action = "ContextMenuPartial" };
+        settings.Width = 490;
+        settings.Height = 370;
+
+        string htmlContentPath = HttpContext.Current.Server.MapPath("~/Content/HtmlEditor/DemoHtml/ContextMenu.htm");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        settings.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "HtmlEditor", Action = "ContextMenuImageUpload" };
+        settings.SettingsImageUpload.UploadImageFolder = HtmlEditorDemosHelper.UploadDirectory;
+        settings.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDemosHelper.ImageUploadValidationSettings);
+
+        settings.SettingsImageSelector.Enabled = true;
+
+        settings.Toolbars.Add("Toolbar1",
+            new ToolbarUndoButton(true),
+            new ToolbarRedoButton(),
+            new ToolbarBoldButton(true),
+            new ToolbarItalicButton(),
+            new ToolbarUnderlineButton(),
+            new ToolbarStrikethroughButton(),
+            new ToolbarInsertLinkDialogButton(true),
+            new ToolbarUnlinkButton(),
+            new ToolbarInsertImageDialogButton(),
+            new ToolbarTableOperationsDropDownButton(true),
+            new ToolbarFullscreenButton(true)
+        ).CreateDefaultItems();
+
+        if(ViewData["AllowContextMenu"] != null)
+            settings.Settings.AllowContextMenu = (DefaultBoolean)ViewData["AllowContextMenu"];
+        if(ViewData["ContextMenuItems"] != null)
+            settings.ContextMenuItems.Assign((HtmlEditorContextMenuItemCollection)ViewData["ContextMenuItems"]);
+
+        settings.ClientSideEvents.ContextMenuShowing = "OnContextMenuShowing";
+        settings.ClientSideEvents.CustomCommand = "OnCustomCommand";
+    }).GetHtml()

@@ -1,0 +1,29 @@
+﻿.zone {
+	background-color: #F4F4F4;
+	border-color: #D9D9D9;
+	border-width: 1px;
+	border-style: solid;
+}
+.zone.vertical  {
+	float: left;
+	margin-left: 3px;
+}
+.zone.vertical.first {
+	margin: 0;
+}
+.zone.horizontal {
+	margin-top: 3px;
+}
+.zone.allowed {
+	background-color: #D6F0CE;
+	border-color: #AECDA7;
+}
+.zone.forbidden {
+	background-color: #FADADA;
+	border-color: #EDBFBF;
+}
+.zoneContainer {
+	padding-left: 106px;
+}
+
+

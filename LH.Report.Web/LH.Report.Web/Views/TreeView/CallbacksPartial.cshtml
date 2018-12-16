@@ -1,0 +1,12 @@
+﻿@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvCallbacks";
+        settings.CallbackRouteValues = new { Controller = "TreeView", Action = "CallbacksPartial" };
+
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.Nodes[0].Expanded = true;
+            treeView.Nodes[1].Expanded = true;
+        };
+    }).BindToSiteMap("~/App_Data/Feature.sitemap", false).GetHtml()

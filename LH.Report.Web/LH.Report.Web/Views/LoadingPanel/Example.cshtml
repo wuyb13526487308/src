@@ -1,0 +1,37 @@
+﻿<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function () {
+        $("#DisplayOverPanel").change(
+            function() {
+                $("form").submit();
+            }
+        );
+    });
+// ]]>
+</script>
+@using (Html.BeginForm()) {
+    bool IsDisplayedOverPanel = (bool)ViewData["DisplayOverPanel"];
+	@Html.Partial("ExamplePartial")
+    <div class="BottomPadding">
+        @Html.CheckBox("DisplayOverPanel", IsDisplayedOverPanel, new { style = "vertical-align: middle" })
+        <label class="checkBox" for="DisplayOverPanel" style="vertical-align: middle">Display the Loading Panel over a specific control</label>
+    </div>
+    <div id="Panel" style="border: Dashed 1px Gray; margin: 30px 20%; padding: 51px 0px">
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "Button";
+                settings.Text = "Show Loading Panel";
+                settings.ClientSideEvents.Click = "function(s, e) { CallbackPanel.PerformCallback(); }";
+                settings.Width = 148;
+                settings.Style.Add("margin", "0 auto");
+            }
+        ).GetHtml()
+    </div>
+    @Html.DevExpress().LoadingPanel(
+        settings => {
+            settings.Name = "LoadingPanel";
+            settings.Modal = true;
+            settings.ContainerElementID = IsDisplayedOverPanel ? "Panel" : "";
+        }
+    ).GetHtml()
+}

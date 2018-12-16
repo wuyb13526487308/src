@@ -1,0 +1,38 @@
+﻿@using (Html.BeginForm("MultiFileUpload", "UploadControl", FormMethod.Post, new { @class = "imageGallery" })) {
+    @Html.DevExpress().UploadControl(
+        settings =>
+        {
+            settings.Name = "ucMultiFile";
+
+            settings.AddUploadButtonsHorizontalPosition = AddUploadButtonsHorizontalPosition.Left;
+            settings.FileInputCount = UploadControlDemosHelper.FileInputCount;
+            settings.ShowAddRemoveButtons = true;
+            settings.ValidationSettings.Assign(UploadControlDemosHelper.ValidationSettings);
+        }).GetHtml()
+    <br />
+    <div class="text">
+        Allowed image types: jpeg, gif<br />
+        Maximum file size: 20MB
+    </div>
+    <div class="buttons">
+        <input type="submit" name="add" value="Add images to collection" />&nbsp;
+        <input type="submit" name="clear" value="Clear collection" />
+    </div>            
+    @Html.DevExpress().RoundPanel(
+        rpSettings => {
+            rpSettings.Name = "rpImageCollection";
+            rpSettings.HeaderText = "Image Collection";
+            rpSettings.ControlStyle.HorizontalAlign = (UploadControlDemosHelper.Files.Count == 0) ? HorizontalAlign.Center : HorizontalAlign.Left;
+            rpSettings.Width = Unit.Percentage(100);
+            rpSettings.SetContent(() => {
+                if(UploadControlDemosHelper.Files.Count == 0)
+                    ViewContext.Writer.Write("<span class=\"empty_collection_text\">No images</span>");
+                else {
+                    for(int i = 0; i < UploadControlDemosHelper.Files.Count; i++) {
+                        string filePath = UploadControlDemosHelper.UploadDirectory + string.Format(UploadControlDemosHelper.ThumbnailFormat, i, System.IO.Path.GetExtension(UploadControlDemosHelper.Files[i]));
+                        ViewContext.Writer.Write("<img alt=\"\" align=\"top\" class=\"item\" src=\"" + Url.Content(filePath) + "\" />");
+                    }
+                }
+            });
+            }).GetHtml()
+}

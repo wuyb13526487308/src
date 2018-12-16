@@ -1,0 +1,56 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "pivotGrid";
+        settings.CallbackRouteValues = new { Controller = "PivotGrid", Action = "Templatespartial" };
+        settings.OptionsCustomization.AllowDrag = false;
+        settings.OptionsView.ShowFilterHeaders = false;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 0;
+            field.FieldName = "CategoryName";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 1;
+            field.FieldName = "ProductName";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 0;
+            field.FieldName = "ProductSales";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 1;
+            field.Caption = "Percents";
+            field.FieldName = "ProductSales";
+            field.SummaryDisplayType = PivotSummaryDisplayType.PercentOfColumn;
+        });
+
+        settings.SetCellTemplateContent(c => {
+            if (c.DataField != null && c.DataField.Caption == "Percents") {
+                int value = Convert.ToInt32(Convert.ToDecimal(c.Value) * 350);
+                Color cellColor = c.Item.RowValueType == PivotGridValueType.Total ? Color.FromArgb(148, 184, 243) : Color.FromArgb(243, 148, 164);
+
+                if (c.Item.RowValueType == PivotGridValueType.GrandTotal)
+                    cellColor = Color.FromArgb(134, 206, 128);
+
+                ViewContext.Writer.Write(
+                    "<table width=\"400px\">" +
+                        "<tr>" +
+                            string.Format("<td style=\"width:{0}px;height:20px;padding:0px;height:20px;background-color:rgb({1},{2},{3})\">",
+                                value, cellColor.R, cellColor.G, cellColor.B) +
+                            "</td>" +
+                            "<td style=\"white-space:nowrap;\">" + c.Item.Text + "</td>" +
+                        "</tr>" +
+                    "</table>"
+                );
+            }
+            else {
+                ViewContext.Writer.Write(c.Text);
+            }
+        });
+    }).Bind(Model).GetHtml()

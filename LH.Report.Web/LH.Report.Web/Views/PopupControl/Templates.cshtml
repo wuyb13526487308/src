@@ -1,0 +1,95 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    var currentColor = "gray";
+    function ToggleHelpVisible() {
+        var help = $("#helpText");
+        if (help.css("display") == "none")
+            help.css("display", "block");
+        else
+            help.css("display", "none");
+    }
+    function SetColor(colorName) {
+        $("#" + currentColor + "Img").removeClass(currentColor + "_img");
+        $("#content").removeClass(currentColor + "_content");
+        currentColor = colorName;
+        $("#" + currentColor + "Img").addClass(currentColor + "_img");
+        $("#content").addClass(currentColor + "_content");
+    }
+    function AddHover(colorName) {
+        $("#" + colorName + "Img").addClass("hover");
+    }
+    function RemoveHover(colorName) {
+        $("#" + colorName + "Img").removeClass("hover");
+    }        
+// ]]>
+</script>
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "pcTemplates";
+        settings.SkinID = "none";
+        settings.ControlStyle.CssClass = "template_window";
+        settings.Width = 220;
+
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.None;
+        settings.ShowFooter = true;
+        settings.ShowOnPageLoad = true;
+        settings.PopupElementID = "popupArea";
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+        settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+                
+        settings.Styles.Footer.Wrap = DefaultBoolean.True;
+        settings.Styles.Footer.Paddings.Padding = 6;
+        settings.Styles.Header.Paddings.PaddingLeft = 9;
+        settings.Styles.Content.Paddings.Padding = 0;
+
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<div id=\"content\" class=\"gray_content\">" +
+                    "<p class=\"description\">" +
+                        "This sample demonstrates the use of templates within the" +
+                        "<b>MVC Popup Extension</b>." + 
+                        "The look of each element within a popup window can be fully modified by creating the appropriate" +
+                        "template which defines how the element will be rendered by client browsers." +
+                    "</p>" +
+                "</div>"
+            );
+        });
+        settings.SetHeaderTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                "<table cellpadding=\"1\" cellspacing=\"0\" border=\"0\" style=\"width: 100%;\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100%;\">Templates</td>" + 
+                        "<td><img border=\"0\" onclick=\"ToggleHelpVisible();\" onmousedown=\"event.cancelBubble = true;\" alt=\"\" src=\"" +
+                            Url.Content("~/Content/PopupControl/Templates/Help.gif") +"\" style=\"width: 15px; height: 14px; cursor: pointer;\" /></td>" + 
+                        "<td><img border=\"0\" onclick=\"pcTemplates.Hide();\" onmousedown=\"event.cancelBubble = true;\" alt=\"\" src=\"" +
+                            Url.Content("~/Content/PopupControl/Templates/Close.gif") + "\" style=\"width: 15px; height: 14px; cursor: pointer;\" /></td>" + 
+                "</tr>" + 
+                "</table>"
+            ); 
+        });
+        settings.SetFooterTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                "<table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%;\">" +
+                    "<tr>" +
+                        "<th align=\"right\" style=\"width: 100%; font-weight: normal;\">Color:</th>" + 
+                        "<td><img id=\"grayImg\" class=\"color_img gray_img\" onmouseover=\"AddHover('gray');\" onmouseout=\"RemoveHover('gray');\" onclick=\"SetColor('gray');\" alt=\"\" src=\"" + Url.Content("~/Content/PopupControl/Colors/GrayColor.gif") + "\" style=\"width: 12px; height: 12px;\" /></td>" + 
+                        "<td><img id=\"yellowImg\" class=\"color_img\" onmouseover=\"AddHover('yellow');\" onmouseout=\"RemoveHover('yellow');\" onclick=\"SetColor('yellow');\" alt=\"\" src=\"" + Url.Content("~/Content/PopupControl/Colors/YellowColor.gif") + "\" style=\"width: 12px; height: 12px;\" /></td>" + 
+                        "<td><img id=\"blueImg\" class=\"color_img\" onmouseover=\"AddHover('blue');\" onmouseout=\"RemoveHover('blue');\" onclick=\"SetColor('blue');\" alt=\"\" src=\"" + Url.Content("~/Content/PopupControl/Colors/BlueColor.gif") + "\" style=\"width: 12px; height: 12px;\" /></td>" + 
+                        "<td><img id=\"greenImg\" class=\"color_img\" onmouseover=\"AddHover('green');\" onmouseout=\"RemoveHover('green');\" onclick=\"SetColor('green');\" alt=\"\" src=\"" + Url.Content("~/Content/PopupControl/Colors/GreenColor.gif") + "\" style=\"width: 12px; height: 12px;\" /></td>" + 
+                        "<td><img id=\"pinkImg\" class=\"color_img\" onmouseover=\"AddHover('pink');\" onmouseout=\"RemoveHover('pink');\" onclick=\"SetColor('pink');\" alt=\"\" src=\"" + Url.Content("~/Content/PopupControl/Colors/PinkColor.gif") + "\" style=\"width: 12px; height: 12px;\" /></td>" + 
+                    "</tr>" + 
+                    "</table> " + 
+                    "<p id=\"helpText\" class=\"help\">" +
+                        "Click a colored box to specify the background color for the window." +
+                    "</p>"
+                );
+        });
+    }).GetHtml()
+<div id="popupArea" class="template_area">
+    <span>Click here to invoke the popup window</span>
+</div>

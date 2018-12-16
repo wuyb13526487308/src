@@ -1,3 +1,4 @@
+using Coldairarrow.Entity.Sto_BaseInfo;
 using Coldairarrow.Entity.Sto_ProManage;
 using Coldairarrow.Util;
 using System;
@@ -5,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Linq.Expressions;
 
 namespace Coldairarrow.Business.Sto_ProManage
 {
@@ -18,9 +20,23 @@ namespace Coldairarrow.Business.Sto_ProManage
         /// <param name="condition">查询类型</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public List<Pro_ProjectMateriel> GetDataList(string condition, string keyword, Pagination pagination)
+        public List<ProjectMaterielModel> GetDataList(string condition, string keyword, Pagination pagination)
         {
-            var q = GetIQueryable();
+            //var q = GetIQueryable();
+            var whereExpre = LinqHelper.True<ProjectMaterielModel>();
+
+            Expression<Func<Pro_ProjectMateriel, object, ProjectMaterielModel>> selectExpre = (a, b) => new ProjectMaterielModel
+            {
+                UnitNameList = (List<string>)b
+            };
+            selectExpre = selectExpre.BuildExtendSelectExpre();
+
+            var db_MaterialUnitMap = Service.GetIQueryable<Sto_MaterialUnit>();
+
+            var q = from a in GetIQueryable().AsExpandable()
+                    let UnitNames = db_MaterialUnitMap.Where(x => x.UnitNum == a.UnitNo).Select(x => x.Name)
+                    select selectExpre.Invoke(a, UnitNames);
+
 
             //模糊查询
             if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
@@ -152,5 +168,11 @@ namespace Coldairarrow.Business.Sto_ProManage
         }
 
         #endregion
+    }
+
+
+    public class ProjectMaterielModel : Pro_ProjectMateriel
+    {
+        public List<string> UnitNameList { get; set; }
     }
 }

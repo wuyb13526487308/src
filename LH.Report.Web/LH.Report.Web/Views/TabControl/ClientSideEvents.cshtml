@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcClientSideEvents";
+        settings.EnableClientSideAPI = true;
+        settings.Styles.Content.Paddings.Padding = 20;
+        settings.Width = Unit.Percentage(100);
+        settings.TabPages.Add("C#", "C#").SetContent(
+            CodeFormatter.GetFormattedCode(".cs", 
+                "protected override void OnLoad(EventArgs e) {\r\n" + 
+                "   base.OnLoad(e);\r\n" + 
+                "   StyleOptimizer.Instance.RegisterChildControls(Page);\r\n" +
+                "}"
+            )
+        );
+        settings.TabPages.Add("VB", "VB").SetContent(
+            CodeFormatter.GetFormattedCode(".vb",
+                "Protected Overrides Sub OnLoad(ByVal e As EventArgs)\r\n" +
+                "   MyBase.OnLoad(e)\r\n" +
+                "   StyleOptimizer.Instance.RegisterChildControls(Page)\r\n" +
+                "End Sub"
+            )
+        );
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.TabClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'TabClick'); }";
+        settings.ClientSideEvents.ActiveTabChanging = "function(s, e) { DXEventMonitor.Trace(s, e, 'ActiveTabChanging'); }";
+        settings.ClientSideEvents.ActiveTabChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ActiveTabChanged'); }";
+    }).GetHtml()
+<br />
+@Html.Partial("EventMonitor")

@@ -1,0 +1,71 @@
+﻿@model DevExpress.Web.Demos.Models.Employee
+
+<script type="text/javascript">
+    //<![CDATA[
+    function AddFileToContainer(callbackData) {
+        var data = callbackData.split('|');
+        var file = data[0];
+        var url = data[1];
+        $("<a></a>")
+            .attr("target", "_blank")
+            .attr("href", url)
+            .text(file)
+            .click(function(evt) {
+                return DXDemo.ShowScreenshotWindow(evt, this);
+            })
+            .appendTo($("#fileContainer"));
+        $("<br />").appendTo($("#fileContainer"));
+    }
+    function ClearFileContainer() {
+        $("#fileContainer").empty();
+    }
+    // ]]> 
+</script>
+
+@using(Html.BeginForm("MultiFileSelection", "UploadControl", FormMethod.Post, new { @class = "multiSelection" })) {
+    <label>Select Multiple Files:</label>
+    @Html.DevExpress().UploadControl(
+        settings => {
+            settings.Name = "ucMultiSelection";
+            settings.CallbackRouteValues = new { Controller = "UploadControl", Action = "MultiSelectionImageUpload" };
+            settings.ControlStyle.CssClass = "editorArea";
+
+            settings.Width = Unit.Pixel(380);
+            settings.AdvancedModeSettings.EnableMultiSelect = true;
+            settings.NullText = "Click here to browse files...";
+
+            settings.ValidationSettings.Assign(UploadControlDemosHelper.ValidationSettings);
+
+            settings.ClientSideEvents.FileUploadStart = "function(s,e) { ClearFileContainer(); Uploader_OnFileUploadStart(); }";
+            settings.ClientSideEvents.FileUploadComplete = "function(s,e) { if(e.callbackData != '') AddFileToContainer(e.callbackData); }";
+            settings.ClientSideEvents.FilesUploadComplete = "function(s,e) { Uploader_OnFilesUploadComplete(e); }";
+            settings.ClientSideEvents.UploadingProgressChanged = "function(s, e) { Uploader_ProgressChanged(e); }";
+            settings.ClientSideEvents.TextChanged = "function(s, e) { UpdateUploadButton(); }";
+        }).GetHtml()
+
+    <div class="buttons" align="center">
+        @Html.DevExpress().Button(
+            settings =>
+            {
+                settings.Name = "btnUpload";
+                settings.Text = "Upload";
+                settings.ClientEnabled = false;
+                settings.UseSubmitBehavior = false;
+                settings.ClientSideEvents.Click = "function(s,e) { ucMultiSelection.Upload(); }";
+            }).GetHtml()
+    </div>
+
+    <label>&nbsp;</label>
+    <div class="editorArea text">
+        Allowed image types: jpeg, gif<br />
+        Maximum file size: 20MB
+    </div>
+    <fieldset>
+        <legend>Uploaded Files</legend>
+        <div id="fileContainer" class="fileContainer"></div>
+    </fieldset>
+    <p class="Note">
+        <b>Note</b>: All files uploaded to this demo will be automatically deleted in 5 minutes.
+    </p>
+}
+@Html.Partial("MultiFileSelectionPartial", Model)

@@ -1,0 +1,11 @@
+﻿@Html.Partial("InsertTemplateFormPartial")
+
+<div style="margin-top: 10px">
+    @Html.DevExpress().CheckBox(
+        settings => {
+            settings.Name = "overwriteCheckBox";
+            settings.Text = "Overwrite content";
+            settings.Checked = true;
+        }
+    ).GetHtml()
+</div>

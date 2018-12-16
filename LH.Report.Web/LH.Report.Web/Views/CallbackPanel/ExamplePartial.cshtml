@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().CallbackPanel(
+    settings => {
+        settings.Name = "cbpExample";
+        settings.CallbackRouteValues = new { Controller = "CallbackPanel", Action = "ExamplePartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 300;
+            
+        settings.SetContent(() => 
+        {
+            ViewContext.Writer.Write( "<div class=\"column\" style=\"width:180px\">" );
+                Html.DevExpress().BinaryImage(
+                    imageSettings => {
+                        imageSettings.Name = "Photo";
+                        imageSettings.Width = 160;
+                        imageSettings.Height = 170;
+                    })
+                    .Bind(((System.Data.Linq.Binary)DataBinder.Eval(Model, "Photo")).ToArray())
+                    .Render();
+            ViewContext.Writer.Write(
+                "</div>" +
+                "<div class=\"column\" style=\"width:320px\">" +
+                    "<div><label>First Name:</label><span>" + DemosHelper.GetFieldText(Model, "FirstName") + "</span></div>" +
+                    "<div><label>Last Name:</label><span>" + DemosHelper.GetFieldText(Model, "LastName") + "</span></div>" +
+                    "<div><label>Birth Date:</label><span>" + DemosHelper.GetFieldText(Model, "BirthDate") + "</span></div>" +
+                    "<div><label>City:</label><span>" + DemosHelper.GetFieldText(Model, "City") + "</span></div>" +
+                    "<div><label>Region:</label><span>" + DemosHelper.GetFieldText(Model, "Region") + "</span></div>" +
+                    "<div><label>Notes:</label><span>" + DemosHelper.GetFieldText(Model, "Notes") + "</span></div>" +
+                "</div>"
+            );
+        });
+
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.ClientSideEvents.EndCallback = "OnEndCallback";
+    }
+).GetHtml()

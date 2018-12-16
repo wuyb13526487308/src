@@ -1,0 +1,37 @@
+﻿<script type="text/javascript">
+    //<![CDATA[
+    var callbackInitDate;
+
+    function OnStartCallback(s, e) {
+        callbackInitDate = new Date();
+    }
+    function OnEndCallback(s, e) {
+        var currentDate = new Date();
+        var time = currentDate - callbackInitDate;
+        document.getElementById("labelTime").innerHTML = "Time to retrieve the last data:";
+        document.getElementById("valueTime").innerHTML = time / 1000 + " sec";
+    }
+    // ]]>
+</script>
+
+@if (!DatabaseGenerator.IsReady("GeneratedPersonTable")) {
+    @Html.Partial("CreateDatabasePartial", "GeneratedPersonTable")
+} else {
+    <div class="edit_form">
+        <div class="label" style="width:90px; padding: 6px;"> Type to search: </div>
+        <div class="editor" style="width:230px; padding: 3px;">
+            @Html.Partial("LargeDataComboBoxPartial")
+        </div>
+        <div style="float:left; width:300px">
+            <div>
+                <span id="labelTime">&nbsp;</span>
+            </div>
+            <div style="color: red">
+                <span id="valueTime">&nbsp;</span>
+            </div>
+        </div>
+    </div>
+    <p class="Note" style="padding-left:7px; float:left;">
+        <strong>Note:</strong> To start filtering, enter at least two symbols (e.g. 'an') into the editor's text box. This is due to the editor's FilterMinLength property set to 2 in this demo.
+    </p>
+}

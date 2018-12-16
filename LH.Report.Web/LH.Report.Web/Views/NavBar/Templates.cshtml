@@ -1,0 +1,72 @@
+﻿<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; background-color: #E5E5E5;"><tr>
+    <td><img alt="" src="@Url.Content("~/Content/NavBar/Lessons/tl.gif")" style="width:4px; height:32px;" /></td>
+    <td style="width: 100%; background-image: url(@Url.Content("~/Content/NavBar/Lessons/tbg.gif")); background-repeat: repeat-x;"><p style="font-size: 12px; font-weight: bold; color: #818180; padding: 0px; margin: 0px; margin-left: 8px;">ASPxGrid Interactive Lessons</p></td>
+    <td><img alt="" src="@Url.Content("~/Content/NavBar/Lessons/tr.gif")" style="width:4px; height:32px;" /></td>
+</tr><tr>
+    <td style="background-image: url(@Url.Content("~/Content/NavBar/Lessons/lbg.gif")); background-repeat: repeat-y;"><div class="spacer" style="width: 4px;"></div></td>
+    <td style="width: 100%;">
+    
+    @Html.DevExpress().NavBar(
+        settings =>
+        {
+            settings.Name = "nbTemplates";
+            settings.AutoCollapse = true;
+            settings.ExpandButtonPosition = ExpandButtonPosition.Right;
+            settings.SkinID = "None";
+            settings.Width = Unit.Pixel(830);
+
+            settings.Styles.EnableDefaultAppearance = false;
+            settings.ControlStyle.Border.BorderColor = Color.FromArgb(0xBEBEBE);
+            settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+            settings.ControlStyle.Border.BorderWidth = 1;
+            settings.ControlStyle.GroupSpacing = 1;
+            settings.ControlStyle.Paddings.Padding = 1;
+            settings.Styles.GroupContent.BackColor = Color.FromArgb(0xEBF4FC);
+            settings.Styles.GroupContent.ForeColor = Color.FromArgb(0x303030);
+            settings.Styles.GroupContent.Border.BorderStyle = BorderStyle.None;
+            settings.Styles.GroupContent.BorderTop.BorderColor = Color.White; 
+            settings.Styles.GroupContent.BorderTop.BorderStyle = BorderStyle.Solid;
+            settings.Styles.GroupContent.BorderTop.BorderWidth = 1;
+            settings.Styles.GroupContent.Paddings.Padding = 11;
+            settings.Styles.GroupContent.Font.Name = "Tahoma";
+            settings.Styles.GroupContent.Font.Size = 9;
+            settings.Styles.GroupHeaderCollapsed.BackColor = Color.FromArgb(0xF1F1F1);
+            settings.Styles.GroupHeaderCollapsed.ForeColor = Color.Gray;
+            settings.Styles.GroupHeaderCollapsed.HoverStyle.BackColor = Color.FromArgb(0xDAEBFD);
+            settings.Styles.GroupHeader.BackColor = Color.FromArgb(0xC7DEF7);
+            settings.Styles.GroupHeader.Font.Name = "Tahoma";
+            settings.Styles.GroupHeader.Font.Size = 9;
+            settings.Styles.GroupHeader.Font.Bold = true;
+            settings.Styles.GroupHeader.Border.BorderStyle = BorderStyle.None;
+            settings.Styles.GroupHeader.Paddings.Padding = 4;
+            settings.Styles.GroupHeader.Paddings.PaddingLeft = 11;
+
+            settings.Images.Expand.Url = "~/Content/NavBar/Lessons/bExpand.gif";
+            settings.Images.Expand.AlternateText = "Show details";
+            settings.Images.Expand.Width = 21;
+            settings.Images.Expand.Height = 21;
+            settings.Images.Collapse.Url = "~/Content/NavBar/Lessons/bCollapse.gif";
+            settings.Images.Collapse.Width = 21;
+            settings.Images.Collapse.Height = 21;
+
+            settings.SetGroupHeaderTemplateContent(c =>
+            {
+                Html.RenderPartial("TemplatesHeader", c.Group);
+            });
+            settings.SetGroupHeaderTemplateCollapsedContent(c =>
+            {
+                Html.RenderPartial("TemplatesHeaderCollapsed", c.Group);
+            });
+            settings.SetGroupContentTemplateContent(c =>
+            {
+                Html.RenderPartial("TemplatesContent", c.Group);
+            });
+
+        }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Lessons.xml"), "//LessonGroup").GetHtml()
+    </td>
+    <td style="background-image: url(@Url.Content("~/Content/NavBar/Lessons/rbg.gif")); background-repeat: repeat-y;"><div class="spacer" style="width: 4px;"></div></td>
+</tr><tr>
+    <td><img alt="" src="@Url.Content("~/Content/NavBar/Lessons/bl.gif")" style="width:4px; height:15px;" /></td>
+    <td style="width: 100%; background-image: url(@Url.Content("~/Content/NavBar/Lessons/bbg.gif")); background-repeat: repeat-x;"><div class="spacer" style="width: 1px;"></div></td>
+    <td><img alt="" src="@Url.Content("~/Content/NavBar/Lessons/br.gif")" style="width:4px; height:15px;" /></td>
+</tr></table>

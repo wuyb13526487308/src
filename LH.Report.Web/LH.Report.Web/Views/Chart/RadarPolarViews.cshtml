@@ -1,0 +1,30 @@
+﻿@model IList
+
+@using (Html.BeginForm()) {
+    ChartRadarPolarViewsDemoOptions options = (ChartRadarPolarViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height: 40px;">
+        <div style="padding-bottom: 4px;">
+            <label style="margin-right:10px" for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetRadarPolarViews(), new { style = "width:124px" })
+            <label style="margin-left:12px" for="diagramStyle">Diagram Type:</label>
+            @Html.DropDownList("diagramStyle", ChartDemoHelper.GetRadarDiagramTypes(), new { style = "width:74px" })
+            @Html.CheckBox("showLabels", options.ShowLabels, new { style = "margin-left: 8px; vertical-align: -2px;" })
+            <label class="checkBox" for="showLabels">Show Labels</label>
+        </div>
+        <div>
+            <div style="vertical-align: baseline; float: left;">
+                <label for="markerKindString">Marker Kind:</label>
+                @Html.DropDownList("markerKindString", ChartDemoHelper.GetMarkerKinds(), new { style = "width:124px" })
+                <label style="margin-left: 12px; margin-right: 13px" for="markerSize">Marker Size:</label>
+                @Html.DropDownList("markerSize", new SelectList(ChartDemoHelper.GetMarkerSizes()), new { style = "width:74px" })
+            </div>
+            <input style="float: right;" type="submit" value="Apply"/>
+        </div>
+    </div>
+    <br/>
+    if (ChartDemoHelper.IsPolarView(options.View)) {
+        @Html.Partial("RadarPolarViewsPolarPartial", Model)
+    } else {
+        @Html.Partial("RadarPolarViewsRadarPartial", Model)
+    }
+}

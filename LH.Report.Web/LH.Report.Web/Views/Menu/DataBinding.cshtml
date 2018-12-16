@@ -1,0 +1,9 @@
+﻿@model CategoriesData
+
+@Html.DevExpress().Menu(
+    settings =>
+    {
+        settings.Name = "mDataBindingToModel";
+        settings.Orientation = Orientation.Vertical;
+        settings.ShowPopOutImages = DefaultBoolean.True;
+    }).Bind(Model).GetHtml()

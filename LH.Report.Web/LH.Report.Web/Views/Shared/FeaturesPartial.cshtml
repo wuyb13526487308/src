@@ -1,0 +1,22 @@
+﻿<table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+    <tr>
+    @for(int i = 0; i < Utils.CurrentIntro.Features.Count; i++) {
+        IntroFeatureModel feature = Utils.CurrentIntro.Features[i];
+        <td align="left" valign="top">
+            <div class="FeatureImageArea">
+                <img alt="" src="@Url.Content(feature.ImageUrl)" />
+            </div>
+            <div class="FeatureTextArea">
+                <h4>@feature.Title</h4>
+                <div>@feature.Description</div>
+            </div>
+        </td>
+        if(0 < i && i < Utils.CurrentIntro.Features.Count - 1 && (i % 2 == 1)){
+            @:</tr><tr> 
+        }
+    }
+    @if(Utils.CurrentIntro.Features.Count % 2 == 1) {
+        <td></td>
+    }
+    </tr>
+</table>

@@ -1,0 +1,17 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#customWorkTime").change(function(){
+            scheduler.Refresh();
+        });
+    });
+    function OnBeginCallback(s, e){
+        e.customArgs["isCustomWorkTimeEnabled"] = $("#customWorkTime").is(":checked");
+    }
+</script>
+<div class="horizOptionsPanel" style="padding-bottom:20px;height:10px;">
+    @Html.CheckBox("customWorkTime", (bool)ViewData["isCustomWorkTimeEnabled"], new { @class = "leftMost" })
+    <label for="customWorkTime" class="checkBox">Custom work time&nbsp;</label>
+</div>
+@Html.Partial("CustomWorkTimePartial", Model)

@@ -1,0 +1,14 @@
+﻿@model HtmlEditorModel
+
+@Html.DevExpress().HtmlEditor(
+    settings =>
+    {
+        DevExpress.Web.Demos.HtmlEditorDemosHelper.SetHtmlEditorExportSettings(settings);
+        if(Model != null) {
+            settings.Html = Model.Html;
+            if(Model.CssFiles != null) {
+                settings.CssFiles.Clear();
+                settings.CssFiles.AddRange(Model.CssFiles);
+            }
+        }
+    }).GetHtml()

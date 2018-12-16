@@ -1,0 +1,29 @@
+﻿@model IEnumerable
+           
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/TreeList/Templates.css")" />
+
+<script type="text/javascript">
+    function LoadNotes(id, popupElementID) {
+        treeList.PerformCustomDataCallback({ 'id': id, 'popupElementID': popupElementID });
+    }
+    function ShowNotes(s, e) {
+        notesPopup.SetContentHtml(e.result);
+        var args = $.parseJSON(e.arg);
+        notesPopup.ShowAtElementByID(args.popupElementID);
+    }
+</script>
+
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "notesPopup";
+        settings.HeaderText = "Notes";
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.OuterMouseClick;
+        settings.Width = Unit.Pixel(400);
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+        settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+        settings.Styles.Content.HorizontalAlign = HorizontalAlign.Justify;
+    }
+).GetHtml()
+
+@Html.Partial("TemplatesPartial", Model)

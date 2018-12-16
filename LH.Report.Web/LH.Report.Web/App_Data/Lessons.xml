@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Lessons>
+  <LessonGroup Text="Lesson 1: Data Binding, Logic for Update and Delete Operations (442k)" NavigateUrl="~/Content/NavBar/Lessons/lesson1.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson1s.jpg">
+    This lesson guides you through the basic setup and customization of the ASPxGrid. It shows you how to create a grid control and bind it to an MDB table allowing the grid columns to be auto-generated. Additionally, it demonstrates the basic logic which is implemented to handle updates, deletes and inserts of the grid rows.<br />
+    <strong class="light">Note:</strong> that many of the steps in this lesson are required to create the grid control's data source. If you already have one created, only a couple of clicks is required to display its data using the ASPxGrid.
+  </LessonGroup>
+  <LessonGroup Text="Lesson 2: Column Customization, Inplace Editor for a Column (332k)" NavigateUrl="~/Content/NavBar/Lessons/lesson2.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson2s.jpg">
+    This lesson will guide you through the basics of customizing columns - such as retrieving columns, accessing and managing the columns collection at design time. It also shows how to format the values of specific grid columns for display purposes.<br /> Additionally, it demonstrates the use of an editor from the ASPxDataControls Library for a column's inplace editing and shows how the editor's specific settings can be easily customized.
+  </LessonGroup>
+  <LessonGroup Text="Lesson 3: Preview Sections, Group and Total Summaries, RowBtnColumn (248k)" NavigateUrl="~/Content/NavBar/Lessons/lesson3.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson3s.jpg">
+    In this lesson you will learn how to display preview sections within the grid control, how to create and customize group and total summaries, how to add a column of the RowBtnColumn type to the grid and change the column's default buttons and adjustment.
+  </LessonGroup>
+  <LessonGroup Text="Lesson 4: Creating an Auto-Calculated Column (330k)" NavigateUrl="~/Content/NavBar/Lessons/lesson4.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson4s.jpg">
+    In this lesson you will learn how to create a column whose values will be calculated automatically on the client side based upon the values of other grid columns. This column will contain a total summary which is calculated dynamically on the client and will allow any client sorting operation to be performed against its displayed values.<br />
+    So in addition to the steps of creating and customizing a column and its summary item this lesson demonstrates how to handle specific client-side events of a column and the grid control.
+  </LessonGroup>
+  <LessonGroup Text="Lesson 5: Look and Feel Customization (357k)" NavigateUrl="~/Content/NavBar/Lessons/lesson5.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson5s.jpg">
+    This lesson demonstrates the basics of customizing the grid's style. You will learn how to apply a predefined style scheme to a grid, how to customize a primitive look and feel element's style and how to access and modify the individual item styles of a grid control and a column.
+  </LessonGroup>
+  <LessonGroup Text="Lesson 6: Implementing Templates (526k)" NavigateUrl="~/Content/NavBar/Lessons/lesson6.jpg" ImageUrl="~/Content/NavBar/Lessons/lesson6s.jpg">
+    This lesson will teach you how to create a server-side template for a column's edited cell and implement client-side support for the template. The template will be defined using a web user control which will contain two editors from the ASPxDataControls Library.<br />
+    You will find out which client-side events should be handled in order to support the template's child controls in full on the client side for the purposes of editing.
+  </LessonGroup>
+</Lessons>

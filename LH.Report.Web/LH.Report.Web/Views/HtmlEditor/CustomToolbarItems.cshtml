@@ -1,0 +1,107 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    function OnCommandExecute(s, e) {
+        var value = e.parameter;
+        switch (e.commandName) {
+            case "InsertSmiley":
+                InsertSmiley(value);
+                break;
+            case "InsertDateTime":
+                InsertDateTime(value);
+                break;
+            case "PxFontSize":
+                SetFontSize(value);
+                break;
+        }
+    }
+    function InsertSmiley(value) {
+        var selection = heCustomToolbarItems.GetSelection();
+        var valueInfo = value.split("#");
+        selection.SetHtml("<img style='margin-bottom:-2px;' src='../Content/HtmlEditor/Smilies/" + valueInfo[0] + ".png' alt='" + valueInfo[2] + "' title='" + valueInfo[1] + "' />");
+    }
+    function InsertDateTime(value) {
+        heCustomToolbarItems.GetSelection().SetHtml(GetDateString(value));
+    }
+
+    var dateTimeData = {};
+    dateTimeData.Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    dateTimeData.DaysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    function GetDateString(format) {
+        var date = new Date();
+        var result = format;
+
+        var hours = date.getHours();
+        var pmam = "AM";
+        if (hours >= 12) {
+            pmam = "PM";
+            hours -= 12;
+        }
+
+        result = result.replace("%y", date.getFullYear());
+        result = result.replace("%mf", dateTimeData.Months[date.getMonth()]);
+        result = result.replace("%m", GetTwoDigitsNumber(date.getMonth() + 1));
+        result = result.replace("%df", dateTimeData.DaysOfWeek[date.getDay()]);
+        result = result.replace("%d", GetTwoDigitsNumber(date.getDate()));
+        result = result.replace("%h", hours);
+        result = result.replace("%M", GetTwoDigitsNumber(date.getMinutes()));
+        result = result.replace("%s", GetTwoDigitsNumber(date.getSeconds()));
+        result = result.replace("%p", pmam);
+
+        return result;
+    }
+    function GetTwoDigitsNumber(number) {
+        return (number < 10 ? "0" : "") + number;
+    }
+
+    function OnSelectionChanged(s, e) {
+        var selection = heCustomToolbarItems.GetSelection();
+        var selectedElements = selection.GetElements();
+        heCustomToolbarItems.SetToolbarComboBoxValue("PxFontSize", GetPxFontSize(selectedElements, selection));
+    }
+
+    function GetPxFontSize(selectedElements, selection) {
+        var size = "";
+        if (selectedElements.length > 0) {
+            size = GetElementPxFontSize(selectedElements[0]);
+            for (var i = 1; i < selectedElements.length; i++)
+                size = GetElementPxFontSize(selectedElements[i]) == size ? size : "";
+        }
+        else {
+            var selectedElement = selection.GetSelectedElement();
+            if (selectedElement)
+                size = GetElementPxFontSize(selectedElement);
+
+        }
+        return size;
+    }
+    function GetElementPxFontSize(element) {
+        var size = GetCurrentStyle(element.nodeType == 3 ? element.parentNode : element).fontSize;
+        return size.indexOf("px") != -1 ? size : "";
+    }
+    function GetCurrentStyle(element) {
+        return ASPxClientUtils.ie ? element.currentStyle : element.ownerDocument.defaultView.getComputedStyle(element, null);
+    }
+
+    function SetFontSize(size) {
+        var selection = heCustomToolbarItems.GetSelection();
+        var selectedElements = selection.GetElements();
+        if (GetPxFontSize(selectedElements, selection) == size)
+            return;
+
+        var doc = selection.GetSelectedElement().ownerDocument;
+        for (var i = 0; i < selectedElements.length; i++) {
+            var curElement = selectedElements[i];
+            if (curElement.nodeType == 3) {
+                var wrapper = doc.createElement("SPAN");
+                wrapper.style.fontSize = size;
+                curElement.parentNode.insertBefore(wrapper, curElement);
+                wrapper.appendChild(curElement);
+            }
+            else if (curElement.childNodes.length > 0)
+                curElement.style.fontSize = size;
+        }
+    }            
+    // ]]> 
+</script>
+
+@Html.Partial("CustomToolbarItemsPartial")

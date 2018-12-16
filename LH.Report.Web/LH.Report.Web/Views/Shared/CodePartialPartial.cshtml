@@ -1,0 +1,91 @@
+﻿@using System.Text
+
+@functions{
+
+    protected string GetHeaderTemplateHtml(int index, string codeTitle, string demoTitle) {
+        var builder = new StringBuilder();
+        builder.AppendFormat("<a href=\"javascript:;\">{0}</a>", HttpUtility.HtmlEncode(codeTitle));
+        builder.Append("<div class=\"PopupLinkContainer\">");
+        builder.AppendFormat("<span onclick=\"DXDemo.ShowCodeInNewWindow('{0}', '{1}')\">",
+            HttpUtility.HtmlEncode(demoTitle),
+            HttpUtility.HtmlEncode(codeTitle));
+        builder.Append("Open in popup window");
+        builder.Append("</span>");
+        builder.Append("</div>");
+        builder.Append("<b class=\"Clear\"></b>");
+        return builder.ToString();
+    }
+
+    protected string GetHeaderCollapsedTemplateHtml(string codeTitle) {
+        var builder = new StringBuilder();
+        builder.AppendFormat("<a href=\"javascript:;\">{0}</a>", HttpUtility.HtmlEncode(codeTitle));
+        builder.Append("<b class=\"Clear\"></b>");
+        return builder.ToString();
+    }
+
+    protected string GetContentTemplateHtml(int index, string code) {
+        var builder = new StringBuilder();
+        builder.AppendFormat("<div id=\"CodeBlock{0}\">", index);
+        builder.Append(code);
+        builder.Append("</div>");
+        return builder.ToString();
+    }
+
+    bool ShowCodeContent = false;
+    string CurrentDemoGroupKey = string.Empty;
+    string CurrentDemoKey = string.Empty;
+       
+}
+
+
+@Html.DevExpress().CallbackPanel(settings => {
+    settings.Name = "CodePanel";
+    settings.EnableTheming = false;
+    settings.Styles.EnableDefaultAppearance = false;
+    settings.Styles.LoadingPanel.Paddings.PaddingTop = 50;
+    settings.Images.LoadingPanel.Url = "~/Content/Loading.gif";
+    settings.Images.LoadingPanel.Width = 115;
+    settings.Images.LoadingPanel.Height = 115;
+    settings.LoadingPanelText = "";
+    settings.EnableTheming = false;
+    settings.HideContentOnCallback = true;
+    settings.CallbackRouteValues = new { Controller = "Home", Action = "CodePartialPartial" };
+
+    settings.SetContent(() => {
+        if(ShowCodeContent) {
+            ViewContext.Writer.Write(
+                Html.DevExpress().NavBar(
+                    navBarSettings => {
+                        navBarSettings.Name = "CodeNavBar";
+                        navBarSettings.EnableTheming = false;
+                        navBarSettings.ControlStyle.CssClass = "CodeNavBar";
+                        navBarSettings.Width = Unit.Percentage(100);
+                        navBarSettings.Styles.EnableDefaultAppearance = false;
+                        navBarSettings.EnableClientSideAPI = true;
+                        navBarSettings.Images.Expand.SpriteProperties.CssClass = "DemoSprite ExpandIcon";
+                        navBarSettings.Images.Collapse.SpriteProperties.CssClass = "DemoSprite CollapseIcon";
+
+                        DemoModel demo = DemosModel.Current.FindGroup(CurrentDemoGroupKey).FindDemo(CurrentDemoKey);
+                        foreach (SourceCodePage code in Utils.GetSourceCodePages(demo)) {
+                            navBarSettings.Groups.Add(group => {
+                                group.Text = code.Title;
+                                group.Name = code.Title;
+                                group.Expanded = code.Expanded;
+                                group.SetHeaderTemplateContent(GetHeaderTemplateHtml(group.Index, code.Title, Utils.GetDemoTitleHtml(demo)));
+                                group.SetHeaderTemplateCollapsedContent(GetHeaderCollapsedTemplateHtml(code.Title));
+                                group.SetContentTemplateContent(GetContentTemplateHtml(group.Index, code.Code));
+                            });
+
+                        }
+
+                        navBarSettings.ClientSideEvents.HeaderClick = "DXDemo.CodeNavBar_HeaderClick";
+                    }).GetHtml().ToHtmlString()
+                );
+        }
+    });
+    settings.Callback = (sender, e) => {
+        ShowCodeContent = true;
+        CurrentDemoGroupKey = e.Parameter.Split(';')[0];
+        CurrentDemoKey = e.Parameter.Split(';')[1];
+    };
+}).GetHtml()

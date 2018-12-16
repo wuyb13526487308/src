@@ -1,0 +1,33 @@
+﻿@model AjaxFormValidationData
+           
+<div class="line">
+    @Html.DevExpress().LabelFor(model => model.FullName, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().TextBoxFor(model => model.FullName, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+</div>
+<div class="line">
+    @Html.DevExpress().LabelFor(model => model.Login, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().TextBoxFor(model => model.Login, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+</div>
+<div class="line">
+    @Html.DevExpress().LabelFor(model => model.Password, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().TextBoxFor(model => model.Password, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+</div>
+<div class="line">
+    @Html.DevExpress().LabelFor(model => model.Gender, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().RadioButtonListFor(
+        model => model.Gender,
+        settings => {
+            settings.ControlStyle.CssClass = "editor";
+    }).BindList(Enum.GetNames(typeof(Gender))).GetHtml()
+</div>
+<div class="line">
+    @Html.DevExpress().Label(CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().Button(
+        settings => {
+            settings.Name = "btnUpdate";
+            settings.ControlStyle.CssClass = "button";
+            settings.Width = Unit.Pixel(180);
+            settings.Text = "Process";
+            settings.UseSubmitBehavior = true;
+        }).GetHtml()
+</div>

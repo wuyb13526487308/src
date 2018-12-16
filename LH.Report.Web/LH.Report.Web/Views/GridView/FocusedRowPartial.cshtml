@@ -1,0 +1,18 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvFocusedRow";
+        settings.KeyFieldName = "EmployeeID";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "FocusedRowPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Settings.ShowGroupPanel = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add("FirstName");
+        settings.Columns.Add("LastName");
+        settings.Columns.Add("BirthDate").PropertiesEdit.DisplayFormatString = "d";
+        settings.Columns.Add("Title");
+        settings.Columns.Add("HireDate").PropertiesEdit.DisplayFormatString = "d";
+
+        settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,42 @@
+﻿<script type="text/javascript">
+// <![CDATA[
+    function OnSelectingMenuItem(s, e){
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CallbacksPartial", "Common")',
+            data: { selectedMenuItemName: e.item.name },
+            beforeSend: function() {
+                loadingPanel.Show();
+            },
+            success: function(response) {
+                $("#container").html(response);
+                loadingPanel.Hide();
+            }
+        });
+    }
+// ]]>
+</script>
+
+@Html.DevExpress().Menu(
+    settings => {
+        settings.Name = "menu";
+        settings.AllowSelectItem = true;
+        settings.EnableClientSideAPI = true;
+        settings.ClientSideEvents.ItemClick = "OnSelectingMenuItem";
+
+        settings.Items.Add("Calendar", "Calendar").Selected = true;
+        settings.Items.Add("Data Mining", "DataMining");
+        settings.Items.Add("Visualization", "Visualization");
+    }).GetHtml()
+
+<div id="container" style="padding: 10px 0px; width: 760px;">
+    @Html.Partial("CallbacksCalendarPartial")
+</div>
+
+@Html.DevExpress().LoadingPanel(
+    settings => {
+        settings.Name = "loadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "container";
+        settings.Styles.LoadingDiv.BackColor = Color.White;
+    }).GetHtml()

@@ -1,0 +1,73 @@
+﻿@model IEnumerable
+           
+@{
+    PivotGridChartIntegrationDemoOptions options = (PivotGridChartIntegrationDemoOptions)Session["DemoOptions"];
+    PivotGridSettings pivotGridSettings = PivotGridDemoHelper.PivotChartIntegrationSettings(options);
+}
+
+<script type="text/javascript">
+    var isNeedUpdateChart = false;
+
+    $(document).ready(function () {
+        PrepareShowPointLabelStyles();
+
+        $("#ChartType").change(function (){
+            PrepareShowPointLabelStyles();
+        });
+    });
+    function OnBeforePivotGridCallback(s, e) {
+        isNeedUpdateChart = true;
+    }
+    function UpdateChart(s, e) {
+        if(isNeedUpdateChart) {
+            webChart.PerformCallback(); 
+            isNeedUpdateChart = false;
+        }
+    }
+    function OnBeginChartCallback(s, e) {
+        pivotGrid.FillStateObject(e.customArgs);
+    }
+    function PrepareShowPointLabelStyles() {
+        if ($("#ChartType option:selected").text() == "SwiftPlot") {
+            $("#ShowPointLabels").attr("disabled", "disabled");
+            $("label[for='ShowPointLabels']").css("color", "#aaa");
+        } else {
+            $("#ShowPointLabels").removeAttr("disabled");
+            $("label[for='ShowPointLabels']").css("color", "");
+        }
+    }
+</script>
+
+@using (Html.BeginForm()) {
+    <div id="pivotGridChartsIntegration" class="chartOptionsPanel horizOptionsPanel" style="height:70px;margin-bottom:15px;">
+        <table>
+            <tr>
+                <td>
+                    <label class="checkBox" for="ChartType" style="margin-left: 5px;">Chart Type:</label>
+                    @Html.DropDownList("ChartType", typeof(DevExpress.XtraCharts.ViewType), options.ChartType)
+                </td>
+                <td>
+                    @Html.CheckBox("ShowColumnGrandTotals", options.ShowColumnGrandTotals, new { @class = "leftMost" })
+                    <label class="checkBox" for="ShowColumnGrandTotals" style="width:160px;">Show Column Grand Totals</label>
+                </td>
+                <td>
+                    @Html.CheckBox("GenerateSeriesFromColumns", options.GenerateSeriesFromColumns, new { @class = "leftMost" })
+                    <label class="checkBox" for="GenerateSeriesFromColumns" style="width:190px;">Generate Series from Columns</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.CheckBox("ShowPointLabels", options.ShowPointLabels, new { @class = "leftMost" })
+                    <label class="checkBox" for="ShowPointLabels">Show Point Labels</label>
+                </td>
+                <td>
+                    @Html.CheckBox("ShowRowGrandTotals", options.ShowRowGrandTotals, new { @class = "leftMost" })
+                    <label class="checkBox" for="ShowRowGrandTotals">Show Row Grand Totals</label>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Apply" style="float:right;margin:0px;width:100px;"/>
+    </div>
+    @Html.Partial("ChartsIntegrationPivotPartial", Model)
+    @Html.Partial("ChartsIntegrationChartPartial", PivotGridExtension.GetDataObject(pivotGridSettings, Model))
+}

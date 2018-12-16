@@ -1,0 +1,46 @@
+﻿<div class="editorsPanel">
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().TextBox(
+                settings => {
+                    settings.Name = "textBox1";
+                    settings.Width = 170;
+                    settings.Properties.DisplayFormatString = "[ 00 - 00 - 00 ]";
+                    settings.Text = "123456";
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            DisplayFormatString = "[ 00 - 00 - 00 ]"
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().TextBox(
+                settings => {
+                    settings.Name = "textBox2";
+                    settings.Width = 170;
+                    settings.Properties.NullText = "Enter your name...";
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            NullText = "Enter your name..." 
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().TextBox(
+                settings => {
+                    settings.Name = "textBox3";
+                    settings.Width = 170;
+                    settings.Properties.MaskSettings.Mask = "+1 (999) 000-0000";
+                    settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            MaskSettings.Mask = "+1 (999) 000-0000" 
+        </label>
+    </div>
+</div>

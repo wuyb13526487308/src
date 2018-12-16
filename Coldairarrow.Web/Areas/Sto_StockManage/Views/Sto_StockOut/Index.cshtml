@@ -71,10 +71,11 @@
                 },
                 { title: 'ÉêÇë±àºÅ', field: 'ApplyNo', width: 200 },
                 { title: '±¸×¢', field: 'Context', width: 200 },
-                { title: '²Ö¿â', field: 'StoreId', width: 200 },
+                { title: '²Ö¿â', field: 'StoreName', width: 200 },
                 {
                     title: '²Ù×÷', field: '_', width: 150, fixed: true, formatter: function (value, row) {
                         var html = '<a href="javascript:;" onclick="showData(\'{0}\')">²é¿´</a>'.format(row['Id']);
+                        html += '|<a href="javascript:;" onclick="printData(\'{0}\')">´òÓ¡</a>'.format(row['Id']);
                         return html;
                     }
                 }
@@ -98,6 +99,10 @@
         });
     }
 
+    function printData(id) {
+
+        printTicket(rootUrl,"OUT_TICKET",id);
+    }
 
     $(function () {
         initTable();

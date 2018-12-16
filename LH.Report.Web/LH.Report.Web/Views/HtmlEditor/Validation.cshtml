@@ -1,0 +1,29 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    var MaxLength = 50;
+    var CustomErrorText = "Custom validation fails because the HTML content&prime;s length exceeds " + MaxLength.toString() + " characters.";
+    function ValidationHandler(s, e) {
+        if (e.html.length > MaxLength) {
+            e.isValid = false;
+            e.errorText = CustomErrorText;
+        }
+    }
+    function HtmlChangedHandler(s, e) {
+        $("#contentLength").html(s.GetHtml().length);
+    }
+    // ]]> 
+</script>
+@using (Html.BeginForm()) {
+    @Html.Partial("ValidationPartial")
+    <div style="margin: 8px 0;">            
+        Length of HTML code representing the Editor's content (in characters): <b id="contentLength">@(((string)ViewData["Html"]).Length)</b>
+    </div>
+    <br />
+    @Html.DevExpress().Button(
+        settings => {
+            settings.Name = "btnSubmit";
+            settings.Text = "Submit";
+            settings.UseSubmitBehavior = true;
+        }
+    ).GetHtml()
+}

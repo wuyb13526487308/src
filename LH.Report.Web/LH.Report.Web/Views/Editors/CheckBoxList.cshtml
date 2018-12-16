@@ -1,0 +1,36 @@
+﻿@using DevExpress.Web.Demos
+
+@{
+    CheckListDemoOptions options = (CheckListDemoOptions)ViewData["Options"]; 
+}
+
+@using (Html.BeginForm()) {
+    <div class="vertComponentContainer" style="width: 500px;">
+        @Html.DevExpress().CheckBoxList(
+            settings =>
+            {
+                settings.Name = "checkBoxList1";
+                settings.Properties.ValueField = "ID";
+                settings.Properties.TextField = "Name";
+                settings.Properties.RepeatLayout = options.RepeatLayout;
+                settings.Properties.RepeatDirection = options.RepeatDirection;
+                settings.Properties.RepeatColumns = options.RepeatColumns; 
+            }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/ProgLanguages.xml"), "//Language").GetHtml()
+    </div>
+    
+    <div class="vertOptionsPanel">
+        <div>
+            <label for="RepeatLayout">Layout:</label>
+            @Html.DropDownList("RepeatLayout", CheckListDemoHelper.GetRepeatLayouts(), new { style = "width:100px" })
+        </div>
+        <div style="float: none;">
+            <label for="RepeatDirection">Direction:</label>
+            @Html.DropDownList("RepeatDirection", CheckListDemoHelper.GetRepeatDirections(), new { style = "width:100px" })
+        </div>
+        <div style="float: none;">
+            <label for="RepeatColumns">Repeat Columns:</label>
+            @Html.DropDownList("RepeatColumns", CheckListDemoHelper.GetRepeatColumns(), new { style = "width:100px" })
+        </div>
+        <input type="submit" value="Apply" />
+    </div>
+}

@@ -1,0 +1,161 @@
+﻿@using DevExpress.Web.Demos
+@{ Layout = null; }
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Site.css")" />
+    <title></title>
+    @Html.DevExpress().GetStyleSheets(
+           new StyleSheet { ExtensionType = ExtensionType.Button },
+           new StyleSheet { ExtensionType = ExtensionType.DockManager },
+           new StyleSheet { ExtensionType = ExtensionType.DockPanel },
+           new StyleSheet { ExtensionType = ExtensionType.DockZone }
+    )
+    <style type="text/css">
+        .panelNum
+        {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.4.4.js")"></script>
+    <script type="text/javascript">
+        function UpdateClientLayout(s, e) {
+            s.PerformCallback();
+        }
+    </script>
+    @Html.DevExpress().GetScripts(
+           new Script { ExtensionType = ExtensionType.Button },
+           new Script { ExtensionType = ExtensionType.DockManager },
+           new Script { ExtensionType = ExtensionType.DockPanel },
+           new Script { ExtensionType = ExtensionType.DockZone }
+    )
+    @using (Html.BeginForm()){
+        <div style="margin-top: 15px; margin-bottom: 10px;">
+            <div style="float: left; padding-left: 15px;">
+                @Html.DevExpress().Button(
+                    settings => {
+                        settings.Name = "btnSave";
+                        settings.Text = "Save";
+                        settings.UseSubmitBehavior = true;
+                        settings.RouteValues = new { Controller = "Docking", Action = "SaveLayout" };
+                    }
+                ).GetHtml()
+            </div>
+            <div style="float: left; padding-left: 15px;">
+                @Html.DevExpress().Button(
+                    settings => {
+                        settings.Name = "btnRestore";
+                        settings.Text = "Restore layout to initial";
+                        settings.UseSubmitBehavior = true;
+                        settings.RouteValues = new { Controller = "Docking", Action = "RestoreLayout" };
+                    }
+                ).GetHtml()
+            </div>
+            <div style="float: left; padding-left: 15px;">
+                @Html.DevExpress().Button(
+                    settings => {
+                        settings.Name = "btnBack";
+                            settings.Text = "Cancel";
+                            settings.UseSubmitBehavior = true;
+                            settings.RouteValues = new { Controller = "Docking", Action = "LayoutManagement" }; 
+                    }
+                ).GetHtml()
+            </div>
+            <b class="Clear"></b>
+        </div>
+        @Html.DevExpress().DockPanel(
+            settings => {
+                settings.Name = "panel1";
+                settings.PanelUID = "panel1";
+                settings.VisibleIndex = 0;
+                settings.Width = 400;
+                settings.Height = 560;
+                settings.HeaderText = "Panel1";
+                settings.AllowedDockState = AllowedDockState.DockedOnly;
+                settings.AllowResize = true;
+                settings.OwnerZoneUID = "leftZone";
+                settings.Styles.Content.BackColor = Color.FromArgb(0xDBEBF4);
+                settings.Styles.Content.Paddings.Padding = 0;
+                settings.SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div class=\"panelNum\" style=\"margin-top: 185px;\">" +
+                            "<img id=\"imgNum1\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n1.png") + "\" alt=\"\"/>" +
+                        "</div>"
+                    );
+                });
+            }
+        ).GetHtml()
+        @Html.DevExpress().DockPanel(
+            settings => {
+                settings.Name = "panel2";
+                settings.PanelUID = "panel2";
+                settings.VisibleIndex = 0;
+                settings.Width = 350;
+                settings.Height = 300;
+                settings.HeaderText = "Panel2";
+                settings.AllowResize = true;
+                settings.AllowedDockState = AllowedDockState.DockedOnly;
+                settings.OwnerZoneUID = "rightZone";
+                settings.Styles.Content.BackColor = Color.FromArgb(0xDBF4DE);
+                settings.Styles.Content.Paddings.Padding = 0;
+                settings.SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div class=\"panelNum\" style=\"margin-top: 65px;\">" +
+                            "<img id=\"imgNum2\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n2.png") + "\" alt=\"\"/>" +
+                        "</div>"
+                    );
+                });
+            }
+        ).GetHtml()
+        @Html.DevExpress().DockPanel(
+            settings => {
+                settings.Name = "panel3";
+                settings.PanelUID = "panel3";
+                settings.VisibleIndex = 1;
+                settings.Width = 300;
+                settings.Height = 250;
+                settings.HeaderText = "Panel3";
+                settings.Left = 700;
+                settings.Top = 190;
+                settings.AllowedDockState = AllowedDockState.DockedOnly;
+                settings.AllowResize = true;
+                settings.OwnerZoneUID = "rightZone";
+                settings.Styles.Content.BackColor = Color.FromArgb(0xF3EAFB);
+                settings.Styles.Content.Paddings.Padding = 0;
+                settings.SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div class=\"panelNum\" style=\"margin-top: 37px;\">" +
+                            "<img id=\"imgNum3\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n3.png") + "\" alt=\"\"/>" +
+                        "</div>"
+                    );
+                });
+            }
+        ).GetHtml()
+        <div style="float: left; margin-left: 15px;">
+            @Html.DevExpress().DockZone(
+                settings => {
+                    settings.Name = "LeftZone";
+                    settings.ZoneUID = "leftZone";
+                    settings.Width = 288;
+                    settings.PanelSpacing = 12;
+                }
+            ).GetHtml()
+        </div>
+        <div style="float: left; margin-left: 10px;">
+            @Html.DevExpress().DockZone(
+                settings => {
+                    settings.Name = "RightZone";
+                    settings.ZoneUID = "rightZone";
+                    settings.Width = 400;
+                    settings.PanelSpacing = 12;
+                }
+            ).GetHtml()
+        </div>
+        @Html.Partial("EditLayoutPartial")
+    }
+</body>
+</html>

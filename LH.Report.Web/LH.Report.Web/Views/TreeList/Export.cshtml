@@ -1,0 +1,21 @@
+﻿@model IEnumerable
+           
+@{
+    TreeListExportDemoOptions options = (TreeListExportDemoOptions)Session["TreeListExportOptions"]; 
+}
+
+@using(Html.BeginForm("Export", "TreeList")) {
+    <div class="BottomMargin">
+        @foreach(string typeName in TreeListDemoHelper.ExportTypes.Keys) {
+            <input type="submit" name="@typeName" value="@TreeListDemoHelper.ExportTypes[typeName].Title" />
+            <text>&nbsp;</text>
+        }
+        @Html.CheckBox("EnableAutoWidth", options.EnableAutoWidth, new { style = "vertical-align: middle" })
+        <label for="EnableAutoWidth" style="vertical-align: middle">Auto-width</label>
+        @Html.CheckBox("ExpandAllNodes", options.ExpandAllNodes, new { style = "vertical-align: middle" })
+        <label for="ExpandAllNodes" style="vertical-align: middle">Expand all nodes</label>
+        @Html.CheckBox("ShowTreeButtons", options.ShowTreeButtons, new { style = "vertical-align: middle" })
+        <label for="ShowTreeButtons" style="vertical-align: middle">Show tree buttons</label>
+    </div>
+    @Html.Partial("ExportPartial", Model)
+}

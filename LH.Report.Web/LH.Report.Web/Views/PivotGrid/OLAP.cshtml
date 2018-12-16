@@ -1,0 +1,23 @@
+﻿@if (string.IsNullOrEmpty(PivotGridDemoHelper.OLAPConnectionString)) {
+    Html.DevExpress().RoundPanel(
+        settings => {
+            settings.Name = "ErrorPane";
+            settings.ShowHeader = false;
+            settings.Style["margin-bottom"] = "10px";
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                    "<table>" +
+                        "<tr>" +
+                            "<td>" +
+                                "<img alt=\"Error\" src=\"" + @Url.Content("~/Content/PivotGrid/Error.gif") + "\" />" +
+                            "</td>" +
+                            "<td>" +
+                                PivotGridDemoHelper.NoProviderErrorString +
+                            "</td>" +
+                        "</tr>" +
+                    "</table>"
+                );
+            });
+        }).Render();
+}
+@Html.Partial("OLAPPartial")

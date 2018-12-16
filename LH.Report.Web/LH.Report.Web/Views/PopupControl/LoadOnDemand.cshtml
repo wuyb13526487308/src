@@ -1,0 +1,9 @@
+﻿<div style="height: 130px">
+    @Html.DevExpress().Button( settings => {
+        settings.Name = "ShowButton";
+        settings.Text = "Show Popup Window";
+        settings.ClientSideEvents.Click = "function(s, e){ popupControl.Show(); }";
+    }).GetHtml()
+</div>
+
+@Html.Partial("LoadOnDemandPartial")

@@ -1,0 +1,38 @@
+﻿@model IList
+
+<script type="text/javascript">
+    // <![CDATA[
+    $(window).load(UpdateRotationCheckBox);
+
+    function UpdateRotationCheckBox() {
+        var visible = $("#view")[0].selectedIndex > 4 ? "hidden" : "visible";
+        $("#rotated")[0].style.visibility = visible;
+        $("#rotatedLabel")[0].style.visibility = visible;
+    }
+    // ]]> 
+</script>
+
+@using (Html.BeginForm()) {
+    ChartBarViewsDemoOptions options = (ChartBarViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:40px;">
+        <div style="padding-bottom: 4px;">
+            <label for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetBarViews(), new { onchange = "UpdateRotationCheckBox()" })
+        </div>
+        <div>
+            <div style="float: left; vertical-align:baseline;">
+                @Html.CheckBox("showLabels", options.ShowLabels, new { style = "margin-left: 0px; padding-left: 0px;" })
+                <label style="vertical-align:2px" class="checkBox" for="showLabels">Show Labels</label>
+                @Html.CheckBox("rotated", options.Rotated, new { style = "margin-left: 70px; visibility:hidden" })
+                <label id="rotatedLabel" style="vertical-align:2px; visibility:hidden" class="checkBox" for="rotated">Rotated Diagram</label>
+            </div>
+            <input style="float: right;" type="submit" value="Apply"/>
+        </div>
+    </div>
+    <br/>
+    if (ChartDemoHelper.IsSideBySideStackedView(options.View)) {
+        @Html.Partial("BarViewsSideBySideStackedPartial", Model)
+    } else {
+        @Html.Partial("BarViewsPartial", Model)
+    }
+}

@@ -1,0 +1,30 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvFilterRow";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "FilterRowPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add(column => {
+            column.FieldName = "CategoryID";
+            column.Caption = "Category";
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+            comboBoxProperties.TextField = "CategoryName";
+            comboBoxProperties.ValueField = "CategoryID";
+            comboBoxProperties.ValueType = typeof(int);
+            comboBoxProperties.DropDownStyle = DropDownStyle.DropDown;
+        });
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("ReorderLevel");
+        settings.Columns.Add("Discontinued", MVCxGridViewColumnType.CheckBox);
+
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ClearFilterButton.Visible = true;
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,32 @@
+﻿@{
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.ToolTipEnabled = DefaultBoolean.True;
+    
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Function in Cartesian Coordinates"
+    });
+
+    Series series = new Series("Archimedian Spiral", options.View);
+    series.ArgumentScaleType = ScaleType.Numerical;
+    series.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    series.Label.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+    series.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.FixedPoint;
+    series.Label.PointOptions.ValueNumericOptions.Precision = 1;
+    series.ArgumentDataMember = "X";
+    series.ValueDataMembers[0] = "Y";
+    settings.Series.Add(series);
+
+    XYDiagram diagram = (XYDiagram)settings.Diagram;
+    diagram.AxisY.Interlaced = true;
+    diagram.AxisX.GridLines.Visible = true;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvPaging";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "PagingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country");
+
+        settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,77 @@
+﻿@{
+    ChartViewTypeDemoOptions options = (ChartViewTypeDemoOptions)Session[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Height = 400;
+    settings.Width = 700;
+    settings.BorderOptions.Visible = false;
+    settings.EnableClientSideAPI = true;
+    settings.CallbackRouteValues = new { Controller = "Chart", Action = "GanttViewsSideBySidePartial" };
+    settings.CustomActionRouteValues = new { Controller = "Chart", Action = "CustomActionGanttViewsSideBySidePartial" };
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    
+    settings.SeriesTemplate.ChangeView(options.View);
+    settings.SeriesTemplate.LabelsVisibility = DefaultBoolean.False;
+    settings.SeriesTemplate.ValueScaleType = ScaleType.DateTime;
+    settings.SeriesTemplate.ArgumentDataMember = "TaskName";
+    settings.SeriesTemplate.ValueDataMembers[0] = "BeginDate";
+    settings.SeriesTemplate.ValueDataMembers[1] = "EndDate";
+    settings.SeriesDataMember = "ProjectName";
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        if (chart.Series.Count == 4) {
+            ((SideBySideGanttSeriesView)chart.Series[2].View).AxisX = ((GanttDiagram)chart.Diagram).SecondaryAxesX[0];
+            ((SideBySideGanttSeriesView)chart.Series[2].View).Pane = ((GanttDiagram)chart.Diagram).Panes[0];
+            ((SideBySideGanttSeriesView)chart.Series[3].View).AxisX = ((GanttDiagram)chart.Diagram).SecondaryAxesX[0];
+            ((SideBySideGanttSeriesView)chart.Series[3].View).Pane = ((GanttDiagram)chart.Diagram).Panes[0];
+        }
+        
+        Series series = chart.GetSeriesByName(ViewBag.SeriesName);
+        if (series != null){
+            foreach (SeriesPoint point in series.Points)
+                if (point.Argument == ViewBag.Argument) {
+                    Task task = (Task)point.Tag;
+                    if (ViewBag.ValueIndex == 0)
+                        task.BeginDate = ViewBag.Date;
+                    else
+                        task.EndDate = ViewBag.Date;
+                    break;
+                }
+        }
+    };
+
+    GanttDiagram diagram = (GanttDiagram)settings.Diagram;
+    diagram.AxisX.Range.SideMarginsEnabled = true;
+    diagram.AxisX.GridLines.Visible = true;
+    diagram.AxisY.GridLines.MinorVisible = true;
+    diagram.AxisY.Range.SetMinMaxValues(new DateTime(2005, 03, 14), new DateTime(2005, 06, 21));
+    diagram.AxisY.Range.SideMarginsEnabled = false;
+    diagram.AxisY.MinorCount = 4;
+    diagram.AxisY.Interlaced = true;
+    diagram.AxisY.DateTimeGridAlignment = DateTimeMeasurementUnit.Month;
+    diagram.AxisY.DateTimeOptions.Format = DateTimeFormat.MonthAndDay;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Project Comparsion"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Tasks",
+        Dock = ChartTitleDockStyle.Left,
+        Font = new Font("Tahoma", 12)
+    });
+
+    SecondaryAxisX axisX = new SecondaryAxisX("secondaryAxisX");
+    axisX.Reverse = true;
+    axisX.Alignment = AxisAlignment.Near;
+    axisX.Range.SideMarginsEnabled = true;
+    axisX.GridLines.Visible = true;
+    diagram.SecondaryAxesX.Add(axisX);
+    diagram.Panes.Add(new XYDiagramPane("pane") {
+        Weight = diagram.DefaultPane.Weight
+    });
+    diagram.AxisY.SetVisibilityInPane(false, diagram.DefaultPane);
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

@@ -1,0 +1,209 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    function OnLoginValidate(s, e) {
+        e.isValid = e.value != null && CheckRegExp("^[a-z]+$", e.value);
+    }
+    function OnPasswordValidate(s, e) {
+        e.isValid = e.value != null && CheckRegExp("^[0-9]+$", e.value);
+    }
+    function OnEmailValidate(s, e) {
+        e.isValid = e.value != null && CheckRegExp("^\\w+([-+.']\\w+)*@@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", e.value);
+    }
+    function CheckRegExp(pattern, value) {
+        return new RegExp(pattern).test(value);
+    }
+
+    function OnEditorGotFocus(s, e) {
+        SetHintVisible(s.name.substring(2), true);
+    }
+    function OnEditorLostFocus(s, e) {
+        SetHintVisible(s.name.substring(2), false);
+        UpdateErrorWindow(true);
+    }
+    function UpdateErrorWindow(checkVisible) {
+        if (checkVisible && !IsErrorWindowVisible()) return;
+
+        var errorText = '';
+        if (!tbLogin.GetIsValid())
+            errorText += 'Invalid login.';
+        if (!tbPassword.GetIsValid()) {
+            if (errorText != '')
+                errorText += '<br /><br />';
+            errorText += 'Invalid password.';
+        }
+        if (!tbEmail.GetIsValid()) {
+            if (errorText != '')
+                errorText += '<br /><br />';
+            errorText += 'Invalid email address.';
+        }
+        if (tbLogin.GetIsValid() && tbPassword.GetIsValid() && tbEmail.GetIsValid()) {
+            SetWindowErrorVisible(false);
+        } else {
+            SetWindowErrorString(errorText);
+            SetWindowErrorVisible(true);
+        }
+
+    }
+    function SetHintVisible(name, value) {
+        var hintWindow = pcHint.GetWindowByName(name);
+        if (value)
+            pcHint.ShowWindow(hintWindow);
+        else
+            pcHint.HideWindow(hintWindow);
+    }
+    function SetWindowErrorVisible(value) {
+        if (value)
+            pcError.Show();
+        else
+            pcError.Hide();
+    }
+    function SetWindowErrorString(text) {
+        pcError.SetContentHTML(text);
+    }
+    function IsErrorWindowVisible() {
+        return pcError.IsVisible();
+    }
+// ]]>
+</script>
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "pcHint";
+        settings.SkinID = "none";
+        settings.Width = 250;
+        settings.EncodeHtml = false;
+        settings.EnableClientSideAPI = true;
+        settings.EnableHotTrack = false;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
+        settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+        settings.ShowHeader = false;
+        settings.PopupHorizontalOffset = 1;
+        settings.PopupVerticalOffset = -10;
+        settings.PopupAction = PopupAction.None;
+        settings.CloseAction = CloseAction.None;
+
+        settings.Styles.Content.BackColor = Color.FromArgb(0xFFFBBA);
+        settings.Styles.Content.ForeColor = Color.FromArgb(0x916E04);
+        settings.Styles.Content.Paddings.Padding = 12;
+        settings.Styles.Content.Paddings.PaddingLeft = 14;
+        settings.Styles.Content.Paddings.PaddingRight = 14;
+        settings.ControlStyle.Border.BorderColor = Color.FromArgb(0xFFC800);
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+        settings.ControlStyle.Border.BorderWidth = 1;
+
+        settings.Windows.Add("Login should consist of <b>a-z</b>.", "Login").PopupElementID = "tbLogin";
+        settings.Windows.Add("Password should consist of <b>0-9</b>.", "Password").PopupElementID = "tbPassword";
+        settings.Windows.Add("For instance, <b>myname@example.com</b>.<br /> This will be used to sign-in to your account.", "Email").PopupElementID = "tbEmail";
+    }).GetHtml()
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "pcError";
+        settings.SkinID = "none";
+        settings.Width = 170;
+        settings.EnableClientSideAPI = true;
+        settings.EnableHotTrack = false;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+        settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+        settings.PopupElementID = "popupControlForm";
+        settings.ShowShadow = false;
+        settings.ShowHeader = false;
+        settings.PopupHorizontalOffset = 70;
+        settings.PopupVerticalOffset = 114;
+        settings.PopupAction = PopupAction.None;
+        settings.CloseAction = CloseAction.None;
+
+        settings.Styles.Content.BackColor = Color.FromArgb(0xFFFBBA);
+        settings.Styles.Content.ForeColor = Color.FromArgb(0xFF3333);
+        settings.Styles.Content.Paddings.Padding = 12;
+        settings.Styles.Content.Paddings.PaddingLeft = 14;
+        settings.Styles.Content.Paddings.PaddingRight = 14;
+        settings.ControlStyle.Border.BorderColor = Color.FromArgb(0xFFC800);
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+        settings.ControlStyle.Border.BorderWidth = 1;
+    }).GetHtml()
+    
+@using (Html.BeginForm("ClientSideAPI", "PopupControl", FormMethod.Post, new { id = "popupControlForm", @class = "edit_form" }))
+{
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings =>
+            {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Login:";
+                settings.AssociatedControlName = "tbLogin";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings =>
+            {
+                settings.Name = "tbLogin";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+                settings.Properties.ClientSideEvents.GotFocus = "OnEditorGotFocus";
+                settings.Properties.ClientSideEvents.LostFocus = "OnEditorLostFocus";
+                settings.Properties.ClientSideEvents.Validation = "OnLoginValidate";
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings =>
+            {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Password:";
+                settings.AssociatedControlName = "tbPassword";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings =>
+            {
+                settings.Name = "tbPassword";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+                settings.Properties.ClientSideEvents.GotFocus = "OnEditorGotFocus";
+                settings.Properties.ClientSideEvents.LostFocus = "OnEditorLostFocus";
+                settings.Properties.ClientSideEvents.Validation = "OnPasswordValidate";
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings =>
+            {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Email:";
+                settings.AssociatedControlName = "tbEmail";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings =>
+            {
+                settings.Name = "tbEmail";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+                settings.Properties.ClientSideEvents.GotFocus = "OnEditorGotFocus";
+                settings.Properties.ClientSideEvents.LostFocus = "OnEditorLostFocus";
+                settings.Properties.ClientSideEvents.Validation = "OnEmailValidate";
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings =>
+            {
+                settings.ControlStyle.CssClass = "label";
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings =>
+            {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+
+                settings.ClientSideEvents.Click = "function(s,e){ UpdateErrorWindow(false); }";
+            }
+        ).GetHtml()
+    </div>
+}

@@ -1,0 +1,158 @@
+﻿@model EditablePost
+
+@Html.DevExpress().PageControl(
+    pcSettings => {
+        pcSettings.Name = "pageControl";
+        pcSettings.ActiveTabIndex = 0;
+        pcSettings.Width = Unit.Percentage(100);
+
+        pcSettings.TabPages.Add(
+            tab => {
+                tab.Text = "Headers";
+                tab.SetContent(() => {
+                    ViewContext.Writer.Write("<div class=\"edit_form\" style=\"float: left; width: 50%\">");
+                    
+                    ViewContext.Writer.Write("<div class=\"line\">");
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "From :";
+                            edtSettings.AssociatedControlName = "From";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().TextBox(
+                        edtSettings => {
+                            edtSettings.Name = "From";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(Model.From)
+                    .Render();
+                    ViewContext.Writer.Write("</div>");
+
+                    ViewContext.Writer.Write("<div class=\"line\">");
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Date :";
+                            edtSettings.AssociatedControlName = "PostDate";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().DateEdit(
+                        edtSettings => {
+                            edtSettings.Name = "PostDate";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.ShowModelErrors = true;
+                            edtSettings.Properties.EditFormat = EditFormat.DateTime;
+                        }
+                    )
+                    .Bind(Model.PostDate)
+                    .Render();
+                    ViewContext.Writer.Write("</div>");
+
+                    ViewContext.Writer.Write("<div class=\"line\">");
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Subject :";
+                            edtSettings.AssociatedControlName = "Subject";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().TextBox(
+                        edtSettings => {
+                            edtSettings.Name = "Subject";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(Model.Subject)
+                    .Render();
+                    ViewContext.Writer.Write("</div>");
+                    
+                    ViewContext.Writer.Write("</div>");
+
+                    ViewContext.Writer.Write("<div class=\"edit_form\" style=\"float: left; width: 50%\">");
+                    
+                    ViewContext.Writer.Write("<div class=\"line\">");
+                    Html.DevExpress().CheckBox(
+                        edtSettings => {
+                            edtSettings.Name = "HasAttachment";
+                            edtSettings.Text = "Has Attachment";
+                            edtSettings.ControlStyle.CssClass = "checkEditor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(Model.HasAttachment)
+                    .Render();
+                    ViewContext.Writer.Write("</div>");
+
+                    ViewContext.Writer.Write("<div class=\"line\">");
+                    Html.DevExpress().CheckBox(
+                        edtSettings => {
+                            edtSettings.Name = "IsNew";
+                            edtSettings.Text = "Is New";
+                            edtSettings.ControlStyle.CssClass = "checkEditor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(Model.IsNew)
+                    .Render();
+                    ViewContext.Writer.Write("</div>");
+
+                    ViewContext.Writer.Write("</div>");
+                });
+            }
+        );
+        pcSettings.TabPages.Add(
+            tab => {
+                tab.Text = "Message";
+                tab.SetContent(() => {
+                    ViewContext.Writer.Write("<div class=\"edit_form\">");
+                    
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Text :";
+                            edtSettings.AssociatedControlName = "Text";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().Memo(
+                        edtSettings => {
+                            edtSettings.Name = "Text";
+                            edtSettings.ShowModelErrors = true;
+                            edtSettings.Width = Unit.Percentage(100);
+                            edtSettings.Height = Unit.Pixel(200);
+                        }
+                    )
+                    .Bind(Model.Text)
+                    .Render();
+
+                    ViewContext.Writer.Write("</div>");
+                });
+            }
+        );
+    }
+).GetHtml()
+<div style="text-align: right; margin-top: 3px">
+    @Html.DevExpress().HyperLink(
+        edtSettings => {
+            edtSettings.Name = "hlUpdate";
+            edtSettings.Properties.Text = "Update";
+            edtSettings.ControlStyle.Font.Underline = true;
+            edtSettings.Properties.ClientSideEvents.Click = "function(s, e) { treeList.UpdateEdit(); }";
+        }
+    ).GetHtml()
+    @Html.DevExpress().HyperLink(
+        edtSettings => {
+            edtSettings.Name = "hlCancel";
+            edtSettings.Properties.Text = "Cancel";
+            edtSettings.ControlStyle.Font.Underline = true;
+            edtSettings.Properties.ClientSideEvents.Click = "function(s, e) { treeList.CancelEdit(); }";
+        }
+    ).GetHtml()
+</div>

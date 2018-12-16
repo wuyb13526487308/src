@@ -1,0 +1,20 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "VirtualModePartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("name", "File name");
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "date";
+                column.Caption = "Creation Date";
+                column.Width = Unit.Percentage(100);
+                column.PropertiesEdit.DisplayFormatString = "{0:g}";
+            }
+        );
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+    }
+).BindToVirtualData(TreeListVirtualModeHelper.VirtualModeCreateChildren, TreeListVirtualModeHelper.VirtualModeNodeCreating).GetHtml()
+
+

@@ -1,0 +1,66 @@
+﻿@{
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Architecture Share Over Time (GF)"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.top500.org"
+    });
+
+    settings.SeriesTemplate.ArgumentScaleType = ScaleType.DateTime;
+    settings.SeriesTemplate.ChangeView(options.View);
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    if (options.View == DevExpress.XtraCharts.ViewType.FullStackedLine3D){
+        ((FullStackedLine3DSeriesView)settings.SeriesTemplate.View).LineWidth = 1.2;
+    }
+    ((FullStackedPointOptions)settings.SeriesTemplate.Label.PointOptions).ValueNumericOptions.Format = NumericFormat.Percent;
+    ((FullStackedPointOptions)settings.SeriesTemplate.Label.PointOptions).ValueNumericOptions.Precision = 0;
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    settings.SeriesTemplate.ArgumentDataMember = "Date";
+    settings.SeriesTemplate.ValueDataMembers[0] = "Gigaflops";
+    settings.SeriesDataMember = "Name";
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.Bottom;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+
+    AxisBase axisX;
+    AxisBase axisY;
+    if (settings.Diagram is XYDiagram) {
+        axisX = ((XYDiagram)settings.Diagram).AxisX;
+        axisY = ((XYDiagram)settings.Diagram).AxisY;
+    } else {
+        XYDiagram3D diagram = (XYDiagram3D)settings.Diagram;
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.XYZ;
+        diagram.ZoomPercent = 140;
+        diagram.VerticalScrollPercent = 4;
+        axisX = diagram.AxisX;
+        axisY = diagram.AxisY;
+    }
+
+    axisX.DateTimeMeasureUnit = DateTimeMeasurementUnit.Year;
+    axisX.DateTimeGridAlignment = DateTimeMeasurementUnit.Year;
+    axisX.Range.SideMarginsEnabled = false;
+    axisX.DateTimeOptions.Format = DateTimeFormat.Custom;
+    axisX.DateTimeOptions.FormatString = "yyyy";
+    axisY.Interlaced = true;
+    axisY.Range.Auto = false;
+    axisY.Range.MaxValue = 1.07;
+    axisY.Range.MinValue = 0;
+    axisY.NumericOptions.Format = NumericFormat.Percent;
+    axisY.NumericOptions.Precision = 0;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

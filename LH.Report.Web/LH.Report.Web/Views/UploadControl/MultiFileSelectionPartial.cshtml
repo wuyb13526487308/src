@@ -1,0 +1,172 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    var fileNumber = 0;
+    var fileName = "";
+    var startDate = null;
+
+    function Uploader_OnFileUploadStart() {
+        startDate = new Date();
+        ClearProgressInfo();
+        pcProgress.Show();
+    }
+    function Uploader_OnFilesUploadComplete(e) {
+        pcProgress.Hide();
+        UpdateUploadButton();
+    }
+    function UpdateUploadButton() {
+        btnUpload.SetEnabled(ucMultiSelection.GetText(0) != "");
+    }
+    function SetCurrentFileUploadingProgress(fileName, uploadedLength, fileLength) {
+        $("#lblFileName").text("Current File Progress: " + fileName).attr("title", fileName);
+        $("#lblCurrentUploadedFileLength").text(GetContentLengthString(uploadedLength) + " / " + GetContentLengthString(fileLength));
+    }
+    function SetTotalUploadingProgress(number, count, uploadedLength, totalLength) {
+        $("#lblUploadedFiles").text("Total Progress: " + number + ' of ' + count + " file(s)");
+        $("#lblUploadedFileLength").text(GetContentLengthString(uploadedLength) + " / " + GetContentLengthString(totalLength));
+    }
+    function Uploader_ProgressChanged(args) {
+        if (!pcProgress.IsVisible())
+            return;
+
+        if (args.currentFileName != fileName) {
+            fileName = args.currentFileName;
+            fileNumber++;
+        }
+
+        SetCurrentFileUploadingProgress(args.currentFileName, args.currentFileUploadedContentLength, args.currentFileContentLength);
+        progress1.SetPosition(args.currentFileProgress);
+
+        SetTotalUploadingProgress(fileNumber, args.fileCount, args.uploadedContentLength, args.totalContentLength);
+        progress2.SetPosition(args.progress);
+
+        UpdateProgressStatus(args.uploadedContentLength, args.totalContentLength);
+    }
+    function ClearProgressInfo() {
+        SetCurrentFileUploadingProgress("", 0, 0);
+        progress1.SetPosition(0);
+
+        SetTotalUploadingProgress(0, 0, 0, 0);
+        progress2.SetPosition(0);
+
+        $("#lblProgressStatus").html("Elapsed time: 00:00:00 &ensp; Estimated time: 00:00:00 &ensp; Speed: " + GetContentLengthString(0) + "/s");
+
+        fileNumber = 0;
+        fileName = "";
+    }
+    function UpdateProgressStatus(uploadedLength, totalLength) {
+        var currentDate = new Date();
+        var timeDiff = new Date(currentDate - startDate);
+        var speed = uploadedLength / (timeDiff.valueOf() / 1000);
+
+        var elapsedDate = timeDiff;
+        elapsedDate.setHours(elapsedDate.getHours() + elapsedDate.getTimezoneOffset() / 60);
+        var elapsedTime = GetTimeString(elapsedDate);
+
+        var estimatedMilliseconds = Math.floor((totalLength - uploadedLength) / speed) * 1000;
+        var estimatedDate = new Date(estimatedMilliseconds);
+        estimatedDate.setHours(estimatedDate.getHours() + estimatedDate.getTimezoneOffset() / 60);
+        var estimatedTime = GetTimeString(estimatedDate);
+
+        $("#lblProgressStatus").html("Elapsed time: " + elapsedTime + " &ensp; Estimated time: " + estimatedTime + " &ensp; Speed: " + GetContentLengthString(speed) + "/s");
+    }
+    function GetContentLengthString(contentLength) {
+        var sizeDimensions = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+        var index = 0;
+
+        var length = contentLength;
+        var postfix = sizeDimensions[index];
+
+        while (length > 1024) {
+            length = length / 1024;
+            postfix = sizeDimensions[++index];
+        }
+
+        var numberRegExpPattern = /[-+]?[0-9]*(?:\.|\,)[0-9]{0,2}|[0-9]{0,2}/;
+        var results = numberRegExpPattern.exec(length);
+        length = results ? results[0] : Math.floor(length);
+
+        return length.toString() + ' ' + postfix;
+    }
+    function GetTimeString(date) {
+        var timeRegExpPattern = /\d{1,2}:\d{1,2}:\d{1,2}/;
+        var results = timeRegExpPattern.exec(date.toTimeString());
+        return results ? results[0] : "00:00:00";
+    }
+// ]]>
+</script>
+
+@Html.DevExpress().PopupControl(
+    pcSettings =>
+    {
+        pcSettings.Name = "pcProgress";
+        pcSettings.Width = Unit.Pixel(460);
+        pcSettings.Modal = true;
+        pcSettings.HeaderText = "Uploading";
+        pcSettings.PopupAnimationType = AnimationType.None;
+        pcSettings.CloseAction = CloseAction.None;
+        pcSettings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        pcSettings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        pcSettings.AllowDragging = true;
+        pcSettings.ShowPageScrollbarWhenModal = true;
+        pcSettings.ShowCloseButton = false;
+        pcSettings.ShowFooter = true;
+
+        pcSettings.SetContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    "<table style=\"width: 100%;\">" +
+                        "<tr><td style=\"width: 100%;\">" +
+                            "<div style=\"overflow: hidden; width: 280px;\">" +
+                                "<label id=\"lblFileName\"></label>" +
+                            "</div>" +
+                        "</td><td class=\"NoWrap\" align=\"right\">" +
+                            "<label id=\"lblCurrentUploadedFileLength\"></label>" +
+                        "</td></tr><tr><td colspan=\"2\" class=\"TopPadding\" >");
+                            @Html.DevExpress().ProgressBar(
+                                    settings => {
+                                        settings.Name = "progress1";
+                                        settings.Width = Unit.Percentage(100);
+                                        settings.Height = Unit.Pixel(21);
+                                    }).Render();
+                ViewContext.Writer.Write(
+                    "</td></tr><tr><td colspan=\"2\">" +
+                        "<div class=\"Spacer\" style=\"height: 12px;\"></div>" +
+                    "</td></tr><tr><td style=\"width: 100%;\">" +
+                        "<label id=\"lblUploadedFiles\"></label>" +
+                    "</td><td class=\"NoWrap\" align=\"right\">" +
+                        "<label id=\"lblUploadedFileLength\"></label>" +
+                    "</td></tr><tr><td colspan=\"2\" class=\"TopPadding\" >");
+                        @Html.DevExpress().ProgressBar(
+                                settings => {
+                                    settings.Name = "progress2";
+                                    settings.Width = Unit.Percentage(100);
+                                    settings.Height = Unit.Pixel(21);
+                                    settings.ControlStyle.CssClass = "BottomMargin";
+                                }).Render();
+                ViewContext.Writer.Write(
+                    "</td></tr><tr><td colspan=\"2\">" +
+                        "<div class=\"Spacer\" style=\"height: 12px;\"></div>" +
+                    "</td></tr>" +
+                    "<tr><td colspan=\"2\">" +
+                        "<label id=\"lblProgressStatus\"></label>" +
+                    "</td></tr>" +
+                "</table>");
+                    
+            });
+
+        pcSettings.SetFooterTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    "<table style=\"width: 100%;\"><tr><td align=\"right\">");
+                    @Html.DevExpress().Button(
+                            settings => {
+                                settings.Name = "btnCancel";
+                                settings.Text = "Cancel";
+                                settings.UseSubmitBehavior = false;
+                                settings.Width = Unit.Pixel(100);
+                                settings.ClientSideEvents.Click = "function(s, e) { ucMultiSelection.Cancel(); }";
+                            }).Render();
+                ViewContext.Writer.Write(
+                    "</td></tr></table>");
+            });
+    }).GetHtml()

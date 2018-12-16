@@ -1,0 +1,57 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+    function OnExport(){
+        SetFormAction(true);
+        $("form").submit();
+        SetFormAction(false);
+    }
+    function SetFormAction(isExportAction){
+        var routeUrl = '@Url.Action(string.Empty, "PivotGrid")';
+        $("form").attr("action", routeUrl + (isExportAction ? "/ExportTo" : "/Export"));
+    }
+</script>
+
+@using (Html.BeginForm()) {
+    PivotGridExportDemoOptions options = (PivotGridExportDemoOptions)Session["ExportOptions"];
+    
+    <div style="height: 140px;">
+        <div>
+            <strong>Export to:</strong>&nbsp;
+            @Html.DropDownList("ExportType", typeof(PivotGridExportFormats), options.ExportType)
+            <input type="button" value="Save" onclick="OnExport()"/>
+        </div>
+        <div>
+            <strong style="float:left;">Export Options:</strong>
+            <div id="pivotGridExportOptionsPanel" class="vertOptionsPanel" style="width: 300px;">
+                <div>
+                    @Html.CheckBox("PrintHeadersOnEveryPage", options.PrintHeadersOnEveryPage, new { @class = "leftMost" })
+                    <label class="checkBox" for="PrintHeadersOnEveryPage">
+                        Print headers on every page</label>
+                </div>
+                <div>
+                    @Html.CheckBox("PrintFilterHeaders", options.PrintFilterHeaders, new { @class = "leftMost" })
+                    <label class="checkBox" for="PrintFilterHeaders">
+                        Print filter headers</label>
+                </div>
+                <div>
+                    @Html.CheckBox("PrintColumnHeaders", options.PrintColumnHeaders, new { @class = "leftMost" })
+                    <label class="checkBox" for="PrintColumnHeaders">
+                        Print column headers</label>
+                </div>
+                <div>
+                    @Html.CheckBox("PrintRowHeaders", options.PrintRowHeaders, new { @class = "leftMost" })
+                    <label class="checkBox" for="PrintRowHeaders">
+                        Print row headers</label>
+                </div>
+                <div>
+                    @Html.CheckBox("PrintDataHeaders", options.PrintDataHeaders, new { @class = "leftMost" })
+                    <label class="checkBox" for="PrintDataHeaders">
+                        Print data headers</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    @Html.Partial("ExportPartial", Model)
+}

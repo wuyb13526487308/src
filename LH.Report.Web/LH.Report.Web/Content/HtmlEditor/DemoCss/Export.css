@@ -1,0 +1,20 @@
+﻿.TextContent
+{
+	font: 11px Verdana;
+    color: #2e3139;
+    line-height: 14px;
+}
+
+.TextContent p,
+.TextContent ul li
+{
+    margin-bottom: 10px;
+}
+
+.TextContent ul
+{
+	list-style: outside;
+	padding: 0;
+	margin-left: 32px;
+	list-style-type: disc;
+}

@@ -1,0 +1,24 @@
+﻿@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvDataBinding";
+        settings.AllowSelectNode = true;
+                
+        settings.TextField = "Title";
+        settings.NavigateUrlField = "HelpUrl";
+        settings.ImageUrlField = "NodeTypeImage";
+
+        settings.Images.NodeImage.Width = 16;
+        settings.Images.NodeImage.Height = 16;
+        settings.Styles.NodeImage.Paddings.PaddingTop = 3;
+                
+        settings.NodeDataBound = (source, e) => {
+            System.Xml.XmlNode dataNode = ((e.Node.DataItem as IHierarchyData).Item as System.Xml.XmlNode);
+            if(dataNode.Name == "class")
+                e.Node.TextStyle.Font.Bold = true;
+        };
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.ExpandToDepth(0);
+        };
+    }).BindToXML(Server.MapPath("~/App_Data/HelpNav.xml"), "//namespace/*").GetHtml()

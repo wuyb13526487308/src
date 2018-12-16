@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().DataView(
+    settings => {
+        settings.Name = "dataView";
+        settings.CallbackRouteValues = new { Controller = "DataView", Action = "DataBindingPartial" };
+        settings.RowPerPage = 2;
+        settings.Width = Unit.Percentage(100);
+        settings.PagerAlign = DevExpress.Web.ASPxDataView.PagerAlign.Justify;
+        settings.SetItemTemplateContent( 
+            c => {
+                var discID = DataBinder.Eval(c.DataItem, "ID").ToString();
+                ViewContext.Writer.Write(
+                    "<div class=\"DataViewItemTop\">" +
+                        "<img src=" + Url.Content("~/Content/DataView/Images/plus.png") + " alt=\"+\" width=\"11\" height=\"10\" />" +
+                        "<a href=\"" + "javascript:void(" + discID + ");\">Add to cart</a>" +
+                    "</div>" +
+                    "<div style=\"height: 100px;\">" +
+                        "<img id=\"" + "imgCover" + discID + "\" src=\"" + Url.Content("~/Content/DataView/Images/Discs/" + discID + ".jpg") + "\" alt=\"\" />" +
+                    "</div>" +
+                    "<label>" + DataBinder.Eval(c.DataItem, "Year").ToString() + "</label>" +
+                    "<div class=\"DataViewItemTitle\">" +
+                        "<a class=\"NoWrap\" href=\"" + "javascript:void(" + discID + ");\">" + DataBinder.Eval(c.DataItem, "Title").ToString() + "</a>" +
+                    "</div>" +
+                    "<div class=\"DataViewItemPrice\">" +
+                        "<label>" + DataBinder.Eval(c.DataItem, "Price").ToString() + "</label>" +
+                    "</div>"
+                );
+            }
+        );
+        settings.PagerSettings.ShowNumericButtons = true;
+        settings.PagerSettings.AllButton.Visible = false;
+        settings.PagerSettings.Summary.Visible = false;
+        settings.PagerSettings.PageSizeItemSettings.Visible = true;
+        settings.PagerSettings.PageSizeItemSettings.ShowAllItem = true;
+    }
+).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/DataViewDiscs.xml"), "//Discs/*").GetHtml()

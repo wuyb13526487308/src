@@ -1,0 +1,14 @@
+﻿@model IEnumerable
+
+<label for="GroupBy">GroupBy:</label>
+<select id="GroupBy" onchange="gvGrouping.PerformCallback({ 'param': this.value });">
+    <option value="0">Country</option>
+    <option value="1">Country, City</option>
+    <option value="2">Company Name</option>
+</select>
+&nbsp;
+<input type="button" value="Collapse All Rows" onclick="gvGrouping.CollapseAll();" />
+&nbsp;
+<input type="button" value="Expand All Rows" onclick="gvGrouping.ExpandAll();" />
+<br /><br />
+@Html.Partial("GroupingPartial", Model)

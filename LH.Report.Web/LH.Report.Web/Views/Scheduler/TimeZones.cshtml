@@ -1,0 +1,13 @@
+﻿@model SchedulerDataObject
+
+<div>
+    <label style="float:left;padding:4px;">Choose the Client Time Zone:&nbsp;</label>
+    @Html.DevExpress().TimeZoneEdit(
+        settings => {
+            settings.Name = "timeZoneEdit";
+            settings.SchedulerName = "scheduler";
+            settings.Width = Unit.Percentage(50);
+        }).GetHtml()
+</div>
+<br />
+@Html.Partial("TimeZonesPartial", Model)

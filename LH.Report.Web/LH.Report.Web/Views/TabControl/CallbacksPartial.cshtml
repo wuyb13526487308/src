@@ -1,0 +1,30 @@
+﻿@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcCallbacks";
+        settings.CallbackRouteValues = new { Controller = "TabControl", Action = "CallbacksPartial" };
+        settings.Width = 426;
+        settings.Height = 353;
+        settings.TabAlign = TabAlign.Justify;
+        settings.TabPosition = TabPosition.Bottom;
+
+        settings.TabPages.Add("Original").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Hands/Original.jpg") + "\" />"
+            );
+        });
+        settings.TabPages.Add("Cross-Process").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Hands/CrossProcess.jpg") + "\" />"
+            );
+        });
+        settings.TabPages.Add("Sepia").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Hands/Sepia.jpg") + "\" />"
+            );
+        });
+        settings.ActiveTabIndex = 0;
+    }).GetHtml()

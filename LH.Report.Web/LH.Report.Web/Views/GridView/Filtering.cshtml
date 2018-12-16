@@ -1,0 +1,25 @@
+﻿ @model IEnumerable
+
+ <script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function() {
+        $("#EnableCheckedListMode").change(
+            function() { 
+                $("form").submit(); 
+            }
+        );
+    });        
+// ]]> 
+</script>
+@{
+    var enableCheckedListMode = (bool)Session["EnableCheckedListMode"];
+}
+@using(Html.BeginForm()) {
+    <div class="vertOptionsPanel" style="padding-left: 0">
+        @Html.CheckBox("EnableCheckedListMode", enableCheckedListMode, new { @class = "leftMost" })
+        <label class="checkBox" for="EnableCheckedListMode">Enable CheckedList Mode</label>
+    </div>
+    <br />
+    <br />
+ @Html.Partial("FilteringPartial", Model)
+}

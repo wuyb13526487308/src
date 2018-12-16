@@ -1,0 +1,36 @@
+﻿@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrolling";
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 275;
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add("Scheduling").SetContent(() =>
+        { 
+            ViewContext.Writer.Write(Html.ComponentList("Scheduling", 9));
+        });
+        settings.TabPages.Add("Reporting").SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.ComponentList("Reporting", 9));
+        });
+        settings.TabPages.Add("Navigation & Layout").SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.ComponentList("Navigation & Layout", 9));
+        });
+        settings.TabPages.Add("Data").SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.ComponentList("Data", 9));
+        });
+        settings.TabPages.Add("Components").SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.ComponentList("Components", 9));
+        });
+        settings.TabPages.Add("Common Controls").SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.ComponentList("Common Controls", 9));
+        });
+    }).GetHtml()

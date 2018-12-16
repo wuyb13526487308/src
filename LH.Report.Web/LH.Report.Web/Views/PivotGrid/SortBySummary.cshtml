@@ -1,0 +1,26 @@
+﻿@model IEnumerable
+  
+@functions{
+    IList<string> SortFields {
+        get { return new List<string>() { "Order Amount", "Quantity", "Discount (Avg)" }; }
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#SortByField").change(
+            function () {
+                $("form").submit();
+            }
+        );
+    });
+</script>
+
+@using(Html.BeginForm()) {
+    <div>
+        <label for="SortByField">Sort the "Sales Person" Field by:</label>
+        @Html.DropDownList("SortByField", new SelectList(SortFields, "0"))
+    </div>
+    <br />
+    @Html.Partial("SortBySummaryPartial", Model)
+}

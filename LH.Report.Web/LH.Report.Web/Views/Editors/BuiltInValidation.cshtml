@@ -1,0 +1,121 @@
+﻿@model BuiltInValidationData
+
+<script type="text/javascript">
+//<![CDATA[
+    function OnNameValidation(s, e) {
+        if (e.value == null)
+            e.isValid = false;
+        var name = String(e.value);
+        if (name == "")
+            e.isValid = false;
+        if (name.length > 50) {
+            e.isValid = false;
+            e.errorText = "Must be under 50 characters";
+        }
+    }
+
+    function OnAgeValidation(s, e) {
+        if (e.value == null || e.value == "")
+            return;
+        var age = Number(e.value);
+        if (isNaN(age) || age < 18 || age > 100)
+            e.isValid = false;
+    }
+// ]]> 
+</script>
+
+@using (Html.BeginForm("BuiltInValidation", "Editors", FormMethod.Post, new { id = "validationForm", @class = "edit_form", style="height:150px;" })) {
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Name:";
+                settings.AssociatedControlName = "Name";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings => {
+                settings.Name = "Name";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Assign(EditorsDemosHelper.NameValidationSettings);
+                settings.Properties.ClientSideEvents.Validation = "OnNameValidation";
+            }
+        ).Bind(Model.Name).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Age:";
+                settings.AssociatedControlName = "Age";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings => {
+                settings.Name = "Age";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Assign(EditorsDemosHelper.AgeValidationSettings);
+                settings.Properties.ClientSideEvents.Validation = "OnAgeValidation";
+            }
+        ).Bind(Model.Age).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Email:";
+                settings.AssociatedControlName = "Email";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings => {
+                settings.Name = "Email";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Assign(EditorsDemosHelper.EmailValidationSettings);
+            }
+        ).Bind(Model.Email).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Arrival Date:";
+                settings.AssociatedControlName = "ArrivalDate";
+            }
+        ).GetHtml()
+        @Html.DevExpress().DateEdit(
+            settings => {
+                settings.Name = "ArrivalDate";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Assign(EditorsDemosHelper.ArrivalDateValidationSettings);                        
+            }
+        ).Bind(Model.ArrivalDate).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnClear";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Clear";
+                settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+            }
+        ).GetHtml()
+    </div>
+}
+<p>
+    The following validation rules are defined in this demo: Name: required, must be under 50 characters; Age: required, must be between 18 and 100; 
+    Email: required, must fit email regular expression; Arrival date: required
+</p>

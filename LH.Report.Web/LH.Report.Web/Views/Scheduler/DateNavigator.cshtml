@@ -1,0 +1,10 @@
+﻿@model SchedulerDataObject
+
+<div>
+    <div style="float:left">
+        @Html.Partial("DateNavigatorPartial", Model)
+    </div>
+    <div style="margin-left:10px;float:left;">
+        @Html.DevExpress().DateNavigator(SchedulerDemoHelper.DateNavigatorSchedulerSettings).Bind(Model.Appointments, Model.Resources).GetHtml()
+    </div>
+</div>

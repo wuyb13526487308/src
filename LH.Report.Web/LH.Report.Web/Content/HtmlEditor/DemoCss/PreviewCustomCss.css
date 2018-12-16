@@ -1,0 +1,36 @@
+﻿.CommonTitlePreview {
+    color: #3366ff;
+    font-family: Tahoma;
+    font-size: 20pt;
+    font-weight: bold;
+}
+.CommonHeader1Preview {
+    color: #576fa5;
+    font-weight: lighter;
+    font-size: 15pt;
+}
+.CommonHeader2Preview {
+    color: #576fa5;
+    font-weight: lighter;
+    font-size: 12pt;
+}
+.CommonContentPreview {
+    font-size: 100%;
+    color: #303440;
+}
+.CommonFeaturesPreview {
+    font-weight: 700;
+    color: #595d66;
+}
+.CommonFooterPreview {
+    color: Black;
+    font-size: 12px
+}
+.ImageTitlePreview {
+    color: #000000;
+    line-height: 20px;
+    font-style:italic;
+}
+.LinkPreview {
+	color: #0000FF;
+}

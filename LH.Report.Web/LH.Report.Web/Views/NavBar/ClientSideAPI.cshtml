@@ -1,0 +1,176 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function () {
+        $("#cbClientVisible").click(
+            function () {
+                nbClientSideAPI.SetVisible($("#cbClientVisible").attr("checked"));
+            }
+        );
+        $("#cmbGroups").change(
+            function () {
+                UpdateItemsCombo(GetNavBarGroup().name);
+                ShowProperties();
+            }
+        );
+        $("#cbGroupExpanded").click(
+            function () {
+                GetNavBarGroup().SetExpanded($("#cbGroupExpanded").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbGroupVisible").click(
+            function () {
+                GetNavBarGroup().SetVisible($("#cbGroupVisible").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cmbItems").change(
+            function () {
+                ShowProperties();
+            }
+        );
+        $("#cbItemEnabled").click(
+            function () {
+                GetNavBarItem().SetEnabled($("#cbItemEnabled").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbItemVisible").click(
+            function () {
+                GetNavBarItem().SetVisible($("#cbItemVisible").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbItemSelected").click(
+            function () {
+                var item = GetNavBarItem();
+                if (!item.GetVisible())
+                    $("#cbItemSelected").attr("checked", false);
+                else {
+                    nbClientSideAPI.SetSelectedItem($("#cbItemSelected").attr("checked") ? GetNavBarItem() : null);
+                    ShowProperties();
+                }
+            }
+        );
+        UpdateItemsCombo($("#cmbGroups").val());
+        ShowProperties();
+    });
+    function GetNavBarGroup() {
+        return nbClientSideAPI.GetGroupByName($("#cmbGroups").val());
+    }
+    function GetNavBarItem() {
+        return nbClientSideAPI.GetItemByName($("#cmbItems").val());
+    }
+    function GroupExpandedChanged(s, e) {
+        if (e.group.GetExpanded())
+            UpdateItemsCombo(e.group.name);
+        else
+            ShowProperties();
+    }
+    function GroupExpandedChanging(s, e) {
+        if (!e.group.GetExpanded())
+            nbClientSideAPI.CollapseAll();
+    }
+    function ItemClick(s, e) {
+        $("#cmbItems").val(e.item.name);
+        ShowProperties();
+    }
+    function UpdateItemsCombo(groupName) {
+        $("#cmbGroups").val(groupName);
+        $("#cmbItems").html("");
+        var group = GetNavBarGroup();
+        for (var i = 0; i < group.GetItemCount(); i++) {
+            var item = group.GetItem(i);
+            $("#cmbItems").append("<option value=\"" + item.name + "\">" + item.GetText() + "</option>");
+        }
+        $("#cmbItems").attr("selectedIndex", 0);
+
+        ShowProperties();
+    }
+    function ShowProperties() {
+        $("#cbClientVisible").attr("checked", nbClientSideAPI.GetVisible());
+        $("#cbGroupVisible").attr("checked", !GetNavBarGroup() ? false : GetNavBarGroup().GetVisible());
+        $("#cbGroupExpanded").attr("checked", !GetNavBarGroup() ? false : GetNavBarGroup().GetExpanded());
+        $("#cbItemEnabled").attr("checked", !GetNavBarItem() ? false : GetNavBarItem().GetEnabled());
+        $("#cbItemVisible").attr("checked", !GetNavBarItem() ? false : GetNavBarItem().GetVisible());
+        $("#cbItemSelected").attr("checked", GetNavBarItem() && GetNavBarItem() == nbClientSideAPI.GetSelectedItem() ? true : false);
+    }
+// ]]>
+</script>
+<div class="vertComponentContainer">
+    @Html.DevExpress().NavBar(
+        settings =>
+        {
+            settings.Name = "nbClientSideAPI";
+            settings.AllowSelectItem = true;
+            settings.AutoCollapse = true;
+            settings.EnableClientSideAPI = true;
+            settings.Width = 150;
+
+            settings.Groups.Add(group => {
+                group.Text = "Platform";
+                group.Name = "Platform";
+
+                group.Items.Add("Windows", "Windows");
+                group.Items.Add("Linux", "Linux");
+                group.Items.Add("Mac OS", "Mac OS");
+            });
+            settings.Groups.Add(group => {
+                group.Text = "SQL Server";
+                group.Name = "SQL";
+                group.Expanded = true;
+
+                group.Items.Add("MSSQL Server", "MSSQL Server");
+                group.Items.Add("Oracle", "Oracle");
+                group.Items.Add("InterBase", "InterBase");
+                group.Items.Add("MySql", "MySql");
+                group.Items.Add("DB2", "DB2");
+                group.Items.Add("Sybase", "Sybase");
+            });
+            settings.Groups.Add(group => {
+                group.Text = "Browser";
+                group.Name = "Browser";
+
+                group.Items.Add("Internet Explorer", "Internet Explorer");
+                group.Items.Add("Firefox", "Firefox");
+                group.Items.Add("Opera", "Opera");
+                group.Items.Add("Safari", "Safari");
+                group.Items.Add("Google Chrome", "Google Chrome");
+            });
+            settings.Groups.Add(group => {
+                group.Text = "Language";
+                group.Name = "Language";
+
+                group.Items.Add("C#", "C#");
+                group.Items.Add("Visual Basic", "Visual Basic");
+                group.Items.Add("Object Pascal", "Object Pascal");
+                group.Items.Add("J#", "J#");
+                group.Items.Add("C++", "C++");
+            });
+
+            settings.ClientSideEvents.ExpandedChanging = "GroupExpandedChanging";
+            settings.ClientSideEvents.ExpandedChanged = "GroupExpandedChanged";
+            settings.ClientSideEvents.ItemClick = "ItemClick";
+        }).GetHtml()
+</div>
+<div id="navBarClientSideAPIPanel" class="vertOptionsPanel" style="height:285px;">
+    <div><input type="checkbox" id="cbClientVisible" /><label class="checkBox" for="cbClientVisible">ClientVisible</label></div>
+    <div><label>&nbsp;</label></div>
+    <div><label for="cmbGroups">Choose group:</label>
+    <select id="cmbGroups">
+        <option value="Platform">Platform</option>
+        <option value="SQL">SQL Server</option>
+        <option value="Browser">Browser</option>
+        <option value="Language">Language</option>
+    </select></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbGroupExpanded" /><label class="checkBox" for="cbGroupExpanded">Expanded</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbGroupVisible" /><label class="checkBox" for="cbGroupVisible">Visible</label></div>
+    <div><label>&nbsp;</label></div>
+    <div><label for="cmbItems">Choose item:</label>
+    <select id="cmbItems">
+        <option value="Item">Item</option>
+    </select></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemEnabled" /><label class="checkBox" for="cbItemEnabled">Enabled</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemVisible" /><label class="checkBox" for="cbItemVisible">Visible</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemSelected" /><label class="checkBox" for="cbItemSelected">Selected</label></div>
+</div>

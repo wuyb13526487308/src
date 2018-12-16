@@ -1,0 +1,44 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function() {
+        $("#EnableRecursiveSelection").change(
+            function() {
+                $("form").submit();
+            }
+        );
+        $("#AllowSelectAll").change(
+            function() {
+                $("form").submit();
+            }
+        );
+    });        
+// ]]> 
+</script>
+           
+@{
+    TreeListMultipleSelectionDemoOptions options = (TreeListMultipleSelectionDemoOptions)Session["SelectionOptions"]; 
+}
+           
+@using(Html.BeginForm("MultipleNodeSelection", "TreeList")) {
+    <div class="BottomMargin" style="width: 50%; float: left">
+        @Html.CheckBox("EnableRecursiveSelection", options.EnableRecursiveSelection, new { 
+            style = "vertical-align: middle"
+        })
+        <label for="EnableRecursiveSelection" style="vertical-align: middle">Recursive</label>
+        @Html.CheckBox("AllowSelectAll", options.AllowSelectAll, new { 
+            style = "vertical-align: middle" 
+        })
+        <label for="AllowSelectAll" style="vertical-align: middle">Show 'Select All' check box</label>
+    </div>
+    <div class="BottomMargin" style="width: 50%; text-align: right; float: left">
+        <label for="SelectMode" style="vertical-align: middle">Allow select:</label>
+        @Html.DropDownList("SelectMode", TreeListDemoHelper.GetSelectModes(), new {
+            style = "vertical-align: middle",
+            onchange = "$('form').submit();"    
+        })
+    </div>
+    <br />
+    @Html.Partial("MultipleNodeSelectionPartial", Model)
+}

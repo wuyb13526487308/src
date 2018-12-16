@@ -1,0 +1,78 @@
+﻿<div class="editorsPanel trackBarPanel">
+    <div>
+        <div class="trackBarContainer">
+            @Html.DevExpress().TrackBar(
+                settings => {
+                    settings.Name = "trackBar1";
+                    settings.Properties.SmallTickFrequency = 5;
+                    settings.Properties.LargeTickInterval = 10;
+                    settings.Properties.MaxValue = 50;
+                    settings.Width = 256;
+                    settings.Position = 10;
+                    settings.Properties.ScalePosition = ScalePosition.RightOrBottom;
+                }
+            ).GetHtml()
+        </div>        
+        <label>
+            MinValue="0"<br />
+            MaxValue="50"<br />
+            LargeTickInterval="10"<br />
+            SmallTickFrequency="5"
+        </label>
+    </div>
+    <div>
+        <div class="trackBarContainer">
+            @Html.DevExpress().TrackBar(
+                settings => {
+                    settings.Name = "trackBar2";
+                    settings.Properties.ScalePosition = ScalePosition.LeftOrTop;
+                    settings.Properties.ValueToolTipPosition = ValueToolTipPosition.RightOrBottom;
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Width = 256;
+                    settings.Properties.Items.AddRange(new TrackBarItem[] {
+                        new TrackBarItem("Item1"), new TrackBarItem("Item2"),
+                        new TrackBarItem("Item3"), new TrackBarItem("Item4")
+                    });
+                    settings.Position = 2;
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            <br />
+            ScalePosition="LeftOrTop"<br />
+            ValueToolTipPosition="RightOrBottom"<br />
+            <br />
+        </label>
+    </div>
+    <div>
+        <div class="trackBarContainer">
+            @Html.DevExpress().TrackBar(
+                settings => {
+                    settings.Name = "trackBar3";
+                    settings.Properties.ScalePosition = ScalePosition.Both;
+                    settings.Properties.Orientation = Orientation.Vertical;
+                    settings.Properties.Direction = Direction.Reversed;
+                    settings.Properties.AllowRangeSelection = true;
+                    settings.Properties.EqualTickMarks = true;
+                    settings.Properties.ValueToolTipFormatString = "{0:C}...{1:C}";
+                    settings.Properties.LargeTickInterval = 50;
+                    settings.Properties.SmallTickFrequency = 10;
+                    settings.Properties.ScaleLabelFormatString = "{0:C}";
+                    settings.PositionStart = 10;
+                    settings.PositionEnd = 30;
+                    settings.Width = 130;
+                    settings.Height = 256;
+                    settings.ControlStyle.CssClass = "verticalTrackBar";
+                }
+            ).GetHtml()
+        </div>
+        <label class="verticalTrackBarLabel">
+            Orientation="Vertical"<br />
+            Direction="Reversed"<br />
+            AllowRangeSelection="True"<br />
+            ValueToolTipFormatString="{0:C}...{1:C}"<br />
+            ScaleLabelFormatString="{0:C}"<br />
+            EqualTickMarks="True"
+        </label>
+    </div>
+</div>

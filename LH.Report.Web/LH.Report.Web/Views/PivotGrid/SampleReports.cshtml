@@ -1,0 +1,58 @@
+﻿@model IEnumerable
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function () {
+        $("#filterYear").change(ChangeDemoOption);
+        $("#filterQuarter").change(ChangeDemoOption)
+        $("input:radio[name=demoKind]").change(ChangeDemoOption);
+        function ChangeDemoOption(){
+            PrepareControlsOfFilterPanel();
+            pivotGrid.PerformCallback({
+                "DemoKind": $("input:radio[name=demoKind]:checked").val(),
+                "FilterYearIndex": $("#filterYear").val(),
+                "FilterQuarterIndex": $("#filterQuarter").val()
+            });
+        }
+        function PrepareControlsOfFilterPanel(){
+            $("#filterPanel").toggle(IsFilteredDemoKind());
+            if (!$("#filterPanel").is(':visible')){
+                $("#filterYear").val(0);
+                $("#filterQuarter").val(0)
+            };
+        }
+        function IsFilteredDemoKind(){
+            return $("input:radio[name=demoKind]:checked").val() == 1;
+        }
+    });
+// ]]> 
+</script>
+<div>
+    <div>
+        <input type="radio" name="demoKind" value="0" />Customers&nbsp;
+        <input type="radio" name="demoKind" value="1" checked="checked"/>Products(Filtering)&nbsp;
+        <input type="radio" name="demoKind" value="2" />Top 2 Products&nbsp;
+        <input type="radio" name="demoKind" value="3" />Top 10 Customers&nbsp;
+    </div>
+    <br />
+    <div id="filterPanel">
+        <label>Filter by: Year</label>
+        <select id="filterYear">
+            <option value="0">All</option>
+            <option value="1">1996</option>
+            <option value="2">1997</option>
+            <option value="3">1998</option>
+        </select>
+        <label>Quarter</label>
+        <select id="filterQuarter">
+            <option value="0">All</option>
+            <option value="1">Qtr 1</option>
+            <option value="2">Qtr 2</option>
+            <option value="3">Qtr 3</option>
+            <option value="4">Qtr 4</option>
+        </select>
+    </div>
+    <br/>
+    <div>
+        @Html.Partial("SampleReportsPartial", Model)
+    </div>
+</div>

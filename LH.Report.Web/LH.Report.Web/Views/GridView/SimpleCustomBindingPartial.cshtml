@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().GridView(
+    settings => {
+        settings.Name = "gridView";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "SimpleCustomBindingPartial" };
+        settings.CustomBindingRouteValuesCollection.Add(
+            GridViewOperationType.Paging,
+            new { Controller = "GridView", Action = "SimpleCustomBindingPagingAction" }
+        );
+        settings.CustomBindingRouteValuesCollection.Add(
+            GridViewOperationType.Sorting,
+            new { Controller = "GridView", Action = "SimpleCustomBindingSortingAction" }
+        );
+        
+        settings.Width = Unit.Percentage(100);
+        settings.Columns.Add("From");
+        settings.Columns.Add("Subject");
+        settings.Columns.Add(column => {
+            column.FieldName = "Sent";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.Settings.AutoFilterCondition = AutoFilterCondition.Equals;
+        });
+        settings.Columns.Add("Size").Settings.AutoFilterCondition = AutoFilterCondition.Equals;
+        settings.Columns.Add("HasAttachment", "Attachment?", MVCxGridViewColumnType.CheckBox);
+
+        settings.ClientSideEvents.Init = "function(s, e) { s.PerformCallback(); }";
+        settings.ClientSideEvents.BeginCallback = "function(s, e) { OnStartCallback(s, e); }";
+        settings.ClientSideEvents.EndCallback = "function(s, e) { OnEndCallback(s, e); }";
+    }).BindToCustomData(Model).GetHtml()

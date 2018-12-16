@@ -1,0 +1,59 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+// <![CDATA[
+    function OnAppointmentsSelectionChanged(s, e) {
+        var appointmentIds = e.appointmentIds;
+        if(appointmentIds && appointmentIds.length == 1)
+            s.GetAppointmentProperties(appointmentIds[0], 'Subject;Location;Start;End;Description;ContactInfo', OnGetAppointmentProps);
+        else
+            OnGetAppointmentProps(null);
+    }
+    function OnGetAppointmentProps(values) {
+        $("#aptsubj").html(values ? values[0] : '&nbsp;');
+        $("#aptloc").html(values ? values[1] : '&nbsp;');
+        $("#aptstart").html(values ? FormatDate(values[2]) : '&nbsp;');
+        $("#aptend").html(values ? FormatDate(values[3]) : '&nbsp;');
+        $("#aptdesc").html(values ? values[4] : '&nbsp;');
+        $("#aptcontact").html(values && values[5] ? values[5] : '&nbsp;');
+    }
+    function FormatDate(date) {
+        var result = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.') + ' ' + [date.getHours(), date.getMinutes()].join(':');
+        return result.replace(/(\b\d{1}\b)/g, '0$1');
+    }
+// ]]> 
+</script>
+@Html.Partial("AppointmentsSelectionPartial", Model)
+<br />
+<div class="chartOptionsPanel" style="width: 100%; padding: 10px 0px 10px 0px; overflow: hidden">
+    <center style="padding-bottom: 10px">
+        <b>Appointment Details</b>
+    </center>
+    <div class="vertOptionsPanel" style="width: 100%">
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptsubj" style="width: 20%; padding: 0px">Subject:</label>
+	        <span id="aptsubj">&nbsp;</span>
+        </div>
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptloc" style="width: 20%; padding: 0px">Location:</label>
+	        <span id="aptloc">&nbsp;</span>
+        </div>
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptstart" style="width: 20%; padding: 0px">Start time:</label>
+	        <span id="aptstart">&nbsp;</span>
+        </div>
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptend" style="width: 20%; padding: 0px">End time:</label>
+	        <span id="aptend">&nbsp;</span>
+        </div>
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptdesc" style="width: 20%; padding: 0px">Description:</label>
+	        <span id="aptdesc">&nbsp;</span>
+        </div>
+        <div style="padding-bottom: 10px; float: none">
+            <label for="aptcontact" style="width: 100%; padding: 0px">Contact information:</label>
+            <textarea id="aptcontact" style="border: 1px solid #000000; margin-top: 6px; padding: 2px 4px 2px 4px; overflow: auto"
+	            readonly="readonly" rows="4" cols="85">&nbsp;</textarea>
+        </div>	
+    </div>
+</div>

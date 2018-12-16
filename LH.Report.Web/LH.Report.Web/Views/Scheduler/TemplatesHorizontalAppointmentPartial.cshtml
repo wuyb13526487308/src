@@ -1,0 +1,61 @@
+﻿@model Appointment
+
+@functions{
+    string LocationText {
+        get { return String.IsNullOrEmpty(Model.Location) ? string.Empty : String.Format("({0})", Model.Location); }
+    }
+}
+           
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/AppointmentTemplates/styles.css")" />
+
+<div class="HorizontalAptTemplateDiv">
+    <div style="position: absolute; height: 35px; width: 98%; overflow: hidden; left: 2px;
+        top: 2px; text-align: center;">
+        <table cellpadding="0" cellspacing="1" style="width: 100%; height: 100%">
+            <tr valign="middle" align="left">
+                <td runat="server" id="startTimeClockContainer">
+                </td>
+                <td style="width: 100%;" align="center">
+                    <span style="white-space: normal; color: black;">
+                        <label style="font:bold 8pt Tahoma;">@Model.Subject</label>
+                        <label style="font:8pt Tahoma;">@Model.Location</label>
+                    </span>
+                </td>
+                <td runat="server" id="endTimeClockContainer">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table style="height: 100%; width: 100%; filter: alpha(opacity=80); opacity: 0.80;"
+        cellpadding="0" cellspacing="0">
+        <tr valign="top">
+            <td style="background: url(@Url.Content("~/Content/Scheduler/AppointmentTemplates/hTopLeftCorner.gif")) no-repeat; font-size: 0; width: 9px;">
+                <div style="width: 9px;">
+                </div>
+            </td>
+            <td style="border-top: solid 1px #7eacb1; background: #f3fef7;">
+                <div style="height: 5px;">&nbsp;</div>
+            </td>
+            <td style="background: url(@Url.Content("~/Content/Scheduler/AppointmentTemplates/hTopRightCorner.gif")) no-repeat right top;
+                font-size: 0; width: 9px;">
+                <div style="width: 9px;"></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="background: url(@Url.Content("~/Content/Scheduler/AppointmentTemplates/hBottomLeftCorner.gif")) no-repeat left bottom;
+                font-size: 0">
+                <div style="width: 9px;">
+                </div>
+            </td>
+            <td style="border-bottom: solid 1px #7eacb1; background: #f3fef7">
+                <div style="height: 5px;">
+                    &nbsp;</div>
+            </td>
+            <td style="background: url(@Url.Content("~/Content/Scheduler/AppointmentTemplates/hBottomRightCorner.gif")) no-repeat right bottom;
+                font-size: 0">
+                <div style="width: 9px;">
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

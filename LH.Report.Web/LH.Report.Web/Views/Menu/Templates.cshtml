@@ -1,0 +1,90 @@
+﻿@Html.DevExpress().Menu(
+    settings =>
+    {
+        settings.Name = "mTemplates";
+        settings.ShowPopOutImages = DefaultBoolean.True;
+
+        settings.Items.Add(item => {
+            item.Text = "SubMenu Template";
+            item.Name = "submenu";
+            item.Items.Add();
+            item.SetSubMenuTemplateContent(c => {
+                ViewContext.Writer.Write(
+                    "<table class=\"sitemap\" cellpadding=\"0\" cellspacing=\"8\" border=\"0\">" +
+                        "<tr>" +
+                            "<th>NavBar</th>" +
+                            "<th>Menu</th>" +
+                            "<th>TabControl</th>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td valign=\"top\">" +
+                                "<ul>" +
+                                    "<li><a href=\"javascript:void(0)\">DataBinding</a></li>" +
+                                    "<li><a href=\"javascript:void(1)\">Features</a></li>" +
+                                    "<li><a href=\"javascript:void(2)\">Templates</a></li>" +
+                                    "<li><a href=\"javascript:void(3)\">Client-side Events</a></li>"+
+                                    "<li><a href=\"javascript:void(4)\">Client-side API</a></li>" +
+                                "</ul>" +
+                            "</td>" +
+                            "<td valign=\"top\">" +
+                                "<ul>" +
+                                    "<li><a href=\"javascript:void(5)\">DataBinding</a></li>" +
+                                    "<li><a href=\"javascript:void(6)\">Features</a></li>" +
+                                    "<li><a href=\"javascript:void(7)\">Templates</a></li>" +
+                                    "<li><a href=\"javascript:void(8)\">Client-side Events</a></li>" +
+                                    "<li><a href=\"javascript:void(9)\">Client-side API</a></li>" +
+                                "</ul>" +
+                            "</td>" +
+                            "<td valign=\"top\">" +
+                                "<ul>" +
+                                    "<li><a href=\"javascript:void(10)\">DataBinding</a></li>" +
+                                    "<li><a href=\"javascript:void(11)\">Features</a></li>" +
+                                    "<li><a href=\"javascript:void(12)\">Callbacks</a></li>" +
+                                    "<li><a href=\"javascript:void(13)\">Templates</a></li>" +
+                                    "<li><a href=\"javascript:void(14)\">Client-side Events</a></li>" +
+                                    "<li><a href=\"javascript:void(15)\">Client-side API</a></li>" +
+                                "</ul>" +
+                            "</td>" +
+                        "</tr>" +
+                    "</table>"
+                );
+            });
+        });
+        settings.Items.Add(item => {
+            item.Text = "Item Template";
+            item.Name = "item";
+
+            item.SubMenuStyle.Paddings.Padding = 6;
+                    
+            item.Items.Add("ASP.NET", "aspdotnet").SetTemplateContent(c => {
+                ViewContext.Writer.Write("<label class=\"technologyTitle\">News</label>");
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add("Announcements", "announcements").SetTemplateContent(c => {
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add("Building Controls", "building").SetTemplateContent(c => {
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add("Graphic Designer", "graphic").SetTemplateContent(c => {
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add("Web Controls", "webcontrols").SetTemplateContent(c => { 
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add("Web Services", "webservices").SetTemplateContent(c => {
+                Html.RenderPartial("TemplatesItem", c.Item);
+            });
+            item.Items.Add(emailItem => {
+                emailItem.Text = "Email";
+                emailItem.Name = "email";
+                emailItem.SetTemplateContent(c => {
+                    ViewContext.Writer.Write(
+                        "<label for=\"search\" class=\"technologyTitle\">Email</label>" +
+                        "<input id=\"search\" style=\"width:150px\" /><input type=\"button\" value=\"Subscribe\" onclick=\"ASPxClientMenuBase.GetMenuCollection().HideAll();\" />"
+                    );
+                });
+                emailItem.BeginGroup = true;
+            });
+        });
+    }).GetHtml()

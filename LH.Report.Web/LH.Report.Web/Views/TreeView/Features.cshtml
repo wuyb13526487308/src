@@ -1,0 +1,81 @@
+﻿@{ TreeViewFeaturesDemoOptions options = (TreeViewFeaturesDemoOptions)ViewData["Options"]; }
+
+@using (Html.BeginForm()) {
+    <div class="vertComponentContainer">
+        @Html.DevExpress().TreeView(
+            settings => {
+                settings.Name = "tvFeatures";
+                settings.AllowCheckNodes = options.AllowCheckNodes;
+                settings.AllowSelectNode = options.AllowSelectNode;
+                settings.CheckNodesRecursive = options.CheckNodesRecursive;
+                settings.EnableAnimation = options.EnableAnimation;
+                settings.EnableHotTrack = options.EnableHotTrack;
+                settings.ShowTreeLines = options.ShowTreeLines;
+                settings.ShowExpandButtons = options.ShowExpandButtons;
+                settings.Width = 300;
+
+                settings.Nodes.Add(node => {
+                    node.Text = "Home";
+                    node.Nodes.Add(subNode => {
+                        subNode.Text = "News";
+                        subNode.Nodes.Add("For Developers");
+                        subNode.Nodes.Add("Website news");
+                    });
+                    node.Nodes.Add("Our Mission");
+                    node.Nodes.Add("Our Customers");
+                });
+                settings.Nodes.Add(node => {
+                    node.Text = "Products";
+                    node.Nodes.Add("Subscriptions / Packs");
+                    node.Nodes.Add(".NET Windows Forms Components");
+                    node.Nodes.Add("Reporting / Printing Suites");
+                    node.Nodes.Add("ASP.NET WebForms Components");
+                    node.Nodes.Add("ASP.NET MVC Extensions");
+                });
+                settings.Nodes.Add(node => {
+                    node.Text = "Support";
+                    node.Nodes.Add("Knowledge Base");
+                    node.Nodes.Add("Documentation");
+                    node.Nodes.Add("Support Center");
+                    node.Nodes.Add("Newsgroups");
+                    node.Nodes.Add("Best Practicies");
+                });
+
+                settings.PreRender = (source, e) => {
+                    ASPxTreeView treeView = (ASPxTreeView)source;
+                    treeView.ExpandToDepth(0);
+                };
+            }).GetHtml()
+    </div>
+    <div id="navBarFeaturesPanel" class="vertOptionsPanel" style="height:210px">
+        <div>
+            @Html.CheckBox("AllowSelectNode", options.AllowSelectNode, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowSelectNode">AllowSelectNode</label>
+        </div>
+        <div>            
+            @Html.CheckBox("EnableAnimation", options.EnableAnimation, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableAnimation">EnableAnimation</label>
+        </div>
+        <div>
+            @Html.CheckBox("EnableHottrack", options.EnableHotTrack, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableHottrack">EnableHottrack</label>
+        </div>
+        <div>
+            @Html.CheckBox("ShowTreeLines", options.ShowTreeLines, new { @class = "leftMost" })
+            <label class="checkBox" for="ShowTreeLines">ShowTreeLines</label>
+        </div>
+            <div>
+            @Html.CheckBox("ShowExpandButtons", options.ShowExpandButtons, new { @class = "leftMost" })
+            <label class="checkBox" for="ShowExpandButtons">ShowExpandButtons</label>
+        </div> 
+            <div>
+            @Html.CheckBox("AllowCheckNodes", options.AllowCheckNodes, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowCheckNodes">AllowCheckNodes</label>
+        </div>   
+        <div>
+            @Html.CheckBox("CheckNodesRecursive", options.CheckNodesRecursive, new { @class = "leftMost" })
+            <label class="checkBox" for="CheckNodesRecursive">CheckNodesRecursive</label>
+        </div>
+        <input type="submit" value="Apply" />
+    </div>
+}

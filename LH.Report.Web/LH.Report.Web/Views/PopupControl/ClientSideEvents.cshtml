@@ -1,0 +1,66 @@
+﻿<p class="description_area">
+    DevExpress MVC Extensions include the following:
+    <span><b>data grid</b><img src="@Url.Content("~/Content/PopupControl/ClientSideEvents/Help.gif")" alt="" id="imgGridView" /></span>, 
+    <span><b>menu</b><img src="@Url.Content("~/Content/PopupControl/ClientSideEvents/Help.gif")" alt="" id="imgMenu" /></span>, 
+    <span><b>navigation bar</b><img src="@Url.Content("~/Content/PopupControl/ClientSideEvents/Help.gif")" alt="" id="imgNavBar" /></span>,
+    <span><b>tab control</b><img src="@Url.Content("~/Content/PopupControl/ClientSideEvents/Help.gif")" alt="" id="imgTabControl" /></span>, 
+    <span><b>popup control</b><img src="@Url.Content("~/Content/PopupControl/ClientSideEvents/Help.gif")" alt="" id="imgPopupControl" /></span>, 
+    and many more.
+</p>
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "pcClientSideEvents";
+        settings.SkinID = "none";
+        settings.Width = 200;
+        settings.EncodeHtml = false;
+        settings.EnableHotTrack = false;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.RightSides;
+        settings.PopupVerticalAlign = PopupVerticalAlign.Above;
+        settings.PopupHorizontalOffset = 1;
+        settings.PopupVerticalOffset = -4;
+                
+        settings.Styles.Footer.BackColor = Color.FromArgb(0xFFFBBA);
+        settings.Styles.Footer.Border.BorderWidth = 0;
+        settings.ControlStyle.Border.BorderColor = Color.FromArgb(0xBAAE6D);
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+        settings.ControlStyle.Border.BorderWidth = 1;
+        settings.Styles.Header.BackColor = Color.FromArgb(0xFCFADD);
+        settings.Styles.Header.ForeColor = Color.FromArgb(0x9E8A4F);
+        settings.Styles.Header.Font.Bold = true;
+        settings.Styles.Header.Font.Size = 9;
+        settings.Styles.Header.Border.BorderWidth = 0;
+        settings.Styles.Header.BorderBottom.BorderColor= Color.FromArgb(0xDCD9B0);
+        settings.Styles.Header.BorderBottom.BorderStyle = BorderStyle.Solid;
+        settings.Styles.Header.BorderBottom.BorderWidth = 1;
+        settings.Styles.Header.Paddings.Padding = 6;
+        settings.Styles.Header.Paddings.PaddingLeft = 13;
+        settings.Styles.Header.Paddings.PaddingRight = 8;
+        settings.Styles.Content.BackColor = Color.FromArgb(0xFFFBBA);
+        settings.Styles.Content.ForeColor = Color.FromArgb(0x9E8A4F);
+        settings.Styles.Content.Border.BorderWidth = 0;
+        settings.Styles.Content.Paddings.Padding = 13;
+        settings.Styles.Content.Paddings.PaddingBottom = 10;
+        settings.Styles.Content.Paddings.PaddingTop = 9;
+        settings.Styles.CloseButton.Paddings.Padding = 0;
+        settings.Styles.CloseButton.Paddings.PaddingLeft = 3;
+
+        settings.Images.CloseButton.Height = 15;
+        settings.Images.CloseButton.Width = 15;
+        settings.Images.CloseButton.Url = "~/Content/PopupControl/ClientSideEvents/Close.gif";
+
+        settings.Windows.Add("The <b>Grid View</b> presents data using a two-dimensional row/column grid.", "", "MVC Grid View").PopupElementID = "imgGridView";
+        settings.Windows.Add("The <b>Menu Extension</b> offers you an elegant way to provide website navigation options to your end-users.", "", "MVC Menu").PopupElementID = "imgMenu";
+        settings.Windows.Add("The <b>NavBar Extension</b> allows you to introduce cutting edge site navigation capabilities to your ASP.NET MVC applications.", "", "MVC NavBar").PopupElementID = "imgNavBar";
+        settings.Windows.Add("The <b>Tab Extension</b> allows you to deliver tabbed interfaces within your web applications.", "", "MVC Tab Extension").PopupElementID = "imgTabControl";
+        settings.Windows.Add("The <b>Popup Extension</b> allows you to enhance the presentation of information within your web applications.", "", "MVC Popup Extension").PopupElementID = "imgPopupControl";
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.PopUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'PopUp'); }";
+        settings.ClientSideEvents.Shown = "function(s, e) { DXEventMonitor.Trace(s, e, 'Shown'); }";
+        settings.ClientSideEvents.CloseButtonClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'CloseButtonClick'); }";
+        settings.ClientSideEvents.Closing = "function(s, e) { DXEventMonitor.Trace(s, e, 'Closing'); }";
+        settings.ClientSideEvents.CloseUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'CloseUp'); }";
+    }).GetHtml()
+<br />
+ @Html.Partial("EventMonitor")

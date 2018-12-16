@@ -1,0 +1,31 @@
+﻿@{
+    ChartRadarPolarViewsDemoOptions options = (ChartRadarPolarViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+
+    Series lemniscateSeries = new Series("Lemniscate", options.View);
+    lemniscateSeries.ArgumentScaleType = ScaleType.Numerical;
+    lemniscateSeries.Label.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+    lemniscateSeries.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.Number;
+    lemniscateSeries.ArgumentDataMember = "X";
+    lemniscateSeries.ValueDataMembers[0] = "Y";
+    lemniscateSeries.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    settings.Series.Add(lemniscateSeries);
+    RadarPointSeriesView view = ((RadarPointSeriesView)lemniscateSeries.View);
+    MarkerKind markerKind = (MarkerKind)Enum.Parse(typeof(MarkerKind), options.MarkerKindString);
+    view.PointMarkerOptions.Kind = markerKind;
+    view.PointMarkerOptions.Size = options.MarkerSize;
+    if (options.MarkerKindString == MarkerKind.Star.ToString()) {
+        view.PointMarkerOptions.StarPointCount = options.StarPointCount;
+    }
+    if (view is ISupportTransparency) {
+        ((ISupportTransparency)view).Transparency = 155;
+    }
+    ((RadarDiagram)settings.Diagram).DrawingStyle = options.DiagramStyle;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

@@ -1,0 +1,3 @@
+﻿@Html.DevExpress().TreeList(
+    TreeListDemoHelper.CreateExportTreeListSettings((TreeListExportDemoOptions)Session["TreeListExportOptions"])
+).Bind(Model).GetHtml()

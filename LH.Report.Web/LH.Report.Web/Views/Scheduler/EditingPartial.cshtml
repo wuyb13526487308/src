@@ -1,0 +1,17 @@
+﻿@{
+    var scheduler = Html.DevExpress().Scheduler(
+        settings => {
+            settings.Name = "scheduler";
+            settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "EditingPartial" };
+            settings.EditAppointmentRouteValues = new { Controller = "Scheduler", Action = "EditingPartialEditAppointment" };
+            settings.Start = new DateTime(2010, 7, 13);
+
+            settings.Storage.EnableReminders = false;
+            settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+            settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        });
+    if (ViewData["SchedulerErrorText"] != null) {
+        scheduler.SetErrorText((string)ViewData["SchedulerErrorText"]);
+    }
+}
+@scheduler.Bind(Model.Appointments, Model.Resources).GetHtml()

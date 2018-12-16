@@ -1,0 +1,57 @@
+﻿@model IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvEditing";
+        settings.KeyFieldName = "ProductID";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "EditingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add(column => {
+            column.Caption = "#";
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("Edit", "EditingEdit", new { ProductID = DataBinder.Eval(c.DataItem, "ProductID") }) + "&nbsp;" +
+                    Html.ActionLink("Delete", "EditingDelete", new { ProductID = DataBinder.Eval(c.DataItem, "ProductID") },
+                        new { onclick = "return confirm('Do you really want to delete this record?')" })
+                );
+            });
+            column.SetHeaderTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("New", "EditingEdit", new { ProductID = -1 }).ToHtmlString()
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 70;
+        });
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add(column => {
+            column.FieldName = "CategoryID";
+            column.Caption = "Category";
+                
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+            comboBoxProperties.TextField = "CategoryName";
+            comboBoxProperties.ValueField = "CategoryID";
+            comboBoxProperties.ValueType = typeof(int);
+        });
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("UnitsInStock");
+        settings.Columns.Add("Discontinued", MVCxGridViewColumnType.CheckBox);
+            
+        settings.ClientLayout = (s, e) =>
+        {
+            if(e.LayoutMode == ClientLayoutMode.Loading) {
+                if(Session["GridState"] != null)
+                    e.LayoutData = (string)Session["GridState"];
+            }
+            else
+                Session["GridState"] = e.LayoutData;
+        };
+    }).Bind(Model).GetHtml()

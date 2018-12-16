@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+	<siteMapNode url="http://www.devexpress.com/" title="Developer Express">
+		<siteMapNode url="~/Home/" title="General Information">
+			<siteMapNode url="" title="News">
+				<siteMapNode url="~/Home/news-vs.xml" title="News for Visual Studio Developers" />
+				<siteMapNode url="~/Home/news-bcb.xml" title="News for Delphi/C++Builder Developers" />
+				<siteMapNode url="~/Home/RSSHowToUse.xml" title="RSS - How To Use" />
+			</siteMapNode>
+			<siteMapNode url="~/Home/Index.xml" title="About Us">
+				<siteMapNode url="~/Home/Mission.xml" title="Our Mission" />
+				<siteMapNode url="~/Home/Comments.xml" title="User Comments about Developer Express" />
+				<siteMapNode url="~/Home/Customers.xml" title="Our Customers" />
+				<siteMapNode url="~/Home/DeveloperStories/Index.xml" title="Case Studies" />
+				<siteMapNode url="~/Home/Awards.xml" title="Our Awards" />
+				<siteMapNode url="~/Home/Careers.xml" title="Careers at Developer Express" />
+				<siteMapNode url="~/Home/ContactUs.xml" title="How to Contact Us" />
+				<siteMapNode url="~/Home/Legal.xml" title="Website Terms of Use" />
+			</siteMapNode>
+		</siteMapNode>
+		<siteMapNode url="~/Support/" title="Client Services">
+			<siteMapNode url="" title="Buy and Download">
+				<siteMapNode url="~/ClientCenter/" title="Online Client Center" />
+				<siteMapNode url="~/Order/Index.xml" title="Order" />
+				<siteMapNode url="~/Downloads/index.xml" title="Download Center" />
+				<siteMapNode url="~/Home/60DayMoneyBack.xml" title="60 Day Money Back Guarantee" />
+				<siteMapNode url="~/Order/FAQ/index.xml" title="FAQ - How to Order Our Products" />
+			</siteMapNode>
+			<siteMapNode url="~/Support/Index.xml" title="Get Support">
+				<siteMapNode url="~/Support/Center/" title="Support Center" />
+				<siteMapNode url="~/Support/KnowledgeBase/" title="Knowledge Base" />
+				<siteMapNode url="~/Support/OnlineHelp.xml" title="Online Documentation" />
+				<siteMapNode url="~/Support/OnlineLessons.xml" title="Online Tutorials and Screencasts" />
+				<siteMapNode url="http://community.devexpress.com" title="Community (Forums and Blogs)" />
+				<siteMapNode url="~/Support/LicensingFAQ.xml" title="Common Licensing Questions" />
+				<siteMapNode url="~/Support/Versions.xml" title="Current Version/Build" />
+				<siteMapNode url="~/Support/DXSquad.xml" title="Become a DX-Squad Member" />
+			</siteMapNode>
+		</siteMapNode>
+		<siteMapNode url="~/Products/" title="Our Products">
+			<siteMapNode url="~/Products/subscriptions.xml" title="Subscriptions / Packs">
+				<siteMapNode url="~/Products/NET/DXperience/editionUniversal.xml" title="DXperience Universal" />
+				<siteMapNode url="~/Products/NET/DXperience/editionEnt.xml" title="DXperience Enterprise" />
+				<siteMapNode url="~/Products/NET/DXperience/editionPro.xml" title="DXperience Professional" />
+				<siteMapNode url="~/Products/NET/DXperience/editionASPNET.xml" title="DXperience ASP.NET" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxperience/index.xml" title="ASPxperience Suite" />
+				<siteMapNode url="~/Products/VCL/Subscription/index.xml" title="VCL Subscription" />
+				<siteMapNode url="~/Products/VCL/ExQuantumPack/index.xml" title="ExpressQuantumPack" />
+				<siteMapNode url="~/Products/ActiveX/XDevStudio/index.xml" title="XpressDev Studio" />
+			</siteMapNode>
+			<siteMapNode url="~/Products/Index.xml" title=".NET Windows Forms">
+				<siteMapNode url="~/Products/NET/WinForms/XtraGrid/Index.xml" title="XtraGrid Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraReports/Index.xml" title="XtraReports Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraBars/Index.xml" title="XtraBars Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraScheduler/Index.xml" title="XtraScheduler Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraCharts/Index.xml" title="XtraCharts Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraPivotGrid/Index.xml" title="XtraPivotGrid Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraLayoutControl/Index.xml" title="XtraLayoutControl" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraTreeList/Index.xml" title="XtraTreeList Suite" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraVerticalGrid/Index.xml" title="XtraVerticalGrid" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraNavBar/Index.xml" title="XtraNavBar" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraEditors/Index.xml" title="XtraEditors Library" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraPrinting/Index.xml" title="XtraPrinting System" />
+				<siteMapNode url="~/Products/NET/WinForms/XtraSpellChecker/Index.xml" title="XtraSpellChecker" />
+			</siteMapNode>
+			<siteMapNode url="~/Products/NET/WebForms/Index.xml" title="ASP.NET Products">
+				<siteMapNode url="~/Downloads/NET/OnlineDemos.xml" title="Online Demos" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxGrid/Index.xml" title="ASPxGrid and Editors Suite" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxScheduler/Index.xml" title="ASPxScheduler Suite" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxPivotGrid/Index.xml" title="ASPxPivotGrid Suite" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxCloudControl/Index.xml" title="ASPxCloudControl" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxDataView/Index.xml" title="ASPxDataView" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxNavBar/Index.xml" title="ASPxNavBar" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxNewsControl/Index.xml" title="ASPxNewsControl" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxMenu/Index.xml" title="ASPxMenu" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxPopupControl/Index.xml" title="ASPxPopupControl" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxSiteMapControl/Index.xml" title="ASPxSiteMapControl" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxTabControl/Index.xml" title="ASPxTabControl" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxTitleIndex/Index.xml" title="ASPxTitleIndex" />
+				<siteMapNode url="~/Products/NET/WebForms/ASPxUtilities/Index.xml" title="ASPxUtilities" />
+			</siteMapNode>
+			<siteMapNode url="~/Products/VCL/Index.xml" title="VCL Product Line">
+				<siteMapNode url="~/Products/VCL/ExQuantumGrid/index.xml" title="ExpressQuantumGrid Suite" />
+				<siteMapNode url="~/Products/VCL/ExBars/Index.xml" title="ExpressBars Suite" />
+				<siteMapNode url="~/Products/VCL/ExQuantumTreeList/index.xml" title="ExpressQuantumTreeList Suite" />
+				<siteMapNode url="~/Products/VCL/ExScheduler/Index.xml" title="ExpressScheduler Suite" />
+				<siteMapNode url="~/Products/VCL/ExPrintingSystem/Index.xml" title="ExpressPrinting System" />
+				<siteMapNode url="~/Products/VCL/ExVerticalGrid/Index.xml" title="ExpressVerticalGrid" />
+				<siteMapNode url="~/Products/VCL/ExNavBar/Index.xml" title="ExpressNavBar" />
+				<siteMapNode url="~/Products/VCL/ExLayoutControl/Index.xml" title="ExpressLayout Control" />
+				<siteMapNode url="~/Products/VCL/ExSpreadSheet/Index.xml" title="ExpressSpreadSheet" />
+				<siteMapNode url="~/Products/VCL/EWF/Index.xml" title="ExpressWeb Framework" />
+				<siteMapNode url="~/Products/VCL/ExMasterView/Index.xml" title="ExpressMasterView" />
+				<siteMapNode url="~/Products/VCL/ExDBTree/Index.xml" title="ExpressDBTree Suite" />
+				<siteMapNode url="~/Products/VCL/ExFlowChart/Index.xml" title="ExpressFlowChart Suite" />
+				<siteMapNode url="~/Products/VCL/ExOrgChart/Index.xml" title="ExpressOrgChart Suite" />
+			</siteMapNode>
+			<siteMapNode url="" title="IDE Productivity Tools">
+				<siteMapNode url="~/Products/NET/IDETools/CodeRush/Training.xml" title="Training Videos" />
+				<siteMapNode url="~/Products/NET/IDETools/CodeRush/Index.xml" title="CodeRush for Visual Studio" />
+				<siteMapNode url="~/Products/NET/IDETools/Refactor/Index.xml" title="Refactor! Pro for Visual Studio" />
+				<siteMapNode url="~/Products/NET/IDETools/VBRefactor/Index.xml" title="Refactor! for Visual Basic" />
+				<siteMapNode url="~/Products/NET/IDETools/RefactorCPP/Index.xml" title="Refactor! for C++" />
+				<siteMapNode url="~/Products/NET/IDETools/RefactorASP/Index.xml" title="Refactor! for ASP.NET" />
+				<siteMapNode url="~/Products/NET/IDETools/DXCore/Index.xml" title="DXCore for Visual Studio" />
+			</siteMapNode>
+			<siteMapNode url="" title="Business App Frameworks">
+				<siteMapNode url="~/Products/NET/Libraries/eXpressApp/Index.xml" title="eXpressApp Framework" />
+				<siteMapNode url="~/Products/NET/Libraries/XPO/Index.xml" title="eXpressPersistent Objects" />
+			</siteMapNode>
+			<siteMapNode url="~/Products/ActiveX/Index.xml" title="ActiveX Product Line">
+				<siteMapNode url="~/Products/ActiveX/XQuantumGrid/Index.xml" title="XpressQuantumGrid" />
+				<siteMapNode url="~/Products/ActiveX/XEditors/Index.xml" title="XpressEditors" />
+				<siteMapNode url="~/Products/ActiveX/XPrintingSystem/Index.xml" title="XpressPrinting System" />
+				<siteMapNode url="~/Products/ActiveX/XQuantumTreeList/Index.xml" title="XpressQuantumTreeList" />
+				<siteMapNode url="~/Products/ActiveX/XInspector/Index.xml" title="XpressInspector" />
+				<siteMapNode url="~/Products/ActiveX/XSideBar/Index.xml" title="XpressSideBar" />
+			</siteMapNode>
+		</siteMapNode>
+	</siteMapNode>
+</siteMap>

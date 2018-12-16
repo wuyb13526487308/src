@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().DockManager(
+    settings => {
+        settings.Name = "dockManager";
+        settings.CallbackRouteValues = new { Controller = "Docking", Action = "EditLayoutPartial" };
+        settings.FreezeLayout = false;
+        settings.ClientSideEvents.AfterDock = "UpdateClientLayout";
+        settings.ClientSideEvents.PanelClosing = "UpdateClientLayout";
+        settings.ClientLayout = (sender, e) => {
+            if(e.LayoutMode == ClientLayoutMode.Saving)
+                Session["EditLayout"] = e.LayoutData;
+            if(e.LayoutMode == ClientLayoutMode.Loading && Session["EditLayout"] != null)
+                e.LayoutData = Session["EditLayout"] as string;
+        };
+    }
+).GetHtml()

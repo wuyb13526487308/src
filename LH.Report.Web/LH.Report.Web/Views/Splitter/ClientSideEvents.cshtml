@@ -1,0 +1,46 @@
+﻿@Html.DevExpress().Splitter(
+    settings =>
+    {
+        settings.Name = "splClientSideEvents";
+        settings.Height = 250;
+        settings.Width = Unit.Percentage(100);
+        settings.Orientation = Orientation.Vertical;
+        settings.ShowCollapseBackwardButton = true;
+        settings.ShowCollapseForwardButton = true;
+
+        settings.Panes.Add(pane => {
+            pane.Name = "Pane 0";
+            pane.SetContent(() => {
+                ViewContext.Writer.Write("Pane 0");
+            });
+        });
+        settings.Panes.Add(pane => {
+            pane.Name = "Pane 1";
+            pane.SetContent(() => {
+                ViewContext.Writer.Write("Pane 1");
+            });
+                    
+            pane.Panes.Add("Pane 1-0").SetContent(() =>
+            {
+                ViewContext.Writer.Write("Pane 1-0");
+            });
+            pane.Panes.Add("Pane 1-1").SetContent(() =>
+            {
+                ViewContext.Writer.Write("Pane 1-1");
+            });
+            pane.Panes.Add("Pane 1-2").SetContent(() =>
+            {
+                ViewContext.Writer.Write("Pane 1-2");
+            });
+        });
+                
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.PaneResizing = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneResizing'); }";
+        settings.ClientSideEvents.PaneResized = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneResized'); }";
+        settings.ClientSideEvents.PaneCollapsing = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneCollapsing'); }";
+        settings.ClientSideEvents.PaneCollapsed = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneCollapsed'); }";
+        settings.ClientSideEvents.PaneExpanding = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneExpanding'); }";
+        settings.ClientSideEvents.PaneExpanded = "function(s, e) { DXEventMonitor.Trace(s, e, 'PaneExpanded'); }";
+    }).GetHtml()
+<br />
+@Html.Partial("EventMonitor", "EventMonitor")

@@ -1,0 +1,29 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvGrouping";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "GroupingPartial" };
+        settings.CustomActionRouteValues = new { Cotroller = "GridView", Action = "CustomGroupingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country").GroupIndex = 0;
+
+        settings.Settings.ShowGroupPanel = true;
+
+        settings.BeforeGetCallbackResult = (sender, e) => {
+            if (ViewBag.GroupedColumns == null)
+                return;
+            
+            MVCxGridView grid = (MVCxGridView)sender;
+            string[] columnNames = ViewBag.GroupedColumns.Split(';');
+            grid.ClearSort();
+            foreach(string name in columnNames){
+                grid.GroupBy(grid.Columns[name]);
+            }
+            grid.ExpandAll();
+        };
+    }).Bind(Model).GetHtml()

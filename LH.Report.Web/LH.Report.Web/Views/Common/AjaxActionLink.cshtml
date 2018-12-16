@@ -1,0 +1,33 @@
+﻿@model IEnumerable
+
+@{
+    int popupHeight = 180;
+    int popupWidth = 500;
+}
+<script type="text/javascript">
+    function ShowCategoryInformation(){
+        var mainElement = gvProducts.GetMainElement();
+        var x = ASPxClientUtils.GetAbsoluteX(mainElement) + (gvProducts.GetWidth() - @popupWidth) / 2;
+        var y = ASPxClientUtils.GetAbsoluteY(mainElement) + (gvProducts.GetHeight() - @popupHeight) / 2;
+        categoryPopup.ShowAtPos(x, y);
+    }
+</script>
+
+@Html.Partial("AjaxActionLinkPartial", Model)
+
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "categoryPopup";
+        settings.AllowDragging = true;
+        settings.Height = popupHeight;
+        settings.Width = popupWidth;
+        settings.HeaderText = "Category information";
+        settings.PopupAnimationType = AnimationType.Fade;
+
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div id=\"categoryContent\">" +
+                "</div>"
+            );
+        });
+    }).GetHtml()

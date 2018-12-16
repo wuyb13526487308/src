@@ -1,0 +1,26 @@
+﻿@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "nbClientSideEvents";
+        settings.Width = 200;
+        settings.AllowSelectItem = true;
+        settings.EnableClientSideAPI = true;
+
+        settings.Groups.Add(group => {
+            group.Text = "Products";
+                    
+            group.Items.Add("Subscriptions / Packs", "packs");
+            group.Items.Add(".NET Windows Forms Components", "net");
+            group.Items.Add("Reporting / Printing Suites", "report");
+            group.Items.Add("VCL Components and Tools", "vcl");
+            group.Items.Add("ASP.NET Components", "asp");
+        });
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.ItemClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemClick'); }";
+        settings.ClientSideEvents.HeaderClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'HeaderClick'); }";
+        settings.ClientSideEvents.ExpandedChanging = "function(s, e) { DXEventMonitor.Trace(s, e, 'ExpandedChanging'); }";
+        settings.ClientSideEvents.ExpandedChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ExpandedChanged'); }";
+    }).GetHtml()
+<br />
+@Html.Partial("EventMonitor")

@@ -1,0 +1,7 @@
+﻿@model IEnumerable
+
+@if (string.IsNullOrEmpty((string)ViewData[ChartDemoHelper.CategoryKey])) {
+    @Html.Partial("DrillDownPartial", Model)
+} else {
+    @Html.Partial("DrillDownCategoryPartial", Model)
+}

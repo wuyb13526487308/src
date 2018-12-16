@@ -1,0 +1,197 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+//<![CDATA[
+    function OnGetRowValues(values) {
+        tbContactName.SetText(values[0]);
+        tbCompanyName.SetText(values[1]);
+        var memoText = '';
+        if (values[2] != null) memoText += 'City: ' + values[2] + '\n';
+        if (values[3] != null) memoText += 'Address: ' + values[3] + '\n';
+        if (values[4] != null) memoText += 'Phone: ' + values[4] + '\n';
+        if (values[5] != null) memoText += 'Fax: ' + values[5] + '\n';
+        mContacts.SetText(memoText);
+    }
+
+    function UpdateEditorsValues() {
+        gvEmployees.GetRowValues(gvEmployees.GetFocusedRowIndex(), 'ContactName;CompanyName;City;Address;Phone;Fax', OnGetRowValues);
+    }
+
+    var dataChanged = false;
+    function OnListBoxValueChanged(s, e) {
+        gvEmployees.Refresh();
+        dataChanged = true;
+    }
+
+    function OnSplitterPaneResized(s, e) {
+        var name = e.pane.name;
+        if (name == 'listBoxContainer')
+            ResizeControl(lblEmployees, e.pane);
+        else if (name == 'gridContainer')
+            ResizeControl(gvEmployees, e.pane);
+        else if (name == 'editorsContainer')
+            ResizeEditors(e.pane);
+    }
+
+    function ResizeControl(control, splitterPane) {
+        control.SetWidth(splitterPane.GetClientWidth());
+        control.SetHeight(splitterPane.GetClientHeight());
+    }
+
+    function ResizeEditors(splitterPane) {
+        SetEditorsSize(1, 1);
+        var memoTD = document.getElementById('memoCell');
+        var memoHeight = memoTD.clientHeight + splitterPane.GetClientHeight() - document.getElementById('editorsTable').offsetHeight;
+        SetEditorsSize(memoTD.clientWidth, memoHeight);
+    }
+
+    function SetEditorsSize(width, height) {
+        tbContactName.SetWidth(width);
+        tbCompanyName.SetWidth(width);
+        mContacts.SetWidth(width);
+        mContacts.SetHeight(height);
+    }
+
+    function OnGridEndCallback(s, e) {
+        splResizing.GetPaneByName("gridContainer").RaiseResizedEvent();
+        if (dataChanged) {
+            UpdateEditorsValues();
+            dataChanged = false;
+        }
+    }
+    function OnGridBeginCallback(s, e) {
+        e.customArgs["EmployeeID"] = lblEmployees.GetValue();
+    }    
+// ]]>
+</script>
+@using (Html.BeginForm()){
+    @Html.DevExpress().Splitter(
+        settings =>
+        {
+            settings.Name = "splResizing";
+            settings.Height = 400;
+            settings.Width = Unit.Percentage(100);
+            settings.Styles.Pane.Paddings.Padding = 0;
+
+            settings.Panes.Add(listBoxPane => {
+                listBoxPane.Name = "listBoxContainer";
+                listBoxPane.Size = Unit.Percentage(20);
+                listBoxPane.ShowCollapseBackwardButton = DefaultBoolean.True;
+                listBoxPane.SetContent(() => {
+                    @Html.DevExpress().ListBox(
+                        listBoxSettings => {
+                            listBoxSettings.Name = "lblEmployees";
+                            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+
+                            listBoxSettings.Properties.TextField = "Name";
+                            listBoxSettings.Properties.ValueField = "ID";
+                            listBoxSettings.Properties.ValueType = typeof(Int32);
+                            listBoxSettings.SelectedIndex = 0;
+
+                            listBoxSettings.Properties.ClientSideEvents.ValueChanged = "OnListBoxValueChanged";
+                        })
+                        .BindList(ViewData["Employees"])
+                        .Render();
+                });
+            });
+            settings.Panes.Add(contentPane => {
+                contentPane.MinSize = 350;
+
+                contentPane.Panes.Add(gridPane => {
+                    gridPane.Name = "gridContainer";
+                    gridPane.Size = Unit.Percentage(60);
+                    gridPane.MinSize = 100;
+                    gridPane.SetContent(() => {
+                        @Html.RenderPartial("ResizingPartial", Model);
+                    });
+                });
+
+                contentPane.Panes.Add(editorsPane => {
+                    editorsPane.Name = "editorsContainer";
+                    editorsPane.MinSize = 100;
+                    editorsPane.ShowCollapseForwardButton = DefaultBoolean.True;
+                    editorsPane.SetContent(() => {
+                        ViewContext.Writer.Write(
+                            "<table id=\"editorsTable\" cellpadding=\"0\" cellspacing=\"4\" border=\"0\">" +
+                                "<tr>" +
+                                    "<td style=\"white-space: nowrap\">"
+                        );
+                                        @Html.DevExpress().Label(
+                                            labelSettings => {
+                                                labelSettings.Text = "Customer name:";
+                                                labelSettings.AssociatedControlName = "tbContactName";
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                    "</td>" +
+                                    "<td style=\"width: 100%\">"
+                        );
+                                        @Html.DevExpress().TextBox(
+                                            textBoxSettings => {
+                                                textBoxSettings.Name = "tbContactName";
+                                                textBoxSettings.Width = 170;
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                    "</td>" +
+                                "</tr>" +
+                                "<tr>" +
+                                    "<td style=\"white-space: nowrap\">"
+                        );
+                                        @Html.DevExpress().Label(
+                                            labelSettings => {
+                                                labelSettings.Text = "Company name:";
+                                                labelSettings.AssociatedControlName = "tbCompanyName";
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                    "</td>" +
+                                    "<td>"
+                        );
+                                        Html.DevExpress().TextBox(
+                                            textBoxSettings => {
+                                                textBoxSettings.Name = "tbCompanyName";
+                                                textBoxSettings.Width = 170;
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                    "</td>" +
+                                "</tr>" +
+                                "<tr>" +
+                                    "<td style=\"vertical-align: text-top; white-space: nowrap; padding-top: 2px;\">"
+                        );
+                                        @Html.DevExpress().Label(
+                                            labelSettings => {
+                                                labelSettings.Text = "Contacts:";
+                                                labelSettings.AssociatedControlName = "mContacts";
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                    "</td>" +
+                                    "<td id=\"memoCell\">"
+                        );
+                                        @Html.DevExpress().Memo(
+                                            memoSettings => {
+                                                memoSettings.Name = "mContacts";
+                                                memoSettings.Height = 71;
+                                                memoSettings.Width = 170;
+                                            }
+                                        )
+                                        .Render();
+                        ViewContext.Writer.Write(
+                                                    "</td>" +
+                                                "</tr>" +
+                                            "</table>"
+                        );
+                    });
+                });
+            });
+
+            settings.ClientSideEvents.PaneResized = "OnSplitterPaneResized";
+        }).GetHtml()
+}

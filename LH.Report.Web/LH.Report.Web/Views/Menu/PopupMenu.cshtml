@@ -1,0 +1,101 @@
+﻿@model IList
+           
+<script type="text/javascript">
+// <![CDATA[
+    function InitPopupMenuHandler(s, e) {
+        $("#gridCell").bind("contextmenu", OnGridContextMenu);
+        $("#ImgButton1").bind("contextmenu", OnPreventContextMenu);
+    }
+    function OnGridContextMenu(evt) {
+        PopupMenu.ShowAtPos(evt.pageX, evt.pageY);
+        OnPreventContextMenu(evt);
+    }
+    function OnPreventContextMenu(evt) {
+        evt.preventDefault();
+    }
+    function OnPopupMenuItemClick(s, e) {
+        if(e.item == null || e.item.name == $("#CheckedItemName").val())
+            return;
+        $("#CheckedItemName").val(e.item.name);
+        grid.PerformCallback({ "sortColumn": e.item.name });
+    }
+// ]]>
+</script>
+@using (Html.BeginForm()) {
+    PopupMenuOptions options = (PopupMenuOptions)ViewData["Options"];
+    <div style="float: left; width: 68%">
+        <table width="100%" id="ImageTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="right" style="padding-bottom: 1px;">
+                    <img alt="" title="" style="border: 0px; margin-bottom: 2px; width:77px; height:19px; cursor: pointer"
+                        src="@Url.Content("~/Content/Menu/ArrangeBy.gif")" id="ImgButton1" />
+                </td>
+            </tr>
+            <tr>
+                <td id="gridCell">
+                    @Html.Partial("PopupMenuGridViewPartial", Model)
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="float: right; width: 30%">
+        <table border="0" cellpadding="4" cellspacing="0">
+            <tr>
+                <td>
+                    <label for="PopupAction">PopupAction:</label>
+                </td>
+                <td>
+                    @Html.DropDownList("PopupAction", PopupMenuDemoHelper.GetPopupActions(), new { style = "width:120px" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="HorizontalAlign">HorizontalAlign:</label>
+                </td>
+                <td align="left" style="width: 130px">
+                    @Html.DropDownList("HorizontalAlign", PopupMenuDemoHelper.GetPopupHorizontalAlignOptions(), new { style = "width:120px" }) 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="VerticalAlign">VerticalAlign:</label>
+                </td>
+                <td align="left" style="width: 130px">
+                    @Html.DropDownList("VerticalAlign", PopupMenuDemoHelper.GetPopupVerticalAlignOptions(), new { style = "width:120px" })
+                </td>
+            </tr>
+        </table>
+        @Html.Hidden("CheckedItemName", "")
+        <input type="submit" value="Apply" />
+    </div>
+    @Html.DevExpress().PopupMenu(
+        settings => {
+            settings.Name = "PopupMenu";
+            settings.PopupElementID = "ImgButton1";
+            settings.ShowPopOutImages = DefaultBoolean.True;
+            settings.Items.Add(item => {
+                item.Text = "Country Name";
+                item.Name = "Name";
+                item.GroupName = "Sort";
+                item.Checked = item.Name == options.CheckedItemName;
+            });
+            settings.Items.Add(item => {
+                item.Text = "Area";
+                item.Name = "Area";
+                item.GroupName = "Sort";
+                item.Checked = item.Name == options.CheckedItemName;
+            });
+            settings.Items.Add(item => {
+                item.Text = "Population";
+                item.Name = "Population";
+                item.GroupName = "Sort";
+                item.Checked = item.Name == options.CheckedItemName;
+            });
+            settings.ClientSideEvents.Init = "InitPopupMenuHandler";
+            settings.ClientSideEvents.ItemClick = "OnPopupMenuItemClick";
+            settings.PopupAction = options.PopupAction;
+            settings.PopupHorizontalAlign = options.HorizontalAlign;
+            settings.PopupVerticalAlign = options.VerticalAlign;
+        }
+    ).GetHtml()
+}

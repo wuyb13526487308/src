@@ -1,0 +1,12 @@
+﻿@Html.DevExpress().CallbackPanel(
+	settings => {
+		settings.Name = "CallbackPanel";
+		settings.CallbackRouteValues = new { Controller = "LoadingPanel", Action = "ExamplePartial" };
+		settings.ShowLoadingPanel = false;
+		settings.Callback = (sender, e) => {
+			System.Threading.Thread.Sleep(500);
+		};
+		settings.ClientSideEvents.BeginCallback = "function(s, e) { LoadingPanel.Show(); }";
+		settings.ClientSideEvents.EndCallback = "function(s, e) { LoadingPanel.Hide(); }";
+	}
+).GetHtml()

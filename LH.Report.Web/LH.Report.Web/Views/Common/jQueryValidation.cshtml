@@ -1,0 +1,117 @@
+﻿@model JQueryValidationData
+
+<script type="text/javascript">
+// <![CDATA[
+    $().ready(function() {
+        $("#jQueryValidationForm").validate({
+            showErrors: function(errorMap, errorList){
+            },
+            rules: {
+                Author: {
+                    required: true
+                },
+                Publisher: {
+                    maxlength: 10
+                },
+                ReleaseDate: {
+                    required: true,
+                    remote: '@(Url.Action("CheckReleaseDate", "Common"))'
+                },
+                Annotation: {
+                    required: true
+                }
+            },
+            messages: {
+                Author: {
+                    required: "Author is required"
+                },
+                Publisher: {
+                    range: "Must be under 10 characters"
+                },
+                ReleaseDate: {
+                    required: "Release date is required",
+                    remote: "Release date can not be earlier than today"
+                },
+                Annotation: {
+                    required: "Annotation is required"
+                }
+            }
+        });
+    });
+// ]]>
+</script>
+
+@{
+    Html.EnableClientValidation(false);
+    Html.EnableUnobtrusiveJavaScript(false);
+}
+@using (Html.BeginForm("jQueryValidation", "Common", FormMethod.Post, new { id = "jQueryValidationForm", @class = "edit_form", style = "height:170px;"})) {
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Author, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(
+            model => model.Author,
+            settings => {
+                settings.ShowModelErrors = true;
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Publisher, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(
+            model => model.Publisher,
+            settings => {
+                settings.ShowModelErrors = true;
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.ReleaseDate, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().DateEditFor(
+            model => model.ReleaseDate,
+            settings => {
+                settings.ShowModelErrors = true;
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+            }
+        ).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Annotation, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().MemoFor(
+            model => model.Annotation, 
+            settings => { 
+                settings.ShowModelErrors = true;
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.ValidationSettings.Display = Display.None;
+            }
+        ).GetHtml()
+    </div>
+    <div>
+        @Html.DevExpress().ValidationSummary().GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnClear";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Clear";
+                settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+            }
+        ).GetHtml()
+    </div>
+}
+<p>The following validation rules are defined in this demo: Author: required; Publisher: must be under 10 characters; 
+    Release date: required, can not be earlier than today; Annotation: required </p>

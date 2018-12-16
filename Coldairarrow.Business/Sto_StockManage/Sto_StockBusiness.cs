@@ -47,12 +47,12 @@ namespace Coldairarrow.Business.Sto_StockManage
                     }
 
                     if (!obj.UnitNo.IsNullOrEmpty()){
-                        list = list.Where(p => p.UnitNo.Contains( obj.UnitNo)).ToList();
+                        list = list.Where(p => (p.UnitNo.Contains( obj.UnitNo))).ToList();
                     }
 
                     if (!obj.MatNo.IsNullOrEmpty())
                     {
-                        list = list.Where(p => p.MatNo == obj.MatNo).ToList();
+                        list = list.Where(p => (p.MatNo.Contains(obj.MatNo) || p.MatName.Contains(obj.MatNo))).ToList();
                     }                    
                 }
             }
@@ -125,6 +125,9 @@ namespace Coldairarrow.Business.Sto_StockManage
             /// </summary>
             public String StoreId { get; set; }
 
+            public String StoreName { get; set; }
+
+
             /// <summary>
             /// StoreUnitId
             /// </summary>
@@ -150,6 +153,8 @@ namespace Coldairarrow.Business.Sto_StockManage
             /// </summary>
             public String UnitNo { get; set; }
 
+            public String UnitName { get; set; }
+
             /// <summary>
             /// Quantity
             /// </summary>
@@ -164,6 +169,19 @@ namespace Coldairarrow.Business.Sto_StockManage
             /// BigClass
             /// </summary>
             public String BigClass { get; set; }
+
+            public string BigClassName { get; set; }
+
+
+            /// <summary>
+            /// MaxStoreQuantity
+            /// </summary>
+            public Int32 MaxStoreQuantity { get; set; }
+
+            /// <summary>
+            /// WarnStoreQuantity
+            /// </summary>
+            public Int32 WarnStoreQuantity { get; set; }
         }
         #endregion
     }

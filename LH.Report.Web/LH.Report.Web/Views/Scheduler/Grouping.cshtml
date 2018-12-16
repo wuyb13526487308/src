@@ -1,0 +1,17 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#GroupType").change(function (){
+            $("form").submit();
+        });
+    });
+</script>
+
+@using (Html.BeginForm()) {
+    <div style="padding-bottom:10px;">
+        <label for="GroupType">Group type:</label>
+        @Html.DropDownList("GroupType", typeof(SchedulerGroupType), Session["GroupType"])
+    </div>
+    @Html.Partial("GroupingPartial")
+}

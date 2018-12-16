@@ -1,0 +1,44 @@
+﻿@model ModelValidationData
+
+@{
+    Html.EnableClientValidation();
+}
+@using (Html.BeginForm("ModelValidation", "Common", FormMethod.Post, new { id = "validationForm", @class = "edit_form", style="height: 150px;" })) {
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Name, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(model => model.Name, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Age, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(model => model.Age, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Email, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(model => model.Email, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.ArrivalDate, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().DateEditFor(model => model.ArrivalDate, CommonDemoHelper.DateEditSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnClear";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Clear";
+                settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+            }
+        ).GetHtml()
+    </div>
+}
+<p>The following validation rules are defined in this demo: Name: required, must be under 50 characters; Age: required, must be between 18 and 100;
+    Email: required, must fit email regular expression; Arrival Date: required</p>

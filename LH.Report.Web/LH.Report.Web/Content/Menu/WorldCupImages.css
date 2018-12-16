@@ -1,0 +1,165 @@
+﻿.WorldCup_algeria,
+.WorldCup_argentina,
+.WorldCup_australia,
+.WorldCup_brazil,
+.WorldCup_cameroon,
+.WorldCup_chile,
+.WorldCup_denmark,
+.WorldCup_england,
+.WorldCup_france,
+.WorldCup_germany,
+.WorldCup_ghana,
+.WorldCup_greece,
+.WorldCup_honduras,
+.WorldCup_italy,
+.WorldCup_ivorycoast,
+.WorldCup_japan,
+.WorldCup_mexico,
+.WorldCup_netherlands,
+.WorldCup_newzealand,
+.WorldCup_nigeria,
+.WorldCup_northkorea,
+.WorldCup_paraguay,
+.WorldCup_portugal,
+.WorldCup_serbia,
+.WorldCup_slovakia,
+.WorldCup_slovenia,
+.WorldCup_southafrica,
+.WorldCup_southkorea,
+.WorldCup_spain,
+.WorldCup_switzerland,
+.WorldCup_uruguay,
+.WorldCup_usa
+{
+    background-image: url('./WorldCup.png');
+    width: 18px;
+    height: 12px;
+}
+.WorldCup_algeria
+{
+    background-position: 0px 0px
+}
+.WorldCup_argentina
+{
+    background-position: -19px 0px
+}
+.WorldCup_australia
+{
+    background-position: -38px 0px
+}
+.WorldCup_brazil
+{
+    background-position: -57px 0px
+}
+.WorldCup_cameroon
+{
+    background-position: -76px 0px
+}
+.WorldCup_chile
+{
+    background-position: -95px 0px
+}
+.WorldCup_denmark
+{
+    background-position: 0px -13px
+}
+.WorldCup_england
+{
+    background-position: -19px -13px
+}
+.WorldCup_france
+{
+    background-position: -38px -13px
+}
+.WorldCup_germany
+{
+    background-position: -57px -13px
+}
+.WorldCup_ghana
+{
+    background-position: -76px -13px
+}
+.WorldCup_greece
+{
+    background-position: -95px -13px
+}
+.WorldCup_honduras
+{
+    background-position: 0px -26px
+}
+.WorldCup_italy
+{
+    background-position: -19px -26px
+}
+.WorldCup_ivorycoast
+{
+    background-position: -38px -26px
+}
+.WorldCup_japan
+{
+    background-position: -57px -26px
+}
+.WorldCup_mexico
+{
+    background-position: -76px -26px
+}
+.WorldCup_netherlands
+{
+    background-position: -95px -26px
+}
+.WorldCup_newzealand
+{
+    background-position: 0px -39px
+}
+.WorldCup_nigeria
+{
+    background-position: -19px -39px
+}
+.WorldCup_northkorea
+{
+    background-position: -38px -39px
+}
+.WorldCup_paraguay
+{
+    background-position: -57px -39px
+}
+.WorldCup_portugal
+{
+    background-position: -76px -39px
+}
+.WorldCup_serbia
+{
+    background-position: -95px -39px
+}
+.WorldCup_slovakia
+{
+    background-position: 0px -52px
+}
+.WorldCup_slovenia
+{
+    background-position: -19px -52px
+}
+.WorldCup_southafrica
+{
+    background-position: -38px -52px
+}
+.WorldCup_southkorea
+{
+    background-position: -57px -52px
+}
+.WorldCup_spain
+{
+    background-position: -76px -52px
+}
+.WorldCup_switzerland
+{
+    background-position: -95px -52px
+}
+.WorldCup_uruguay
+{
+    background-position: 0px -65px
+}
+.WorldCup_usa
+{
+    background-position: -19px -65px
+}

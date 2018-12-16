@@ -1,0 +1,12 @@
+﻿<div class="line">
+    @Html.DevExpress().LabelFor(model => model, CommonDemoHelper.LabelSettingsMethod).GetHtml()
+    @Html.DevExpress().ComboBoxFor(
+        model => model,
+        settings => {
+            settings.Width = Unit.Pixel(250);
+            settings.ShowModelErrors = true;
+            settings.ControlStyle.CssClass = "editor";
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+        }
+    ).BindList(Enum.GetNames(typeof(FuelType))).GetHtml()
+</div>

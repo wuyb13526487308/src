@@ -1,0 +1,157 @@
+﻿<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Docking/CSS/ForbiddenZones.css")" />
+@functions{
+    void SetContentStyleOnPreRender(MVCxDockPanel panel) {
+        panel.Styles.Content.HorizontalAlign = HorizontalAlign.Center;
+        panel.Styles.Content.Paddings.PaddingLeft = 31;
+        panel.Styles.Content.Paddings.PaddingRight = 31;
+        panel.Styles.Content.Paddings.PaddingTop = 24;
+    }
+}
+<div id="zoneContainer" class="zoneContainer">
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "dockZone1";
+            settings.ZoneUID = "zone1";
+            settings.PanelSpacing = 3;
+            settings.Paddings.Padding = 3;
+            settings.Height = 433;
+            settings.Width = 240;
+            settings.ControlStyle.CssClass = "zone vertical first";
+            settings.Styles.DockingAllowedStyle.CssClass = "zone allowed";
+            settings.Styles.DockingForbiddenStyle.CssClass = "zone forbidden";
+        }
+    ).GetHtml()
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "dockZone2";
+            settings.ZoneUID = "zone2";
+            settings.PanelSpacing = 3;
+            settings.Paddings.Padding = 3;
+            settings.Height = 433;
+            settings.Width = 240;
+            settings.ControlStyle.CssClass = "zone vertical";
+            settings.Styles.DockingAllowedStyle.CssClass = "zone allowed";
+            settings.Styles.DockingForbiddenStyle.CssClass = "zone forbidden";
+        }
+    ).GetHtml()
+    <b class="Clear"></b>
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "dockZone3";
+            settings.ZoneUID = "zone3";
+            settings.PanelSpacing = 11;
+            settings.Paddings.Padding = 3;
+            settings.Height = 215;
+            settings.Width = 491;
+            settings.Orientation = DockZoneOrientation.Horizontal;
+            settings.ControlStyle.CssClass = "zone horizontal";
+            settings.Styles.DockingAllowedStyle.CssClass = "zone allowed";
+            settings.Styles.DockingForbiddenStyle.CssClass = "zone forbidden";
+        }
+    ).GetHtml()
+</div>
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "dockPanel1";
+        settings.HeaderText = "Panel 1";
+        settings.PanelUID = "panel1";
+        settings.OwnerZoneUID = "zone1";
+        settings.ForbiddenZones.Add("zone2");
+        settings.ForbiddenZones.Add("zone3");
+        settings.ShowCloseButton = false;
+        settings.Height = 215;
+        settings.Width = 240;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img id=\"ForbiddenZone23Img\" src=\"" + Url.Content("~/Content/Docking/Images/ForbiddenZones/ForbiddenZone23.png") + "\" alt=\"\"/>"
+            );
+        });
+        settings.PreRender = (sender, e) => {
+            SetContentStyleOnPreRender((MVCxDockPanel)sender);
+        };
+    }
+).GetHtml()   
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "dockPanel2";
+        settings.HeaderText = "Panel 2";
+        settings.PanelUID = "panel2";
+        settings.OwnerZoneUID = "zone2";
+        settings.ForbiddenZones.Add("zone1");
+        settings.ForbiddenZones.Add("zone3");
+        settings.ShowCloseButton = false;
+        settings.Height = 215;
+        settings.Width = 240;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img id=\"ForbiddenZone13Img\" src=\"" + Url.Content("~/Content/Docking/Images/ForbiddenZones/ForbiddenZone13.png") + "\" alt=\"\"/>"
+            );
+        });
+        settings.PreRender = (sender, e) => {
+            SetContentStyleOnPreRender((MVCxDockPanel)sender);
+        };
+    }
+).GetHtml() 
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "dockPanel3";
+        settings.HeaderText = "Panel 3";
+        settings.PanelUID = "panel3";
+        settings.OwnerZoneUID = "zone3";
+        settings.ForbiddenZones.Add("zone1");
+        settings.ForbiddenZones.Add("zone2");
+        settings.ShowCloseButton = false;
+        settings.Height = 215;
+        settings.Width = 240;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img id=\"ForbiddenZone12Img\" src=\"" + Url.Content("~/Content/Docking/Images/ForbiddenZones/ForbiddenZone12.png") + "\" alt=\"\"/>"
+            );
+        });
+        settings.PreRender = (sender, e) => {
+            SetContentStyleOnPreRender((MVCxDockPanel)sender);
+        };
+    }
+).GetHtml()
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "dockPanel4";
+        settings.HeaderText = "Panel 4";
+        settings.PanelUID = "panel4";
+        settings.OwnerZoneUID = "zone2";
+        settings.ShowCloseButton = false;
+        settings.Height = 215;
+        settings.Width = 240;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img id=\"AllZonesAllowedImg\" src=\"" + Url.Content("~/Content/Docking/Images/ForbiddenZones/AllZonesAllowed.png") + "\" alt=\"\"/>"
+            );
+        });
+        settings.PreRender = (sender, e) => {
+            SetContentStyleOnPreRender((MVCxDockPanel)sender);
+        };
+    }
+).GetHtml()     
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "dockPanel5";
+        settings.HeaderText = "Panel 5";
+        settings.PanelUID = "panel5";
+        settings.Top = 281;
+        settings.Left = 735;
+        settings.Height = 215;
+        settings.Width = 240;
+        settings.ForbiddenZones.Add("zone1");
+        settings.ForbiddenZones.Add("zone2");
+        settings.ForbiddenZones.Add("zone3");
+        settings.ShowCloseButton = false;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img id=\"AllZonesForbiddenImg\" src=\"" + Url.Content("~/Content/Docking/Images/ForbiddenZones/AllZonesForbidden.png") + "\" alt=\"\"/>"
+            );
+        });
+        settings.PreRender = (sender, e) => {
+            SetContentStyleOnPreRender((MVCxDockPanel)sender);
+        };
+    }
+).GetHtml()        

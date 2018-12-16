@@ -1,0 +1,38 @@
+﻿@{
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.EnableClientSideAPI = true;
+    settings.CallbackRouteValues = new { Controller = "Chart", Action = "DrillDownPartial" };
+    settings.ClientSideEvents.ObjectHotTracked = "function (s, e) { chart.SetCursor(e.hitInfo.inSeries ? 'pointer' : 'default'); }";
+    settings.ClientSideEvents.ObjectSelected = "function (s, e) { if(e.hitInfo.inSeriesPoint) { document.location = '" + DevExpressHelper.GetUrl(new { Controller = "Chart", Action = "DrillDown" }) + "?category=' + e.hitInfo.seriesPoint.argument; } }";
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.Center;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Northwind Traders: Average Product Prices by Categories"
+    });
+
+    Series series = new Series("ProductPricesByCategory", DevExpress.XtraCharts.ViewType.Pie);
+    PieSeriesLabel label = ((PieSeriesLabel)series.Label);
+    label.Position = PieSeriesLabelPosition.Inside;
+    label.Font = new Font("Tahoma", 8, FontStyle.Bold);
+    label.TextColor = Color.Black;
+    label.BackColor = Color.Transparent;
+    label.Border.Visible = false;
+    PieSeriesView view = ((PieSeriesView)series.View);
+    view.ExplodeMode = PieExplodeMode.All;
+    series.Label.PointOptions.Pattern = "${V}";
+    series.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.FixedPoint;
+    series.Label.PointOptions.ValueNumericOptions.Precision = 1;
+    ((PiePointOptions)series.Label.PointOptions).PercentOptions.ValueAsPercent = false;
+    series.LegendPointOptions.PointView = PointView.Argument;
+    series.SeriesPointsSorting = SortingMode.Ascending;
+    series.ArgumentDataMember = "CategoryName";
+    series.ValueDataMembers[0] = "AvgPrice";
+    settings.Series.Add(series);
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

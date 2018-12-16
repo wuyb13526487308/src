@@ -1,0 +1,80 @@
+﻿@Html.DevExpress().Label(
+    settings => {
+        settings.Name = "indicesLabel";
+        settings.Text = "Market leaders";
+        settings.ControlStyle.Font.Bold = true;
+    }
+).GetHtml()
+<table width="100%" style="text-align: center;">
+    @{ List<MarketLeader> marketLeaders = WidgetsDemoHelper.GetMarketLeaders(); }
+    @foreach(MarketLeader marketLeader in marketLeaders) {
+        <tr>
+            <td style="width: 30%">
+            @Html.DevExpress().HyperLink(
+                settings => {
+                    settings.Name = "indexHyperLink" + marketLeaders.IndexOf(marketLeader).ToString();
+                    settings.Properties.Text = marketLeader.Index;
+                    settings.NavigateUrl = "javascript:void(0)";
+                }
+            ).GetHtml()
+            </td>
+            <td style="width: 30%">
+            @Html.DevExpress().Label(
+                settings => {
+                    settings.Name = "valueLabel" + marketLeaders.IndexOf(marketLeader).ToString();
+                    settings.Text = marketLeader.Value;
+                }
+            ).GetHtml()
+            </td>
+            <td style="width: 30%">
+            @Html.DevExpress().Label(
+                settings => {
+                    settings.Name = "growthLabel" + marketLeaders.IndexOf(marketLeader).ToString();
+                    settings.Text = marketLeader.Growth;
+                    settings.ControlStyle.ForeColor = Color.Green;
+                }
+            ).GetHtml()
+            </td>
+        </tr>
+    }
+</table>
+@Html.DevExpress().Label(
+    settings => {
+        settings.Name = "currencyLabel";
+        settings.Text = "Currency rates";
+        settings.ControlStyle.Font.Bold = true;
+    }
+).GetHtml()
+<table width="100%" style="text-align: center;">
+    @{ List<CurrencyRate> currencyRates = WidgetsDemoHelper.GetCurrencyRates(); }
+    @foreach(CurrencyRate currencyRate in currencyRates) {
+        <tr>
+            <td style="width: 30%">
+            @Html.DevExpress().HyperLink(
+                settings => {
+                    settings.Name = "currencyHyperLink" + currencyRates.IndexOf(currencyRate).ToString();
+                    settings.Properties.Text = currencyRate.Currency;
+                    settings.NavigateUrl = "javascript:void(0)";
+                }
+            ).GetHtml()
+            </td>
+            <td style="width: 30%">
+            @Html.DevExpress().Label(
+                settings => {
+                    settings.Name = "currencyValueLabel" + currencyRates.IndexOf(currencyRate).ToString();
+                    settings.Text = currencyRate.Value.ToString();
+                }
+            ).GetHtml()
+            </td>
+            <td style="width: 30%">
+            @Html.DevExpress().Label(
+                settings => {
+                    settings.Name = "currencyGrowthLabel" + currencyRates.IndexOf(currencyRate).ToString();
+                    settings.Text = currencyRate.Growth.ToString();
+                    settings.ControlStyle.ForeColor = currencyRate.Growth > 0 ? Color.Green : Color.Red;
+                }
+            ).GetHtml()
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,51 @@
+﻿@functions{
+    void SetupUpdatedImage(ImagePropertiesBase imageProps, ImageSpriteProperties spriteProps) {
+        spriteProps.CssClass = "DemoSprite UpdatedImage";
+    }
+    void SetupNewImage(ImagePropertiesBase imageProps, ImageSpriteProperties spriteProps) {
+        spriteProps.CssClass = "DemoSprite NewImage";        
+    }
+}
+
+@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "NavigationBar";
+        settings.ControlStyle.CssClass = "NavigationBar";
+        settings.AutoCollapse = true;
+        settings.Styles.EnableDefaultAppearance = false;
+        settings.EnableTheming = false;
+        settings.EnableClientSideAPI = true;
+        settings.ItemLinkMode = ItemLinkMode.TextOnly;
+        settings.AccessibilityCompliant = true;
+        settings.ShowExpandButtons = false;
+
+        foreach(DemoGroupModel group in DemosModel.Current.Groups) {
+            settings.Groups.Add(navBarGroup => {
+                navBarGroup.Text = group.Title;
+                navBarGroup.Expanded = false;
+
+                if(group.IsUpdated)
+                    SetupUpdatedImage(navBarGroup.HeaderImage, navBarGroup.HeaderImage.SpriteProperties);
+                if(group.IsNew)
+                    SetupNewImage(navBarGroup.HeaderImage, navBarGroup.HeaderImage.SpriteProperties);
+
+                foreach(DemoModel demo in group.Demos) {
+                    navBarGroup.Items.Add(item => {
+                        item.Text = demo.Title;
+                        item.NavigateUrl = Url.Content(Utils.GenerateDemoUrl(demo));
+
+                        if(demo.IsUpdated)
+                            SetupUpdatedImage(item.Image, item.Image.SpriteProperties);
+                        if(demo.IsNew)
+                            SetupNewImage(item.Image, item.Image.SpriteProperties);
+
+                        if(demo == Utils.CurrentDemo) {
+                            item.Selected = true;
+                            navBarGroup.Expanded = true;
+                        }
+                    });
+                }
+            });
+        }
+    }).GetHtml()

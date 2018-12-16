@@ -1,0 +1,36 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "SortingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.AutoGenerateColumns = false;
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        settings.RootValue = 0;
+
+        settings.Columns.Add("Name", "Department");
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Location";
+                column.SortIndex = 0;
+                column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+            }
+        );
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Budget";
+                column.SortIndex = 1;
+                column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+                column.PropertiesEdit.DisplayFormatString = "{0:C}";
+            }
+        );
+
+        settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Vertical;
+        settings.Settings.SuppressOuterGridLines = true;
+        settings.SettingsBehavior.AutoExpandAllNodes = true;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+    }
+).Bind(Model).GetHtml()

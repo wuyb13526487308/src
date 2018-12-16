@@ -1,0 +1,58 @@
+﻿@model IEnumerable
+           
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input:radio[name=iCalendarActions]").change(function(){
+            var isExportPaneVisibled = IsExportAction();
+            $("#importPane").toggle(!isExportPaneVisibled);
+            $("#exportPane").toggle(isExportPaneVisibled);
+        });
+    });
+    function IsExportAction(){
+        return $("input:radio[name=iCalendarActions]:checked").val() == 1;
+    }
+    function OnFileUploadStart(s, e){
+        scheduler.ShowLoadingPanel();
+    }
+    function OnFileUploadComplete(s, e){
+        scheduler.HideLoadingPanel();
+    }
+</script>
+
+@using (Html.BeginForm("ChangeStorage", "Scheduler")){
+    <div id="schedulerICalendar" class="chartOptionsPanel horizOptionsPanel" style="height:70px;margin-bottom:15px;">
+        <div>
+            <div>
+                <input type="radio" name="iCalendarActions" value="1" class="leftMost" checked="checked" />
+                <label class="radio">Export</label>
+            </div>
+            <div style="clear:none;">
+                <input type="radio" name="iCalendarActions" value="0" class="leftMost"/>
+                <label class="radio">Import</label>
+            </div>
+        </div>
+        <div style="padding:5px;">
+            <div id="importPane" style="display:none;">
+                <div>
+                    <label>Select iCalendar file:&nbsp;</label>
+                    @Html.DevExpress().UploadControl(
+                        settings => {
+                            settings.Name = "schedulerAptImporter";
+                            settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "ICalendarImport" };
+                            settings.ValidationSettings.MaxFileSize = 1048576;
+                            settings.ClientSideEvents.FileUploadStart = "OnFileUploadStart";
+                            settings.ClientSideEvents.FileUploadComplete = "OnFileUploadComplete";
+                        }).GetHtml()
+                </div>
+                <div>
+                    <input type="submit" name="Import" value = "Import appointments" />
+                </div>
+            </div>
+            <div id="exportPane">
+                <input type="submit" name="Export" value = "Export appointments" />
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("ICalendarPartial", Model)
+}

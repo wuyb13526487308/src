@@ -1,0 +1,15 @@
+﻿@using System.Web.Optimization;
+
+@{
+    ViewBag.Title = "ReportViewer";
+}
+
+        @Html.DevExpress().ReportToolbar(
+                settings =>
+                {
+                    settings.Name = "ReportToolbar";
+                    settings.ReportViewerName = "ReportViewer1";
+                }
+            ).GetHtml()
+
+<h2>ReportViewer</h2>

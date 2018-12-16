@@ -1,0 +1,62 @@
+﻿@using DevExpress.Web.Demos
+
+@using (Html.BeginForm()) {
+    NavBarFeaturesDemoOptions options = (NavBarFeaturesDemoOptions)ViewData["Options"];
+    <div class="vertComponentContainer">
+        @Html.DevExpress().NavBar(
+            settings =>
+            {
+                settings.Name = "nbFeatures";
+                settings.AllowExpanding = options.AllowExpanding;
+                settings.AllowSelectItem = options.AllowSelectItem;
+                settings.AutoCollapse = options.AutoCollapse;
+                settings.EnableHotTrack = options.EnableHotTrack;
+                settings.EnableAnimation = options.EnableAnimation;
+                settings.SaveStateToCookies = options.SaveStateToCookies;
+                settings.Width = 120;
+
+                settings.Groups.Add(group => {
+                    group.Text = "Small Items";
+                            
+                    group.Items.Add("Scheduler", "", "~/Content/NavBar/BO_Scheduler.png");
+                    group.Items.Add("Clients", "", "~/Content/NavBar/BO_Organizations.png");
+                    group.Items.Add("Users", "", "~/Content/NavBar/BO_Users.png");
+                });
+                settings.Groups.Add(group => {
+                    group.Text = "Large Items";
+
+                    group.ItemImagePosition = ImagePosition.Top;
+                    group.Items.Add("Notes", "", "~/Content/NavBar/BO_Notes_Large.png");
+                    group.Items.Add("Reports", "", "~/Content/NavBar/BO_Reports_Large.png");
+                });
+            }).GetHtml()
+    </div>
+    <div id="navBarFeaturesPanel" class="vertOptionsPanel" style="height:210px">
+        <div>
+            @Html.CheckBox("AllowExpanding", options.AllowExpanding, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowExpanding">AllowExpanding</label>
+        </div>
+        <div>
+            @Html.CheckBox("AllowSelectItem", options.AllowSelectItem, new { @class = "leftMost" })
+            <label class="checkBox" for="AllowSelectItem">AllowSelectItem</label>
+        </div>
+        <div>            
+            @Html.CheckBox("AutoCollapse", options.AutoCollapse, new { @class = "leftMost" })
+            <label class="checkBox" for="AutoCollapse">AutoCollapse</label>
+        </div>
+        <div>
+            @Html.CheckBox("EnableHottrack", options.EnableHotTrack, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableHottrack">EnableHottrack</label>
+        </div>
+        <div>
+            @Html.CheckBox("EnableAnimation", options.EnableAnimation, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableAnimation">EnableAnimation</label>
+        </div>
+        <div>
+            @Html.CheckBox("SaveStateToCookies", options.SaveStateToCookies, new { @class = "leftMost" })
+            <label class="checkBox" for="SaveStateToCookies">SaveStateToCookies</label>
+        </div>    
+            
+        <input type="submit" value="Apply" />
+    </div>
+}

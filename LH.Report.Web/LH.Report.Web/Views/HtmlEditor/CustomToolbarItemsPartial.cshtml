@@ -1,0 +1,79 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heCustomToolbarItems";
+        settings.CallbackRouteValues = new { Controller = "HtmlEditor", Action = "CustomToolbarItemsPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 350;
+        
+        string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/CustomToolbarItems.htm");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        settings.Toolbars.Add(toolbar => {
+            toolbar.Items.Add(new ToolbarUndoButton());
+            toolbar.Items.Add(new ToolbarRedoButton());
+            toolbar.Items.Add(new ToolbarBoldButton(true));
+            toolbar.Items.Add(new ToolbarItalicButton());
+            toolbar.Items.Add(new ToolbarUnderlineButton());
+            toolbar.Items.Add(new ToolbarStrikethroughButton());
+                
+            toolbar.Items.Add<ToolbarComboBox>(comboBox => {
+                comboBox.CommandName = "PxFontSize";
+                comboBox.DefaultCaption = "Font Size";
+                comboBox.Items.Add("10px", "10px");
+                comboBox.Items.Add("12px", "12px");
+                comboBox.Items.Add("14px", "14px");
+                comboBox.Items.Add("16px", "16px");
+                comboBox.Items.Add("18px", "18px");
+                comboBox.Items.Add("20px", "20px");
+                comboBox.Items.Add("22px", "22px");
+            });
+                
+            toolbar.Items.Add<ToolbarDropDownItemPicker>(itemPicker => {
+                itemPicker.BeginGroup = true;
+                itemPicker.CommandName = "InsertSmiley";
+                itemPicker.SelectedItemIndex = 0;
+                itemPicker.ImagePosition = ToolbarItemPickerImagePosition.Left;
+                itemPicker.ToolTip = "Insert Smiley";
+                itemPicker.ColumnCount = 4;
+                itemPicker.ItemHeight = 24;
+                itemPicker.ItemWidth = 24;
+                    
+                itemPicker.Items.Add("11#Smile#:)", "", "~/Content/HtmlEditor/Smilies/11.png", "Smile");
+                itemPicker.Items.Add("1#Angry#:@", "", "~/Content/HtmlEditor/Smilies/1.png", "Angry");
+                itemPicker.Items.Add("2#Embarrassed#:$", "", "~/Content/HtmlEditor/Smilies/2.png", "Embarrassed");
+                itemPicker.Items.Add("3#Cool#H", "", "~/Content/HtmlEditor/Smilies/3.png", "Cool");
+                itemPicker.Items.Add("4#Crying#:'(", "", "~/Content/HtmlEditor/Smilies/4.png", "Crying");
+                itemPicker.Items.Add("5#Unsatisfied#=/", "", "~/Content/HtmlEditor/Smilies/5.png", "Unsatisfied");
+                itemPicker.Items.Add("6#Scared#6", "", "~/Content/HtmlEditor/Smilies/6.png", "Scared");
+                itemPicker.Items.Add("7#Angel#A", "", "~/Content/HtmlEditor/Smilies/7.png", "Angel");
+                itemPicker.Items.Add("8#Big Smile#:D", "", "~/Content/HtmlEditor/Smilies/8.png", "Big Smile");
+                itemPicker.Items.Add("9#Kisses#:*", "", "~/Content/HtmlEditor/Smilies/9.png", "Kisses");
+                itemPicker.Items.Add("10#Sleep#|-)", "", "~/Content/HtmlEditor/Smilies/10.png", "Sleep");
+                itemPicker.Items.Add("12#Sad#:(", "", "~/Content/HtmlEditor/Smilies/12.png", "Sad");
+                itemPicker.Items.Add("13#Surprise#:O", "", "~/Content/HtmlEditor/Smilies/13.png", "Surprise");
+                itemPicker.Items.Add("14#Stick out tongue#:P", "", "~/Content/HtmlEditor/Smilies/14.png", "Stick out tongue");
+                itemPicker.Items.Add("15#Huh?#:^", "", "~/Content/HtmlEditor/Smilies/15.png", "Huh?");
+                itemPicker.Items.Add("16#Wink#;)", "", "~/Content/HtmlEditor/Smilies/16.png", "Wink");
+            });
+
+            toolbar.Items.Add<ToolbarDropDownMenu>(dropDownMenu => {
+                dropDownMenu.BeginGroup = true;
+                dropDownMenu.CommandName = "InsertDateTime";
+                dropDownMenu.ToolTip = "Insert Date and Time";
+                dropDownMenu.Image.Url = "~/Content/HtmlEditor/Date.png";
+                dropDownMenu.Image.Width = 16;
+                dropDownMenu.Image.Height = 16;
+                dropDownMenu.Items.Add("%m/%d/%y", "MM/dd/yyyy");
+                dropDownMenu.Items.Add("%y-%m-%d", "yyyy-MM-dd");
+                dropDownMenu.Items.Add("%mf %d, %y", "Month dd, yyyy");
+                dropDownMenu.Items.Add("%df, %mf %d, %y", "Day of Week, Month dd, yyyy");
+                dropDownMenu.Items.Add("%h:%M %p", "h:mm AM").BeginGroup = true;
+                dropDownMenu.Items.Add("%h:%M:%s %p", "h:mm:ss AM");
+                dropDownMenu.Items.Add("%m/%d/%y %h:%M %p", "MM/dd/yyyy h:mm AM").BeginGroup = true;
+                dropDownMenu.Items.Add("%y-%m-%d %h:%M:%s %p", "yyyy-MM-dd h:mm:ss AM");
+            });
+        });
+ 
+        settings.ClientSideEvents.CustomCommand = "OnCommandExecute";
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+    }).GetHtml()

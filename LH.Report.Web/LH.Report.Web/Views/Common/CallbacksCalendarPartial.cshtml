@@ -1,0 +1,7 @@
+﻿@Html.DevExpress().Calendar(
+    settings => {
+        settings.Name = "calendar";
+        settings.Properties.Columns = 3;
+        settings.Properties.Rows = 2;
+        settings.Width = Unit.Percentage(100);
+    }).Bind(DateTime.Today).GetHtml()

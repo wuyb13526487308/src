@@ -1,0 +1,34 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvEmployees";
+        settings.CallbackRouteValues = new { Controller = "Splitter", Action = "ResizingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.ControlStyle.Border.BorderWidth = 0;
+
+        settings.KeyFieldName = "OrderID";
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 100;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsPager.PageSize = 500;
+        settings.SettingsPager.NumericButtonCount = 4;
+
+        settings.Columns.Add("OrderID");
+        settings.Columns.Add("ShipName").Width = 200;
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("ContactName").Visible = false;
+        settings.Columns.Add("CompanyName").Visible = false;
+        settings.Columns.Add("City").Visible = false;
+        settings.Columns.Add("Address").Visible = false;
+        settings.Columns.Add("Phone").Visible = false;
+        settings.Columns.Add("Fax").Visible = false;
+
+        settings.ClientSideEvents.BeginCallback = "OnGridBeginCallback";
+        settings.ClientSideEvents.EndCallback = "OnGridEndCallback";
+        settings.ClientSideEvents.FocusedRowChanged = "UpdateEditorsValues";
+        settings.PreRender = (sender, e) => {
+            ASPxGridView grid = (ASPxGridView)sender;
+            grid.FocusedRowIndex = 0;
+        };
+    }).Bind(Model).GetHtml()

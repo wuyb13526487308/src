@@ -1,0 +1,47 @@
+﻿@{
+    ChartRadarPolarViewsDemoOptions options = (ChartRadarPolarViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+
+    settings.SeriesTemplate.ChangeView(options.View);
+    settings.SeriesTemplate.ArgumentDataMember = "Date";
+    settings.SeriesTemplate.ValueDataMembers[0] = "Temperature";
+    settings.SeriesDataMember = "DayPart";
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    RadarPointSeriesView view = ((RadarPointSeriesView)settings.SeriesTemplate.View);
+    view.PointMarkerOptions.Kind = (MarkerKind)Enum.Parse(typeof(MarkerKind), options.MarkerKindString);
+    view.PointMarkerOptions.Size = options.MarkerSize;
+    if (options.MarkerKindString == MarkerKind.Star.ToString()) {
+        view.PointMarkerOptions.StarPointCount = options.StarPointCount;
+    }
+    if (view is ISupportTransparency) {
+        ((ISupportTransparency)view).Transparency = 155;
+    }
+        
+    RadarDiagram diagram = (RadarDiagram)settings.Diagram;
+    diagram.AxisX.DateTimeMeasureUnit = DateTimeMeasurementUnit.Month;
+    diagram.AxisX.DateTimeGridAlignment = DateTimeMeasurementUnit.Month;
+    diagram.AxisX.DateTimeOptions.Format = DateTimeFormat.Custom;
+    diagram.AxisX.DateTimeOptions.FormatString = "MMMM";
+    diagram.DrawingStyle = options.DiagramStyle;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Average temperature in London"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.weather.com"
+    });
+
+    settings.SeriesTemplate.ArgumentScaleType = ScaleType.DateTime;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

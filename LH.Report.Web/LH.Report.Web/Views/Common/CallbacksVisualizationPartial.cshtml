@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().Chart(
+    settings => {
+        settings.Name = "chart";
+        settings.Width = 760;
+        settings.Height = 400;
+
+        Series series = new Series();
+        series.Name = "Products";
+        series.ArgumentDataMember = "ProductName";
+        series.ValueDataMembers[0] = "UnitPrice";
+        series.LabelsVisibility = DefaultBoolean.True;
+        settings.Series.Add(series);
+
+        XYDiagram diagram = ((XYDiagram)settings.Diagram);
+        diagram.AxisX.Label.Angle = -30;
+        diagram.AxisY.Title.Visible = true;
+        diagram.AxisY.Title.Text = "Price";
+        diagram.AxisY.Interlaced = true;
+    }).Bind(Model).GetHtml()

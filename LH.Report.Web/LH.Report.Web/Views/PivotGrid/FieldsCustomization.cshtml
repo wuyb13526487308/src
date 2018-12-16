@@ -1,0 +1,38 @@
+﻿@{
+    if (Session["FieldsCustomizationDemoOptions"] == null){
+        Session["FieldsCustomizationDemoOptions"] = new PivotGridFieldsCustomizationDemoOptions();
+    }
+    PivotGridFieldsCustomizationDemoOptions options = (PivotGridFieldsCustomizationDemoOptions)Session["FieldsCustomizationDemoOptions"];
+}
+
+@using (Html.BeginForm()) {
+    <div id="pgFieldsCustomizationOptionsPanel" class="horizOptionsPanel" style="height:100px;">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                    <label for="CustomizationFormStyle">Customization Form Style:</label>
+                </td>
+                <td> @Html.DropDownList("CustomizationFormStyle", typeof(CustomizationFormStyle), options.CustomizationFormStyle)</td>
+                <td style="width: 16px;"></td>
+                <td>
+                    @Html.CheckBox("AllowDragFields", options.AllowDragFields)
+                    <label for="AllowDragFields" class="longText">Allow Drag Fields</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:160px;">
+                    <label for="CustomizationFormLayout">Customization Form Layout:</label>
+                </td>
+                <td>@Html.DropDownList("CustomizationFormLayout", typeof(CustomizationFormLayout), options.CustomizationFormLayout)</td>
+                <td style="width:16px;"></td>
+                <td>
+                    @Html.CheckBox("AllowDragFieldsInCustomizationForm", options.AllowDragFieldsInCustomizationForm)
+                    <label for="AllowDragFieldsInCustomizationForm" class="longText">Allow Drag Fields In Customization Form</label>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Apply" style="width: 100px;"/>
+    </div>
+    @Html.Partial("FieldsCustomizationPartial")
+}
+

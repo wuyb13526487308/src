@@ -1,0 +1,51 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heValidation";
+        settings.CallbackRouteValues = new { Controller = "HtmlEditor", Action = "ValidationPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 300;
+
+        if(ViewData["ActiveView"] != null)
+            settings.ActiveView = (HtmlEditorView)ViewData["ActiveView"];
+        if(ViewData["Html"] != null)
+            settings.Html = (string)ViewData["Html"];
+
+        settings.Toolbars.Add(toolbar => {
+            toolbar.Items.Add<ToolbarFontNameEdit>(fontNameItem => {
+                fontNameItem.Items.Add("Times New Roman", "Times New Roman");
+                fontNameItem.Items.Add("Tahoma", "Tahoma");
+                fontNameItem.Items.Add("Verdana", "Verdana");
+                fontNameItem.Items.Add("Arial", "Arial");
+                fontNameItem.Items.Add("MS Sans Serif", "MS Sans Serif");
+                fontNameItem.Items.Add("Courier", "Courier");
+            });
+
+            toolbar.Items.Add<ToolbarFontSizeEdit>(fontSizeItem => {
+                fontSizeItem.Items.Add("1 (8pt)", "1");
+                fontSizeItem.Items.Add("2 (10pt)", "2");
+                fontSizeItem.Items.Add("3 (12pt)", "3");
+                fontSizeItem.Items.Add("4 (14pt)", "4");
+                fontSizeItem.Items.Add("5 (18pt)", "5");
+                fontSizeItem.Items.Add("6 (24pt)", "6");
+                fontSizeItem.Items.Add("7 (36pt)", "7");
+            });
+
+            toolbar.Items.Add(new ToolbarBoldButton(true));
+            toolbar.Items.Add(new ToolbarItalicButton());
+            toolbar.Items.Add(new ToolbarUnderlineButton());
+            toolbar.Items.Add(new ToolbarStrikethroughButton());
+
+            toolbar.Items.Add(new ToolbarJustifyLeftButton(true));
+            toolbar.Items.Add(new ToolbarJustifyCenterButton());
+            toolbar.Items.Add(new ToolbarJustifyRightButton());
+            toolbar.Items.Add(new ToolbarJustifyFullButton());
+        });
+
+        settings.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "HtmlEditor", Action = "ValidationImageUpload" };
+        settings.SettingsImageUpload.UploadImageFolder = HtmlEditorDemosHelper.UploadDirectory;
+        settings.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDemosHelper.ImageUploadValidationSettings);
+
+        settings.SettingsValidation.Assign(HtmlEditorDemosHelper.ValidationSettings);
+        settings.ClientSideEvents.Validation = "ValidationHandler";
+        settings.ClientSideEvents.HtmlChanged = "HtmlChangedHandler";
+    }).GetHtml()

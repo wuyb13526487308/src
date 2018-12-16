@@ -1,0 +1,72 @@
+﻿@Html.DevExpress().HyperLink(
+    settings => {
+        settings.Name = "hyperLink";
+        settings.Properties.Text = "Today";
+        settings.NavigateUrl = "javascript:void(0)";
+        settings.ControlStyle.Font.Size = FontUnit.Larger;    
+    }
+).GetHtml()
+<table width="100%" style="text-align: center;">
+    <tr>
+        <td>
+            @Html.DevExpress().Image(
+                settings => {
+                    settings.Name = "image1";
+                    settings.ImageUrl = Url.Content("~/Content/Docking/Images/Widgets/Weather/rain_thunderstorm.png");
+                    settings.ControlStyle.CssClass = "todayImg";
+                }
+            ).GetHtml()
+        </td>
+        <td style="text-align: left;">
+            @Html.DevExpress().Label(
+                settings => {
+                    settings.Name = "label1";
+                    settings.Text = "+4°C";
+                    settings.ControlStyle.Font.Bold = true;
+                    settings.ControlStyle.Font.Size = FontUnit.Medium;
+                }
+            ).GetHtml()
+        </td>
+        <td colspan="2" style="text-align: left;">
+            Current: Rain
+            <br />
+            Wind: N at 26 km/h
+            <br />
+            Humidity: 81%
+        </td>
+    </tr>
+    <tr>
+        @{ List<DayControl> dayControls = WidgetsDemoHelper.GetDayControls(); }
+        @foreach(DayControl dayUC in dayControls) {
+            <td>
+                <div class="dayUCContainer">
+                    <div>
+                        @Html.DevExpress().HyperLink(
+                            settings => {
+                                settings.Name = "DayOfWeekHyperLink" + dayControls.IndexOf(dayUC).ToString();
+                                settings.Properties.Text = dayUC.DayOfWeek;
+                            }
+                        ).GetHtml()
+                    </div>
+                    <div>
+                        @Html.DevExpress().Image(
+                            settings => {
+                                settings.Name = "WeatherImage" + dayControls.IndexOf(dayUC).ToString();
+                                settings.ImageUrl = dayUC.WeatherImageUrl;
+                            }
+                        ).GetHtml()
+                    </div>
+                    <div>
+                        @Html.DevExpress().HyperLink(
+                            settings => {
+                                settings.Name = "TemperatureHyperLink" + dayControls.IndexOf(dayUC).ToString();
+                                settings.Properties.Text = dayUC.Temperature;
+                                settings.ControlStyle.Wrap = DefaultBoolean.False;
+                            }
+                        ).GetHtml()
+                    </div>
+                </div>
+            </td>
+        }
+    </tr>
+</table>

@@ -1,0 +1,49 @@
+﻿@Html.DevExpress().GridView(
+    settings => {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "Menu", Action = "PopupMenuGridViewPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.KeyFieldName="ID";
+            
+        settings.Columns.Add(column => {
+            column.FieldName = "ID";
+            column.Caption = "ID";
+            column.ReadOnly = true;
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "Name";
+            column.Caption = "Country Name";
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "Area";
+            column.Caption = "Area";
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "Population";
+            column.Caption = "Population";
+        });
+        settings.HtmlDataCellPrepared = (sender, e) => {
+            MVCxGridView gridView = (MVCxGridView)sender;
+            foreach(GridViewColumn column in gridView.Columns) {
+                GridViewDataColumn dataColumn = column as GridViewDataColumn;
+                column.CellStyle.Font.Bold = dataColumn.SortOrder != DevExpress.Data.ColumnSortOrder.None;
+            }
+        };
+        settings.BeforeGetCallbackResult = (sender, e) => {
+            if (ViewBag.SortColumn == null)
+                return;
+            
+            MVCxGridView gridView = (MVCxGridView)sender;
+            gridView.ClearSort();
+            gridView.SortBy(gridView.Columns[ViewBag.SortColumn], DevExpress.Data.ColumnSortOrder.Ascending);
+        };
+        settings.ClientLayout = (s, e) => {
+            if(e.LayoutMode == ClientLayoutMode.Loading) {
+                if(Session["GridState"] != null)
+                    e.LayoutData = (string)Session["GridState"];
+            }
+            else
+                Session["GridState"] = e.LayoutData;
+        };
+    }
+).Bind(Model).GetHtml()

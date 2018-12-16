@@ -58,6 +58,11 @@ declare @Stock TABLE (
                 Sto_Stock ON Sto_StockOutItem.MatNo = Sto_Stock.MatNo AND Sto_StockOut.StoreId = Sto_Stock.StoreId AND 
                 Sto_StockOut.OutDate >= Sto_Stock.UpToTime
 
-	select StoreId,StoreUnitId,MatNo,MatName,GuiGe,UnitNo,Sum(Quantity) as Quantity,avg(Price) as Price,BigClass from @Stock group by  StoreId,StoreUnitId,MatNo,MatName,GuiGe,UnitNo,BigClass
+	select a.StoreId, c.StoreName,StoreUnitId,a.MatNo,a.MatName,a.GuiGe,d.Name as UnitName , a.UnitNo,Sum(Quantity) as Quantity,avg(Price) as Price,
+	a.BigClass,e.BigClassName,b.MaxStoreQuantity,b.WarnStoreQuantity 
+	from @Stock a,Sto_Material b,Sto_Storage c,Sto_MaterialUnit d ,Sto_BigClass e
+	where a.MatNo = b.MatNo and a.StoreId = c.StoreNo and a.UnitNo = d.UnitNum  and a.BigClass = e.BigClassCode
+	group by  a.StoreId, c.StoreName,StoreUnitId,a.MatNo,a.MatName,a.GuiGe,a.UnitNo,d.Name,e.BigClassName,
+	a.BigClass,b.MaxStoreQuantity,b.WarnStoreQuantity
 
 END

@@ -1,0 +1,33 @@
+﻿@{ RoundPanelFeaturesDemoOptions options = (RoundPanelFeaturesDemoOptions)ViewData["Options"]; }
+
+@using (Html.BeginForm()) {
+    <div class="vertComponentContainer">
+        @Html.DevExpress().RoundPanel(
+            settings =>
+            {
+                settings.Name = "rpFeatures";
+                settings.HeaderText = "Demo";
+                settings.ShowHeader = options.ShowHeader;
+                settings.View = options.View;
+                settings.Width = 315;
+                settings.SetContent(() =>
+                {
+                    ViewContext.Writer.Write(
+                        "The <b>MVC Round Panel Extension</b> is a container area with rounded corners. The appearance of the <b>Round Panel</b> can be customized manually (by changing property values) or by using the designer."
+                    );
+                });
+            }).GetHtml()
+    </div>
+    <div id="roundPanelFeaturesPanel" class="vertOptionsPanel">
+        <div>
+            @Html.CheckBox("ShowHeader", options.ShowHeader, new { @class = "leftMost" })
+            <label class="checkBox" for="ShowHeader">ShowHeader</label>
+        </div>
+        <div>
+            <label for="View">View:</label>
+            @Html.DropDownList("View", typeof(DevExpress.Web.ASPxRoundPanel.View), options.View)
+        </div>
+            
+        <input type="submit" value="Apply" />
+    </div>
+}

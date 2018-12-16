@@ -1,0 +1,60 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "UnboundModePartial" };
+        
+        settings.ControlStyle.Border.BorderWidth = 0;
+        settings.Styles.Cell.Paddings.PaddingLeft = Unit.Pixel(1);
+        settings.Width = Unit.Percentage(100);
+        
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Name";
+                column.PropertiesEdit.EncodeHtml = false;
+            }
+        );
+
+        settings.Nodes.Add(
+            node => {
+                node.KeyObject = 1;
+                node["Name"] = "<b>Local Folders</b>";
+                node["IconName"] = "Folder";
+                node.Expanded = true;
+
+                node.ChildNodes.Add(2, new Dictionary<string, object> { { "Name", "Inbox" }, { "IconName", "Inbox" } });
+                node.ChildNodes.Add(3, new Dictionary<string, object> { { "Name", "Outbox" }, { "IconName", "Outbox" } });
+                node.ChildNodes.Add(4, new Dictionary<string, object> { { "Name", "Sent Items" }, { "IconName", "SentItems" } });
+                node.ChildNodes.Add(5, new Dictionary<string, object> { { "Name", "Deleted Items" }, { "IconName", "DeletedItems" } });
+                node.ChildNodes.Add(6, new Dictionary<string, object> { { "Name", "Drafts" }, { "IconName", "Drafts" } });
+            }
+        );
+
+        settings.Nodes.Add(
+            node => {
+                node.KeyObject = 7;
+                node["Name"] = "<b>community.devexpress.com</b>";
+                node["IconName"] = "Folder";
+
+                node.ChildNodes.Add(8, new Dictionary<string, object> { { "Name", "general.announcements" }, { "IconName", "Folder" } });
+                node.ChildNodes.Add(9, new Dictionary<string, object> { { "Name", "general.discussion" }, { "IconName", "Folder" } });
+                node.ChildNodes.Add(10, new Dictionary<string, object> { { "Name", "general.ordering" }, { "IconName", "Folder" } });
+            }
+        );
+        
+        settings.SetDataCellTemplateContent(
+            c => {
+                var iconName = DataBinder.Eval(c.DataItem, "IconName");
+                ViewContext.Writer.Write(
+                    "<div>" +
+                        "<img src=\"" + Url.Content("~/Content/TreeList/Images/" + iconName + ".png") + "\" style=\"width: 16px; height: 16px; vertical-align: middle\"/>" +
+                        "&nbsp;" +
+                        "<label style=\"vertical-align: middle\">" + c.Text + "</label>" +
+                    "</div>"
+                );        
+            }
+        );
+        
+        settings.Settings.ShowColumnHeaders = false;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+    }
+).GetHtml()

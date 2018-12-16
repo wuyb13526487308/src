@@ -1,0 +1,63 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    $(window).load(UpdateLabelPositionDisabled);
+
+    function SetLabelPositionEnabled() {
+        $("#labelPosition")[0].disabled = false;
+    }
+    function UpdateLabelPositionDisabled() {
+        $("#labelPosition")[0].disabled = !($("#showLabels")[0].checked);
+    }
+    // ]]> 
+</script>
+@using (Html.BeginForm()) {
+    ChartFunnelViewsDemoOptions options = (ChartFunnelViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:40px;">
+        <div style="padding-bottom: 4px;">
+            <label style="margin-right:31px" for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetFunnelViews(), new { style = "width:102px" })
+            @Html.CheckBox("valueAsPercent", options.ValueAsPercent, new { style = "margin-left: 8px; vertical-align: -2px;" })
+            <label class="checkBox" for="valueAsPercent">Value As Percent</label>
+        </div>
+        <div>
+            <div style="float: left; vertical-align:baseline;">
+                <label style="margin-right:12px" for="labelPosition">Label Position:</label>
+                @Html.DropDownList("labelPosition", ChartDemoHelper.GetFunnelLabelPositions(), new { style = "width:102px" })
+                @Html.CheckBox("showLabels", options.ShowLabels, new { style = "margin-left: 8px; vertical-align: -2px;", onclick = "UpdateLabelPositionDisabled()" })
+                <label class="checkBox" for="showLabels">Show Labels</label>
+            </div>
+            <input style="float: right;"  type="submit" value="Apply" onclick="SetLabelPositionEnabled()"/>            
+        </div>
+    </div>
+    <br/>
+
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+        
+    Series series = new Series("WebSiteVisitors", options.View);
+    series.ArgumentDataMember = "Caption";
+    series.ValueDataMembers[0] = "Count";
+    series.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    ((FunnelSeriesLabel)series.Label).Position = options.LabelPosition;
+    if(options.ValueAsPercent) {
+        ((FunnelPointOptions)series.Label.PointOptions).PercentOptions.ValueAsPercent = true;
+        series.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.Percent;
+        series.Label.PointOptions.ValueNumericOptions.Precision = 0; 
+    }
+    series.LegendPointOptions.PointView = PointView.ArgumentAndValues;
+    series.Label.PointOptions.PointView = PointView.ArgumentAndValues;
+    settings.Series.Add(series);
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Web Site Visitors Trend"
+    });
+        
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.Bottom;
+
+    @Html.DevExpress().Chart(settings).Bind(Model).GetHtml()
+}

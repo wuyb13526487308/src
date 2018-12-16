@@ -1,0 +1,19 @@
+﻿@using (Ajax.BeginRouteForm(null,
+    new RouteValueDictionary { { "controller", "NavBar" }, { "action", "DataBindingToXMLPartial" } },
+    new AjaxOptions { UpdateTargetId = "componentDiv", OnSuccess = "function() { MVCxClientUtils.FinalizeCallback(); }" })) {
+    <div id="componentDiv" class="vertComponentContainer">
+        @Html.Partial("DataBindingToXMLPartial")
+    </div>
+    <div id="navBarDataBindingPanel" class="vertOptionsPanel">
+        <label for="cmbFilter">Filter:</label>
+        <select id="cmbFilter" name="cmbFilter">
+            <option value="/Cameras/*">All</option>
+            <option value="/Cameras/*[@@Text='Canon']">Canon</option>
+            <option value="/Cameras/*[@@Text='Nikon']">Nikon</option>
+            <option value="/Cameras/*[@@Text='Olympus']">Olympus</option>
+            <option value="/Cameras/*[@@Text='Sony']">Sony</option>
+            <option value="/Cameras/*[@@Text='Pentax']">Pentax</option>
+        </select>
+        <input type="submit" value="Apply" />
+    </div>
+}

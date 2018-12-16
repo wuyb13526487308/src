@@ -1,0 +1,59 @@
+﻿@{ TabControlFeaturesDemoOptions options = (TabControlFeaturesDemoOptions)ViewData["Options"]; }
+
+@using (Html.BeginForm()) {
+    
+    <div class="vertComponentContainer">
+        @Html.DevExpress().PageControl(
+            settings =>
+            {
+                settings.Name = "pcFeatures";
+                settings.ActivateTabPageAction = options.ActivateTabPageAction;
+                settings.EnableHotTrack = options.EnableHotTrack;
+                settings.SaveStateToCookies = options.SaveStateToCookies;
+                settings.TabAlign = options.TabAlign;
+                settings.TabPosition = options.TabPosition;
+                settings.TabPages.Add("Acura").SetContent(() =>
+                {
+                    ViewContext.Writer.Write(
+                        "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Cars/AcuraNSX203_2.jpg")  + "\" width=\"320px\" height=\"240px\" />"
+                    );
+                });
+                settings.TabPages.Add("BMW").SetContent(() =>
+                {
+                    ViewContext.Writer.Write(
+                        "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Cars/BMW_760i_Sedan.jpg") + "\" width=\"320px\" height=\"240px\" />"
+                    );
+                });
+                settings.TabPages.Add("Audi").SetContent(() =>
+                {
+                    ViewContext.Writer.Write(
+                        "<img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Cars/Audi_TT_Roadster.jpg") + "\" width=\"320px\" height=\"240px\" />"
+                    );
+                });
+            }).GetHtml()
+    </div>
+    <div id="tabControlFeaturesPanel" class="vertOptionsPanel">
+        <div>
+            <label for="TabAlign">TabAlign:</label>
+            @Html.DropDownList("TabAlign", typeof(TabAlign), options.TabAlign)
+        </div>
+        <div>
+            <label for="TabPosition">TabPosition:</label>
+            @Html.DropDownList("TabPosition", typeof(TabPosition), options.TabPosition)
+        </div>
+        <div>
+            <label for="ActivateTabPageAction">ActivateTabPageAction:</label>
+            @Html.DropDownList("ActivateTabPageAction", typeof(ActivateTabPageAction), options.ActivateTabPageAction)
+        </div>
+        <div>
+            @Html.CheckBox("EnableHottrack", options.EnableHotTrack, new { @class = "leftMost" })
+            <label class="checkBox" for="EnableHottrack">EnableHottrack</label>
+        </div>
+        <div>
+            @Html.CheckBox("SaveStateToCookies", options.SaveStateToCookies, new { @class = "leftMost" })
+            <label class="checkBox" for="SaveStateToCookies">SaveStateToCookies</label>
+        </div>
+                    
+        <input type="submit" value="Apply" />
+    </div>
+}

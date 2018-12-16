@@ -1,0 +1,61 @@
+﻿@{
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 500;
+    settings.Width = 700;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Top 10 Films by Worldwide Grosses"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.boxofficemojo.com"
+    });
+
+    Series series = new Series("Top 10 Films by Worldwide Grosses", options.View);
+    series.ArgumentScaleType = ScaleType.DateTime;
+    series.Label.PointOptions.Pattern = "${V}B";
+    series.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    series.Label.LineVisible = true;
+    series.ArgumentDataMember = "Date";
+    series.ValueDataMembers[0] = "Budget";
+    series.ValueDataMembers[1] = "Grosses";
+    BubbleSeriesView view = (BubbleSeriesView)series.View;
+    view.MaxSize = 3.5;
+    view.MinSize = 1.5;
+    view.Transparency = 90;
+    view.ColorEach = true;
+    settings.Series.Add(series);
+    settings.CustomDrawSeriesPoint = (sender, e) => {
+        e.LegendText = ((Movie)e.SeriesPoint.Tag).Name;
+    };
+
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+    settings.Legend.Direction = LegendDirection.LeftToRight;
+
+    XYDiagram diagram = (XYDiagram)settings.Diagram;
+    diagram.AxisY.Interlaced = true;
+    diagram.AxisX.DateTimeGridAlignment = DateTimeMeasurementUnit.Year;
+    diagram.AxisX.Interlaced = true;
+    diagram.AxisX.Tickmarks.MinorVisible = false;
+    diagram.AxisX.GridLines.Visible = true;
+    diagram.AxisX.Range.SideMarginsEnabled = true;
+    diagram.AxisX.DateTimeOptions.Format = DateTimeFormat.Custom;
+    diagram.AxisX.DateTimeOptions.FormatString = "yyyy";
+    diagram.AxisY.Title.Text = "Production Budget";
+    diagram.AxisY.Title.Visible = true;
+    diagram.AxisY.Label.BeginText = "$";
+    diagram.AxisY.Label.EndText = "M";
+    diagram.AxisY.Range.SetMinMaxValues(0, 370);
+    diagram.AxisY.Range.SideMarginsEnabled = true;
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

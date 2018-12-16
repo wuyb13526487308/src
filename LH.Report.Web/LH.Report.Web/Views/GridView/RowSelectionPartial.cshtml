@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvRowSelection";
+        settings.KeyFieldName = "CustomerID";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "RowSelectionPartial" };
+        settings.ControlStyle.CssClass = "grid";
+
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country");
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+
+        settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+    }).Bind(Model).GetHtml()

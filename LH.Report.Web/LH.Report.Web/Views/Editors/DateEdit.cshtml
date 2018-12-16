@@ -1,0 +1,79 @@
+﻿<div class="editorsPanel">
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "dateEdit1";
+                    settings.Properties.DisplayFormatString = "D";
+                    settings.Date = new DateTime(1984, 06, 14);
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            DisplayFormatString = "D"
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "dateEdit2";
+                    settings.Properties.NullText = "MM/dd/yyyy";
+                    settings.Properties.EditFormat = EditFormat.Custom;
+                    settings.Properties.EditFormatString = "MM/dd/yyyy";
+                    settings.PopupCalendarOwnerName = "dateEdit1";
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            NullText = "MM/dd/yyyy"<br />
+            EditFormat = EditFormat.Custom<br /> 
+            EditFormatString = "MMMM dd, yyyy"
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "dateEdit3";
+                    settings.Properties.UseMaskBehavior = true;
+                    settings.Properties.EditFormat = EditFormat.Custom;
+                    settings.Properties.EditFormatString = "MMMM dd, yyyy";
+                    settings.Properties.DisplayFormatString = "MMMM dd, yyyy";
+                    settings.Date = DateTime.Now;
+                    settings.PopupCalendarOwnerName = "dateEdit1";
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            UseMaskBehavior = true<br /> 
+            EditFormat = EditFormat.Custom<br /> 
+            EditFormatString = "MMMM dd, yyyy"<br /> 
+            DisplayFormatString = "MMMM dd, yyyy"
+        </label>
+    </div>
+    <div>
+        <div class="editorContainer">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "dateEdit4";
+                    settings.Properties.UseMaskBehavior = true;
+                    settings.Properties.EditFormat = EditFormat.Custom;
+                    settings.Properties.EditFormatString = "dd/MM/yyyy hh:mm tt";
+                    settings.Properties.TimeSectionProperties.Visible = true;
+                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+                    settings.Date = DateTime.Now;
+                }
+            ).GetHtml()
+        </div>
+        <label>
+            UseMaskBehavior = true<br /> 
+            EditFormat = EditFormat.Custom<br /> 
+            EditFormatString = "dd/MM/yyyy hh:mm tt"<br /> 
+            TimeSectionProperties.Visible = true;<br /> 
+            TimeEditProperties.EditFormat = EditFormat.Custom;<br /> 
+            TimeEditProperties.EditFormatString = "hh:mm tt";
+        </label>
+    </div>
+</div>

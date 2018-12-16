@@ -1,0 +1,19 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+    var createAppointment = false;
+    $(document).ready(function () {
+        $("#createAppointment").click(function() {
+            createAppointment = true;
+            scheduler.Refresh();
+        });
+    });
+    function OnSchedulerBeginCallback(s, e) {
+        e.customArgs["CreateAppointment"] = createAppointment;
+        createAppointment = false;
+    }
+</script>
+<div style="padding: 10px;">
+    <input id="createAppointment" type="button" value="Create appointment with reminders" />
+</div>
+@Html.Partial("RemindersPartial", Model)

@@ -1,0 +1,41 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+//<![CDATA[
+    function SelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ContactName", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        SelectedRows.BeginUpdate();
+        try {
+            SelectedRows.ClearItems();
+            for (var i = 0; i < values.length; i++) {
+                SelectedRows.AddItem(values[i]);
+            }
+        } finally {
+            SelectedRows.EndUpdate();
+        }
+        $("#count").html(gvRowSelection.GetSelectedRowCount());
+
+    }    
+// ]]>
+</script>
+
+<div class="selection_form">
+    <div class="values_panel">
+        <div class="text">
+            Selected values:
+        </div>
+        @Html.DevExpress().ListBox(
+            settings => {
+                settings.Name = "SelectedRows";
+                settings.Width = 150;
+                settings.Height = 250;
+                settings.Properties.EnableClientSideAPI = true;
+            }).GetHtml()
+        <div class="text">
+            Selected count:&nbsp;<strong id="count">0</strong>
+        </div>
+    </div>
+    @Html.Partial("RowSelectionPartial", Model)
+</div>

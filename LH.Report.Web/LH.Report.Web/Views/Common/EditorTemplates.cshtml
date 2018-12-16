@@ -1,0 +1,30 @@
+﻿@model EditorTemplatesData
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@using (Html.BeginForm("EditorTemplates", "Common", FormMethod.Post, new { id = "validationForm", @class = "edit_form" })){
+    @Html.EditorFor(model => model.CarModel)
+    @Html.EditorFor(model => model.Price)
+    @Html.EditorFor(model => model.FuelType)
+    @Html.EditorFor(model => model.Mileage)
+    <div class="line" style="padding:17px;">
+        @Html.DevExpress().Label(CommonDemoHelper.LabelSettingsMethod).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnClear";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Clear";
+                settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+            }).GetHtml()
+    </div>
+}

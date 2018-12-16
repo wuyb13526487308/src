@@ -1,0 +1,32 @@
+﻿@model IList
+
+@using (Html.BeginForm()) {
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:19px">
+        <div style="float: left; vertical-align:baseline;">
+            <label for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetAreaViews(), options.View)
+            @Html.CheckBox("showLabels", options.ShowLabels, new { style = "vertical-align: -2px; margin-left: 8px;" })
+            <label class="checkBox" for="showLabels">Show Labels</label>
+        </div>
+        <input style="float: right;" type="submit" value="Apply"/>
+    </div>
+    <br/>
+    switch (options.View) {
+        case DevExpress.XtraCharts.ViewType.FullStackedArea:
+        case DevExpress.XtraCharts.ViewType.FullStackedArea3D:
+        case DevExpress.XtraCharts.ViewType.FullStackedSplineArea:
+        case DevExpress.XtraCharts.ViewType.FullStackedSplineArea3D:
+            @Html.Partial("AreaViewsFullStackedPartial", Model)
+            break;
+        case DevExpress.XtraCharts.ViewType.StackedArea:
+        case DevExpress.XtraCharts.ViewType.StackedArea3D:
+        case DevExpress.XtraCharts.ViewType.StackedSplineArea:
+        case DevExpress.XtraCharts.ViewType.StackedSplineArea3D:
+            @Html.Partial("AreaViewsStackedPartial", Model)
+            break;
+        default:
+            @Html.Partial("AreaViewsPartial", Model)
+            break;
+    }
+}

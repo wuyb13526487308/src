@@ -1,0 +1,50 @@
+﻿@model UnobtrusiveValidationData
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@using (Html.BeginForm("UnobtrusiveValidation", "Common", FormMethod.Post, new { id = "validationForm", @class = "edit_form", style="height: 210px;" })) {
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Name, CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(model => model.Name, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+    </div>
+    <div class="line" style="width:700px;">
+        @Html.DevExpress().LabelFor(model => model.Weight, CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().TextBoxFor(model => model.Weight, CommonDemoHelper.TextBoxSettingsMethod).GetHtml()
+    </div>
+    <div class="line" style="width:700px;">
+        @Html.DevExpress().LabelFor(model => model.SystolicBloodPressure, CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().SpinEditFor(model => model.SystolicBloodPressure, CommonDemoHelper.SpinEditSettingsMethod).GetHtml()
+    </div>
+    <div class="line" style="width:700px;">
+        @Html.DevExpress().LabelFor(model => model.DiastolicBloodPressure, CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().SpinEditFor(model => model.DiastolicBloodPressure, CommonDemoHelper.SpinEditSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().LabelFor(model => model.Notes, CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().MemoFor(model => model.Notes, CommonDemoHelper.MemoSettingsMethod).GetHtml()
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(CommonDemoHelper.WideLabelSettingsMethod).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnClear";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Clear";
+                settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+            }
+        ).GetHtml()
+    </div>
+}
+<p>The following validation rules are defined in this demo: Name: required; Weight: must be a number, must be between 20 and 200;
+    Systolic Blood Pressure: required, must be between 10 and 240 mmHg; Diastolic Blood Pressure: required, must be between 10 and 200 mmHg;
+    Notes: required</p>

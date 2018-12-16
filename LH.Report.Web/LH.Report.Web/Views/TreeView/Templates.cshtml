@@ -1,0 +1,50 @@
+﻿@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvTemplates";
+        settings.ControlStyle.CssClass = "componentTree";
+        settings.EnableHotTrack = false;
+
+        settings.Nodes.Add(node => {
+            node.Text = "ASP.NET AJAX Controls";
+            node.Name = "ASP";
+            node.Image.Url = "~/Content/TreeView/Controls/ASP.png";
+                    
+            node.Nodes.Add("HTML Editor for ASP.NET", "ASPxHTMLEditor™ Suite", "~/Content/TreeView/Controls/ASPxHtmlEditor.png");
+            node.Nodes.Add("Menu for ASP.NET", "ASPxMenu™", "~/Content/TreeView/Controls/ASPxMenu.png");
+            node.Nodes.Add("Data Editors for ASP.NET", "ASPxEditors™ Library", "~/Content/TreeView/Controls/ASPxEditors.png");
+        });
+        settings.Nodes.Add(node => {
+            node.Text = "WinForms Controls";
+            node.Name = "Win";
+            node.Image.Url = "~/Content/TreeView/Controls/Win.png";
+
+            node.Nodes.Add("Grid and Data Editors for WinForms", "XtraGrid™ Suite", "~/Content/TreeView/Controls/XtraGrid.png");
+            node.Nodes.Add("OLAP Data Mining Control for WinForms", "XtraPivotGrid™ Suite", "~/Content/TreeView/Controls/XtraPivotGrid.png");
+            node.Nodes.Add("TreeView-Grid Hybrid for WinForms", "XtraTreeList™ Suite", "~/Content/TreeView/Controls/XtraTreeList.png");
+        });
+                
+        settings.SetNodeTemplateContent(c => 
+        {
+            if(c.Node.Nodes.Count > 0){
+                ViewContext.Writer.Write(
+                    "<img alt=\"" + c.Node.Name + "\" align=\"middle\" class=\"img\" src=\"" + Url.Content(c.Node.Image.Url) + "\" />" +
+                    "<div class=\"head\">" + c.Node.Text + "</div>"
+                );
+            }    
+            else{
+                ViewContext.Writer.Write( 
+                    "<img alt=\"" + c.Node.Name + "\" align=\"middle\" class=\"img\" src=\"" + Url.Content(c.Node.Image.Url) + "\" />" +
+                    "<div class=\"body\">" +
+                        "<a href=\"javascript:void(0)\" class=\"link\">" + c.Node.Text + "</a>" +
+                        "<br />" +
+                        "<span>" + c.Node.Name + "</span>" +
+                        "</div>"
+                    );
+            }
+        });
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.ExpandAll();
+        };
+    }).GetHtml()

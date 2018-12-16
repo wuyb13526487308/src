@@ -1,0 +1,20 @@
+﻿<div class="employee_form">
+    <div class="column" style="width: 170px; float: left;">
+        @Html.DevExpress().BinaryImage(
+            settings => {
+                settings.Name = "Photo";
+                settings.Width = 160;
+                settings.Height = 130;
+            }).Bind(((System.Data.Linq.Binary)DataBinder.Eval(Model, "Picture")).ToArray()).GetHtml()
+    </div>
+    <div class="column" style="width: 300px;">
+        <div>
+            <label style="width: 110px;">Category Name:</label>
+            <span>@DemosHelper.GetFieldText(Model, "CategoryName")</span>
+        </div>
+        <div>
+            <label style="width: 110px;">Description:</label>
+            <span>@DemosHelper.GetFieldText(Model, "Description")</span>
+        </div>
+    </div>
+</div>

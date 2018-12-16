@@ -1,0 +1,143 @@
+﻿@model List<Task>
+
+<script type="text/javascript">
+// <![CDATA[
+    var x = 0;
+    var y = 0;
+    var coords = null;
+    var canDrag = false;
+    var dragging = false;
+    var draggingIndex = -1;
+    var constLine = null;
+    var series = null;
+    var seriesPoint = null;
+    var completedDate = null;
+
+    $(window).load(function () {
+        $("#chart").mousedown(MouseDown);
+        $("#chart").mouseup(MouseUp);
+        $("#chart").mousemove(MouseMove);
+        _aspxPreventElementDragAndSelect(chart.GetMainDOMElement(), false);
+    });
+
+    function MouseDown() {
+        dragging = canDrag;
+        if (dragging && !coords.IsEmpty()) {
+            DraggingToolTip.ShowAtPos(x + 5, y + 10);
+            UpdateDraggingText();
+        }
+        if (!ASPxClientUtils.ie)
+            return false;
+    }
+    function MouseUp() {
+        if (dragging) {
+            dragging = false;
+            if (draggingIndex >= 0)
+                chart.PerformCallback({
+                    "SeriesName": series.name,
+                    "Argument": seriesPoint.argument,
+                    "ValueIndex": draggingIndex,
+                    "Date": GetDateString(seriesPoint.values[draggingIndex])
+                });
+            else {
+                completedDate = GetDateString(constLine.value);
+                chart.PerformCallback();
+            }
+            DraggingToolTip.Hide();
+        }
+    }
+    function MouseMove(e) {
+        x = e.pageX;
+        y = e.pageY;
+        var relativeX = x - $("#chart").offset().left;
+        var relativeY = y - $("#chart").offset().top;
+
+        var diagram = chart.GetChart().diagram;
+        coords = diagram.PointToDiagram(relativeX, relativeY);
+        if (!dragging) {
+            if (diagram.axisY.constantLines.length != 0)
+                canDrag = BeginDragConstantLine(relativeX, relativeY);
+            else
+                canDrag = BeginDragSeriesPoints(relativeX, relativeY);
+        }
+
+        if (canDrag || dragging)
+            chart.SetCursor('e-resize');
+        else
+            chart.SetCursor('default');
+
+        if (dragging && !coords.IsEmpty()) {
+            if (diagram.axisY.constantLines.length != 0)
+                constLine.value = coords.dateTimeValue;
+            else
+                seriesPoint.values[draggingIndex] = coords.dateTimeValue;
+            UpdateDraggingText();
+        }
+    }
+    function BeginDragConstantLine(x, y) {
+        constLine = null;
+
+        var hitinfo = chart.HitTest(x, y)
+        for (var i = 0; i < hitinfo.length; i++) {
+            if (hitinfo[i].object instanceof ASPxClientConstantLine) {
+                constLine = hitinfo[i].object;
+                return true;
+            }
+        }
+        return false;
+    }
+    function BeginDragSeriesPoints(x, y) {
+        series = null;
+        seriesPoint = null;
+
+        var hitInfo = chart.HitTest(x, y);
+        for (var i = 0; i < hitInfo.length; i++) {
+            if ((hitInfo[i].object instanceof ASPxClientSeries) && (hitInfo[i].additionalObject instanceof ASPxClientSeriesPoint)) {
+                series = hitInfo[i].object;
+                seriesPoint = hitInfo[i].additionalObject;
+                if (series.name.indexOf('Current Plan') != -1) {
+                    draggingIndex = GetDraggingIndex();
+                    return draggingIndex != -1;
+                }
+            }
+        }
+        return false;
+    }
+    function GetDraggingIndex() {
+        if (coords.dateTimeValue.getTime() == seriesPoint.values[0].getTime()) return 0;
+        if (coords.dateTimeValue.getTime() == seriesPoint.values[1].getTime()) return 1;
+        return -1;
+    }
+    function UpdateDraggingText() {
+        DraggingToolTip.SetContentHTML("<span style=\"white-space:nowrap\">" + GetDateString(coords.dateTimeValue) + "</span>");
+    }
+    function GetDateString(date) {
+        return (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear();
+    }
+// ]]> 
+</script>
+@using (Html.BeginForm()) {
+    ChartViewTypeDemoOptions options = (ChartViewTypeDemoOptions)Session[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:19px;">
+        <div style="float: left; vertical-align:baseline;">
+            <label for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetGanttViews(), options.View)
+        </div>
+        <input style="float: right;" type="submit" value="Apply"/>
+    </div>
+    if (options.View == DevExpress.XtraCharts.ViewType.Gantt) {
+        @Html.Partial("GanttViewsPartial", Model)
+    } else {
+        @Html.Partial("GanttViewsSideBySidePartial")
+    }
+    @Html.DevExpress().PopupControl(new PopupControlSettings() {
+        Name = "DraggingToolTip",
+        Height = 1,
+        Width = 1,
+        ShowHeader = false,
+        ShowShadow = false,
+        EnableClientSideAPI = true,
+        PopupAction = PopupAction.None,
+        CloseAction = CloseAction.None
+    }).GetHtml()
+}

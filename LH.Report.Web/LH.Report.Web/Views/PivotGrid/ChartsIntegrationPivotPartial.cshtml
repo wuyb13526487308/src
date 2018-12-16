@@ -1,0 +1,5 @@
+﻿@{
+    PivotGridChartIntegrationDemoOptions options = (PivotGridChartIntegrationDemoOptions)Session["DemoOptions"];
+}
+
+@Html.DevExpress().PivotGrid(PivotGridDemoHelper.PivotChartIntegrationSettings(options)).Bind(Model).GetHtml()

@@ -1,0 +1,58 @@
+﻿<link rel="stylesheet" type="text/css" href="@Url.Content(string.Format("~/Content/Report/styles{0}.css", Utils.IsIE6() ? "_ie6" : string.Empty))" />
+
+<div>
+    <div>
+        @Html.DevExpress().ReportToolbar(
+            settins =>
+            {
+                settins.Name = "ReportToolbar";
+                settins.ReportViewerName = "ReportViewer1";
+            }
+        ).GetHtml()
+        <table cellspacing="0" cellpadding="0" border="0" style="margin-top:20px;">
+            <tr>
+                <td class="PageBorder_tlc" style="width: 10px; height: 10px;"> <div style="width: 10px; height: 10px; font-size: 1px" /> </td>
+                <td class="PageBorder_t" />
+                <td class="PageBorder_trc" style="width: 10px; height: 10px;"> <div style="width: 10px; height: 10px; font-size: 1px" /> </td>
+            </tr>
+            <tr>
+                <td class="PageBorder_l" />
+                <td style="background-color: white;" align="center" valign="top">
+                    @Html.DevExpress().ReportViewer(
+                        settins => {
+                            settins.Name = "ReportViewer1";
+                            settins.Report = Model.Report;
+                            settins.CallbackRouteValues = new { Controller = "Report", Action = "ReportViewerPartial", ReportID = Model.ReportID };
+                            settins.ExportRouteValues = new { Controller = "Report", Action = "ReportViewerExportTo", ReportID = Model.ReportID };
+                            settins.BookmarkSelectionBorder.BorderStyle = BorderStyle.None;
+                        }
+                    ).GetHtml()
+                </td>
+                <td class="PageBorder_r" />
+                <td>
+                    <div style="height:499px; overflow:auto; margin-left:30px; padding-right:10px">
+                        @foreach(var item in ThumbnailsBookmarkFiller.GetItems(Model.Report, "ReportViewer1")) {
+                        <div style="margin:10px 0px 20px 10px; text-align:center;">
+                            <a href="javascript:@item.NavigationScript">
+                                <img style="border-color:@item.BorderColor;
+                                            border-width:@item.BorderWidth;
+                                            width:@item.Width;
+                                            height:@item.Height"
+                                        src="@Url.Action("ThumbnailsImageHandler", new { img = item.ImageFileName })"
+                                        alt="@Html.Encode(item.Text)" />
+                                <br />
+                                @Html.Encode(item.Text)
+                            </a>
+                        </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="PageBorder_blc" style="width: 10px; height: 10px;" />
+                <td class="PageBorder_b" />
+                <td class="PageBorder_brc" style="width: 10px; height: 10px;" />
+            </tr>
+        </table>
+    </div>
+</div>

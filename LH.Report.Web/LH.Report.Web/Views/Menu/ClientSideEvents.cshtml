@@ -1,0 +1,56 @@
+﻿@Html.DevExpress().Menu(
+    settings =>
+    {
+        settings.Name = "mClientSideEvents";
+        settings.AllowSelectItem = true;
+        settings.EnableClientSideAPI = true;
+        settings.ShowPopOutImages = DefaultBoolean.True;
+
+        settings.Items.Add(item => {
+            item.Text = "Home";
+            item.Name = "Home";
+
+            item.Items.Add("News", "News");
+            item.Items.Add("Our Mission", "Mission");
+            item.Items.Add("Our Awards", "Awards");
+            item.Items.Add("Our Customers", "Customers");
+        });
+        settings.Items.Add(item => {
+            item.Text = "Products";
+            item.Name = "Products";
+                    
+            item.Items.Add("Subscriptions / Packs", "Packs");
+            item.Items.Add(".NET Windows Forms Components", "WindowsForms");
+            item.Items.Add("Reporting / Printing Suites", "Reporting");
+            item.Items.Add("VCL Components and Tools", "VCL");
+            item.Items.Add("ASP.NET Components", "ASP.NET");
+        });
+        settings.Items.Add(item => {
+            item.Text = "Downloads";
+            item.Name = "Downloads";
+
+            item.Items.Add("Application Framework Libraries", "Libraries");
+            item.Items.Add("IDE Productivity Tools", "Tools");
+            item.Items.Add("ActiveX / COM Technologies", "ActiveX");
+        });
+        settings.Items.Add(item => {
+            item.Text = "Support";
+            item.Name = "Support";
+
+            item.Items.Add("Knowledge Base", "KnowledgeBase");
+            item.Items.Add("Online Documentation", "Documentation");
+            item.Items.Add("Support Center", "SupportCenter");
+            item.Items.Add("Community and Blogs", "Community");
+            item.Items.Add("Newsgroups", "Newsgroups");
+            item.Items.Add("Best Practicies", "Practicies");
+        });
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); }";
+        settings.ClientSideEvents.ItemClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemClick'); }";
+        settings.ClientSideEvents.PopUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'PopUp'); }";
+        settings.ClientSideEvents.CloseUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'CloseUp'); }";
+        settings.ClientSideEvents.ItemMouseOver = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemMouseOver'); }";
+        settings.ClientSideEvents.ItemMouseOut = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemMouseOut'); }";
+    }).GetHtml()
+    <br />
+    @Html.Partial("EventMonitor")

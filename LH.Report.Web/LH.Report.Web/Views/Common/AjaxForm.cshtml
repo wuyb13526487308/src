@@ -1,0 +1,31 @@
+﻿@model AjaxFormValidationData
+
+@{
+    Html.EnableClientValidation();
+}
+
+@using (Ajax.BeginForm("AjaxForm", "Common",
+    new AjaxOptions { 
+        HttpMethod = "POST", 
+        OnBegin = "function(){ loadingPanel.Show(); }",
+        OnComplete = "function(){ loadingPanel.Hide(); }",
+        UpdateTargetId = "content", 
+        InsertionMode = InsertionMode.Replace 
+    },
+    new { 
+        id = "validationForm", 
+        @class = "edit_form", 
+        style="height: 200px; width: 600px;"
+    })) {
+    <div id="content">
+        @Html.Partial("AjaxFormPartial", Model)
+    </div>
+}
+
+@Html.DevExpress().LoadingPanel(
+    settings => {
+        settings.Name = "loadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "validationForm";
+        settings.Styles.LoadingDiv.BackColor = Color.White;
+    }).GetHtml()

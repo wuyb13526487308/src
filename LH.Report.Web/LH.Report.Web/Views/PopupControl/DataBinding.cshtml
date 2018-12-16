@@ -1,0 +1,117 @@
+﻿<script type="text/javascript">
+    //<![CDATA[
+    var windowOverName = "";
+    function ShowSelectionPicture() {
+        var item = mDataBinding.GetSelectedItem();
+        if (item != null)
+            ShowWindowByName(item.name);
+    }
+    function HidePictureWithDelay(name) {
+        if (name == windowOverName)
+            HidePictures();
+    }
+    function ShowPicture(e) {
+        windowOverName = e.item.name;
+        ASPxClientPopupControl.GetPopupControlCollection().HideAllWindows();
+        ShowWindowByName(e.item.name);
+    }
+    function ShowWindowByName(name) {
+        var window = pcDataBinding.GetWindowByName(name);
+        pcDataBinding.ShowWindowAtElementByID(window, "databindingPanel");
+    }
+    function HidePictures() {
+        ASPxClientPopupControl.GetPopupControlCollection().HideAllWindows();
+        var item = mDataBinding.GetSelectedItem();
+        if (item != null)
+            ShowWindowByName(item.name);
+    }
+    // ]]>
+</script>
+
+<div style="height:290px">
+    <div class="vertComponentContainer">
+        @Html.DevExpress().PopupControl(
+            settings => {
+                settings.Name = "pcDataBinding";
+                settings.SkinID = "none";
+                settings.PopupAnimationType = AnimationType.None;
+                settings.EnableClientSideAPI = true;
+                settings.ShowHeader = false;
+                settings.ShowFooter = true;
+                settings.PopupAction = PopupAction.None;
+                settings.CloseAction = CloseAction.None;
+                settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+                settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+                settings.PopupHorizontalOffset = 24;
+                settings.PopupVerticalOffset = 4;
+
+                settings.ControlStyle.Border.BorderColor = Color.FromArgb(0x7EACB1);
+                settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+                settings.ControlStyle.Border.BorderWidth = 1;
+                settings.Styles.Footer.BackgroundImage.ImageUrl = "Images/PopupFooterBackground.gif";
+                settings.Styles.Footer.BackgroundImage.Repeat = BackgroundImageRepeat.RepeatX;
+                settings.Styles.Footer.ForeColor = Color.FromArgb(0x6896A0);
+                settings.Styles.Footer.Border.BorderWidth = 0;
+                settings.Styles.Footer.Paddings.Padding = 6;
+                settings.Styles.Content.Paddings.Padding = 0;
+
+                settings.SetWindowContentTemplateContent(c => {
+                    ViewContext.Writer.Write(
+                        "<img alt=\"\" style=\"width: 380px; height: 240px\" src=\"" +
+                            Url.Content(DataBinder.Eval(c.Window.DataItem, "BigImageUrl").ToString()) + "\" />"
+                    );
+                });
+            settings.SetWindowFooterTemplateContent(c => {
+                ViewContext.Writer.Write( "View:" + DataBinder.Eval(c.Window.DataItem, "View") );
+            });
+        }).BindToXML(Server.MapPath("~/App_Data/Charts.xml"), "//Chart").GetHtml()
+        @Html.DevExpress().Menu(
+            settings => {
+                settings.Name = "mDataBinding";
+                settings.SkinID = "none";
+                settings.EnableClientSideAPI = true;
+                settings.Width = 80;
+                settings.ItemImagePosition = ImagePosition.Top;
+                settings.Orientation = Orientation.Vertical;
+                settings.AllowSelectItem = true;
+
+                settings.ControlStyle.CssClass = "databinding_menu";
+                settings.ControlStyle.BackColor = Color.Transparent;
+                settings.ControlStyle.Border.BorderWidth = 0;
+                settings.ControlStyle.ItemSpacing = 4;
+                settings.Styles.Item.BackColor = Color.FromArgb(0xEDF3F4);
+                settings.Styles.Item.ForeColor = Color.FromArgb(0x6896A0);
+                settings.Styles.Item.HorizontalAlign = HorizontalAlign.Center;
+                settings.Styles.Item.Border.BorderColor = Color.FromArgb(0x7EACB1);
+                settings.Styles.Item.Border.BorderStyle = BorderStyle.Solid;
+                settings.Styles.Item.Border.BorderWidth = 1;
+                settings.Styles.Item.Font.Size = FontUnit.Parse("10px");
+                settings.Styles.Item.HoverStyle.BackColor = Color.FromArgb(0xD9ECED);
+                settings.Styles.Item.HoverStyle.Border.BorderColor = Color.FromArgb(0x7EACB1);
+                settings.Styles.Item.HoverStyle.Border.BorderStyle = BorderStyle.Solid;
+                settings.Styles.Item.HoverStyle.Border.BorderWidth = 1;
+                settings.Styles.Item.SelectedStyle.BackColor = Color.FromArgb(0x9FCED6);
+                settings.Styles.Item.SelectedStyle.ForeColor = Color.FromArgb(0x588187);
+                settings.Styles.Item.SelectedStyle.Border.BorderColor = Color.FromArgb(0x7EACB1);
+                settings.Styles.Item.SelectedStyle.Border.BorderStyle = BorderStyle.Solid;
+                settings.Styles.Item.SelectedStyle.Border.BorderWidth = 1;
+                settings.Styles.Item.Height = 50;
+
+                settings.Images.Item.Height = 24;
+                settings.Images.Item.Width = 23;
+
+                settings.ClientSideEvents.ItemMouseOver = "function(s, e) { ShowPicture(e); }";
+                settings.ClientSideEvents.ItemMouseOut = "function(s, e) { setTimeout(\"HidePictureWithDelay(\'\" + e.item.name + \"\')\", 300); }";
+                settings.ClientSideEvents.Init = "function(s, e) { ShowSelectionPicture(); }";
+            }).BindToXML(Server.MapPath("~/App_Data/Charts.xml"), "//Chart").GetHtml()
+    </div>
+    <div id="databindingPanel" class="databinding_panel">
+        To invoke a popup window move the mouse cursor<br />
+        over the menu's items on the left
+    </div>
+</div>
+<p class="Note">
+    <b>Note</b>: The sample images which are used in this demo were created with the
+    <a href="http://www.devexpress.com/Products/NET/WinForms/XtraCharts/" target="_blank">
+        XtraCharts</a> suite.
+</p>

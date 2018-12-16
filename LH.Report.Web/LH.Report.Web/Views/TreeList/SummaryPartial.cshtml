@@ -1,0 +1,34 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "SummaryPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.AutoGenerateColumns = false;
+
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        settings.RootValue = 0;
+
+        settings.Columns.Add("Name", "Department");
+        settings.Columns.Add("Location");
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Budget";
+                column.PropertiesEdit.DisplayFormatString = "{0:C}";
+            }
+        );
+
+        settings.Summary.Add(DevExpress.Data.SummaryItemType.Count, "Department");
+        settings.Summary.Add(DevExpress.Data.SummaryItemType.Max, "Budget").DisplayFormat = "Max={0:C}";
+        settings.Summary.Add(DevExpress.Data.SummaryItemType.Sum, "Budget").DisplayFormat = "Sum={0:C}";
+
+        settings.Settings.ShowFooter = true;
+        settings.Settings.ShowGroupFooter = true;
+        settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+        settings.PreRender = (sender, e) => {
+            ((MVCxTreeList)sender).ExpandToLevel(2);
+        };
+    }
+).Bind(Model).GetHtml()

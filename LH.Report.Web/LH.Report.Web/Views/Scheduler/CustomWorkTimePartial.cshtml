@@ -1,0 +1,61 @@
+﻿@functions{
+    TimeOfDayInterval[] GetCustomWorkTimes(){
+        return new TimeOfDayInterval[] {
+            new TimeOfDayInterval(TimeSpan.FromHours(0), TimeSpan.FromHours(16)),
+            new TimeOfDayInterval(TimeSpan.FromHours(10), TimeSpan.FromHours(20)),
+            null,
+            new TimeOfDayInterval(TimeSpan.FromHours(7), TimeSpan.FromHours(15)),
+            new TimeOfDayInterval(TimeSpan.FromHours(16), TimeSpan.FromHours(24))
+        };
+    }
+}
+
+@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "CustomWorkTimePartial" };
+        settings.ActiveViewType = SchedulerViewType.Timeline;
+        settings.GroupType = SchedulerGroupType.Date;
+        settings.Start = new DateTime(2010, 7, 13);
+        settings.Width = Unit.Percentage(100);
+
+        settings.Views.DayView.ResourcesPerPage = 2;
+        settings.Views.DayView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+        settings.Views.WorkWeekView.ResourcesPerPage = 2;
+        settings.Views.WorkWeekView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+        settings.Views.TimelineView.ResourcesPerPage = 4;
+        settings.Views.TimelineView.IntervalCount = 12;
+        settings.Views.TimelineView.Styles.TimelineCellBody.Height = Unit.Pixel(120);
+
+        TimeScale[] timeScales = new TimeScale[] {
+            new TimeScaleYear() { Enabled = false }, 
+            new TimeScaleQuarter() { Enabled = false }, 
+            new TimeScaleMonth() { Enabled = false },
+            new TimeScaleFixedInterval() { Enabled = false },
+            new TimeScaleDay(),
+            new TimeScaleHour()
+        };
+        settings.Views.TimelineView.Scales.AddRange(timeScales);
+        settings.Views.WeekView.Enabled = false;
+        settings.Views.MonthView.Enabled = false;
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+        
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.QueryWorkTime = (sender, e) => {
+            MVCxScheduler scheduler = sender as MVCxScheduler;
+            if ((bool)ViewData["isCustomWorkTimeEnabled"] && scheduler != null) {
+                TimeOfDayInterval[] workTimes = GetCustomWorkTimes();
+                int resourceIndex = scheduler.Storage.Resources.Items.IndexOf(e.Resource);
+                if (resourceIndex == 0)
+                    e.WorkTime = (e.Interval.Start.Day % 2 == 0) ? workTimes[resourceIndex % workTimes.Length] : TimeOfDayInterval.Empty;
+                else if (scheduler.WorkDays.IsWorkDay(e.Interval.Start.Date))
+                    e.WorkTime = workTimes[resourceIndex % workTimes.Length];
+            }
+        };
+    }).Bind(Model.Appointments, Model.Resources).GetHtml()

@@ -1,0 +1,44 @@
+﻿.CommonTitle {
+    color: #3366ff;
+    font-family: Tahoma;
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+}
+.CommonHeader1 {
+    color: #576fa5;
+    font-weight: lighter;
+    font-size: 170%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.CommonHeader2 {
+    color: #576fa5;
+    font-weight: lighter;
+    font-size: 130%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.CommonContent {
+    font-size: 100%;
+    color: #303440;
+}
+.CommonFeatures {
+    font-weight: 700;
+    color: #595d66;
+}
+.CommonFooter {
+    padding-top: 8px;
+    color: Black;
+    font-size: 12px
+}
+.ImageTitle {
+    color: #000000;
+    line-height: 20px;
+}
+a.link {
+    text-decoration: none;
+}
+a.link:hover {
+    text-decoration: underline;
+}

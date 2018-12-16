@@ -1,0 +1,83 @@
+﻿@using (Html.BeginForm()) {
+    ChartSeriesBindingDemoOptions options = (ChartSeriesBindingDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:40px;">
+        <div style="float: left;">
+            <div style="padding-bottom: 4px;">
+                <label for="category">Filter By Category:</label>
+                @Html.DropDownList("category", new SelectList(options.Categories, options.Category))
+            </div>
+            <div>
+                @Html.CheckBox("showLabels", options.ShowLabels, new {
+               style = "vertical-align: -2px; margin-left: 0px; padding-left: 0px;"
+           })
+                <label class="checkBox" for="showLabels">Show Labels</label>
+            </div>
+        </div>
+        <div>
+            <div style="padding-bottom: 4px;">
+                <label style="margin-left: 8px; margin-right:18px" for="sortingKey">Sort By:</label>
+                @Html.DropDownList("sortingKey", ChartDemoHelper.GetSortValues(), new {
+               style = "width:91px"
+           })
+            </div>
+            <div>
+                <div style="float: left; vertical-align:baseline;">
+                    <label for="sortingMode" style="margin-left: 8px;">Sort Order:</label>
+                    @Html.DropDownList("sortingMode", typeof(SortingMode), options.SortingMode)
+                </div>
+                <input style="float: right;" type="submit" value="Apply"/>
+            </div>
+        </div>
+    </div>
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    Series series = new Series();
+    series.Name = "Products";
+    series.SeriesPointsSortingKey = options.SortingKey;
+    series.SeriesPointsSorting = options.SortingMode;
+    series.ArgumentDataMember = "ProductName";
+    series.ValueDataMembers[0] = "UnitPrice";
+    series.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    settings.Series.Add(series);
+
+    XYDiagram diagram = ((XYDiagram)settings.Diagram);
+    diagram.AxisX.Label.Angle = -30;
+    diagram.AxisY.Title.Visible = true;
+    diagram.AxisY.Title.Text = "Price";
+    diagram.AxisY.Interlaced = true;
+
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Near,
+        Font = new Font("Tahoma", 10),
+        Text = "Category: " + options.Category
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Northwind Traders",
+        Font = new Font("Tahoma", 18)
+    });
+
+    settings.BoundDataChanged = (sender, e) => {
+        MVCxChartControl chart = (MVCxChartControl)sender;
+        double max = double.NegativeInfinity;
+        double min = double.PositiveInfinity;
+        double average = 0;
+        foreach (SeriesPoint point in chart.Series[0].Points) {
+            if (point.Values[0] > max)
+                max = point.Values[0];
+            if (point.Values[0] < min)
+                min = point.Values[0];
+            average += point.Values[0];
+        }
+        average /= chart.Series[0].Points.Count;
+        chart.Titles[0].Text += "\nMin price: " + min.ToString("0.00");
+        chart.Titles[0].Text += "\nMax price: " + max.ToString("0.00");
+        chart.Titles[0].Text += "\nAverage price: " + average.ToString("0.00");
+    };
+
+    @Html.DevExpress().Chart(settings).Bind(Model).GetHtml()
+}

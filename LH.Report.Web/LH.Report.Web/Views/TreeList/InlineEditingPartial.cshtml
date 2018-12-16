@@ -1,0 +1,58 @@
+﻿@{
+    var treeList = Html.DevExpress().TreeList(
+        settings => {
+            settings.Name = "treeList";
+            settings.CallbackRouteValues = new { Controller = "TreeList", Action = "InlineEditingPartial" };
+
+            settings.AutoGenerateColumns = false;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "PostID";
+            settings.ParentFieldName = "ParentID";
+
+            settings.Columns.Add("From");
+            settings.Columns.Add("Subject");
+            settings.Columns.Add(
+                column => {
+                    column.FieldName = "PostDate";
+                    column.Caption = "Date";
+                    column.ColumnType = MVCxTreeListColumnType.DateEdit;
+
+                    var dateEditProperties = column.PropertiesEdit as DateEditProperties;
+                    dateEditProperties.DisplayFormatString = "dd/MM/yyyy hh:mm tt";
+                    dateEditProperties.DisplayFormatInEditMode = true;
+                    dateEditProperties.EditFormat = EditFormat.DateTime;
+                }
+            );
+            settings.Columns.Add("IsNew", "Is New", MVCxTreeListColumnType.CheckBox);
+            settings.Columns.Add("HasAttachment", "Has Attachment", MVCxTreeListColumnType.CheckBox);
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.NewButton.Visible = true;
+            settings.CommandColumn.DeleteButton.Visible = true;
+            settings.CommandColumn.EditButton.Visible = true;
+
+            settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "TreeList", Action = "InlineEditingAddNewPostPartial" };
+            settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "TreeList", Action = "InlineEditingUpdatePostPartial" };
+            settings.SettingsEditing.NodeDragDropRouteValues = new { Controller = "TreeList", Action = "InlineEditingMovePostPartial" };
+            settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "TreeList", Action = "InlineEditingDeletePostPartial" };
+            settings.SettingsEditing.ConfirmDelete = true;
+
+            settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+            settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            settings.PreRender = (sender, e) => {
+                MVCxTreeList treeListControl = (MVCxTreeList)sender;
+                treeListControl.ExpandToLevel(3);
+                treeListControl.StartEdit("2");
+            };
+        }
+    );
+
+    if(ViewData["EditNodeError"] != null) {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+
+@treeList.Bind(Model).GetHtml()

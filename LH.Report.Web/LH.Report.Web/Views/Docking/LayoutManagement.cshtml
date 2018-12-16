@@ -1,0 +1,124 @@
+﻿<style type="text/css">
+        .panelNum
+        {
+            width: 100%;
+            text-align: center;
+        }
+</style>
+<div style="margin-bottom: 10px;">
+    @Html.DevExpress().Button(
+        settings => {
+            settings.Name = "btnEditLayout";
+            settings.Text = "Edit layout";
+            settings.UseSubmitBehavior = false;
+            settings.RouteValues = new { Controller = "Docking", Action = "StartEditLayout" };
+        }
+    ).GetHtml()
+</div>
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "panel1";
+        settings.PanelUID = "panel1";
+        settings.VisibleIndex = 0;
+        settings.Width = 400;
+        settings.Height = 560;
+        settings.ShowHeader = false;
+        settings.AllowResize = true;
+        settings.OwnerZoneUID = "leftZone";
+        settings.Styles.Content.Border.BorderStyle = BorderStyle.Solid;
+        settings.Styles.Content.Border.BorderWidth = 1;
+        settings.Styles.Content.Border.BorderColor = Color.FromArgb(0xBBD7E7);
+        settings.Styles.Content.BackColor = Color.FromArgb(0xDBEBF4);
+        settings.Styles.Content.Paddings.Padding = 0;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div class=\"panelNum\" style=\"margin-top: 205px;\">" +
+                    "<img id=\"imgNum1\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n1.png") + "\" alt=\"\"/>" +
+                "</div>"
+            );
+        });
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+    }
+).GetHtml()
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "panel2";
+        settings.PanelUID = "panel2";
+        settings.VisibleIndex = 0;
+        settings.Width = 350;
+        settings.Height = 300;
+        settings.ShowHeader = false;
+        settings.AllowResize = true;
+        settings.OwnerZoneUID = "rightZone";
+        settings.Styles.Content.Border.BorderStyle = BorderStyle.Solid;
+        settings.Styles.Content.Border.BorderWidth = 1;
+        settings.Styles.Content.Border.BorderColor = Color.FromArgb(0xBBE7BF);
+        settings.Styles.Content.BackColor = Color.FromArgb(0xDBF4DE);
+        settings.Styles.Content.Paddings.Padding = 0;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div class=\"panelNum\" style=\"margin-top: 85px;\">" +
+                    "<img id=\"imgNum2\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n2.png") + "\" alt=\"\"/>" +
+                "</div>"
+            );
+        });
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+    }
+).GetHtml()
+@Html.DevExpress().DockPanel(
+    settings => {
+        settings.Name = "panel3";
+        settings.PanelUID = "panel3";
+        settings.VisibleIndex = 1;
+        settings.Width = 300;
+        settings.Height = 250;
+        settings.ShowHeader = false;
+        settings.AllowResize = true;
+        settings.OwnerZoneUID = "rightZone";
+        settings.Styles.Content.Border.BorderStyle = BorderStyle.Solid;
+        settings.Styles.Content.Border.BorderWidth = 1;
+        settings.Styles.Content.Border.BorderColor = Color.FromArgb(0xDBCBE9);
+        settings.Styles.Content.BackColor = Color.FromArgb(0xF3EAFB);
+        settings.Styles.Content.Paddings.Padding = 0;
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div class=\"panelNum\" style=\"margin-top: 57px;\">" +
+                    "<img id=\"imgNum3\" src=\"" + Url.Content("~/Content/Docking/Images/LayoutManagement/n3.png") + "\" alt=\"\"/>" +
+                "</div>"
+            );
+        });
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+    }
+).GetHtml()
+<div style="float: left;">
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "LeftZone";
+            settings.ZoneUID = "leftZone";
+            settings.Width = 288;
+            settings.PanelSpacing = 10;
+        }
+    ).GetHtml()
+</div>
+<div style="float: left; margin-left: 10px;">
+    @Html.DevExpress().DockZone(
+        settings => {
+            settings.Name = "RightZone";
+            settings.ZoneUID = "rightZone";
+            settings.Width = 400;
+            settings.PanelSpacing = 10;
+        }
+    ).GetHtml()
+</div>
+@Html.DevExpress().DockManager(
+    settings => {
+        settings.Name = "dockManager";
+        settings.FreezeLayout = true;
+        settings.ClientLayout = (sender, e) => {
+            if(e.LayoutMode == ClientLayoutMode.Loading && Session["Layout"] != null)
+                e.LayoutData = Session["Layout"] as string;
+            if(e.LayoutMode == ClientLayoutMode.Saving && Session["Layout"] == null)
+                Session["InitialLayout"] = e.LayoutData;
+        };
+    }
+).GetHtml()

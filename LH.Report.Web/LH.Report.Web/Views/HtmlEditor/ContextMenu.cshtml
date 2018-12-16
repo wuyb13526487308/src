@@ -1,0 +1,59 @@
+﻿<script type="text/javascript" src="@Url.Content("~/Scripts/ContextMenu.js")"></script>
+@using(Html.BeginForm()) {
+    <table cellpadding="0" cellspacing="0" style="border-width: 0px; width: 100%">
+        <tr>
+            <td style="vertical-align: top; padding-right: 20px">
+                @Html.Partial("ContextMenuPartial")
+            </td>
+            <td style="vertical-align: top; width: 100%">
+                <p>
+                    <b>Context Menu type:</b>
+                </p>
+                @Html.DevExpress().ComboBox(
+                    settings =>
+                    {
+                        settings.Name = "cbContextMenu";
+                        settings.Properties.Items.AddRange(new ListEditItem[] {
+                            new ListEditItem("HTML Editor", "True"),
+                            new ListEditItem("Browser", "Default"),
+                            new ListEditItem("None", "False")
+                        });
+                        settings.PreRender = (s, e) =>
+                        {
+                            ASPxComboBox comboBox = s as ASPxComboBox;
+                            if(ViewData["AllowContextMenu"] != null)
+                                comboBox.Items.FindByValue(ViewData["AllowContextMenu"].ToString()).Selected = true;
+                        };
+                    }).GetHtml()
+                <br />
+                <p>
+                    <b>Context Menu Items:</b>
+                </p>
+                @Html.DevExpress().ListBox(
+                    settings =>
+                    {
+                        settings.Name = "lbContextMenuItems";
+                        settings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                        settings.Width = Unit.Pixel(210);
+                        settings.Height = Unit.Pixel(250);
+                        settings.EncodeHtml = false;
+                        settings.Enabled = ViewData["AllowContextMenu"] == null || ViewData["AllowContextMenu"].Equals(DefaultBoolean.True);
+                        settings.PreRender = (s, e) =>
+                        {
+                            ASPxListBox listBox = (s as ASPxListBox);
+                            foreach(ListEditItem item in ViewData["lbContextMenuItems"] as List<ListEditItem>)
+                                listBox.Items.Add(item);
+                        };
+                    }).GetHtml()
+                <br />
+                @Html.DevExpress().Button(
+                    settings =>
+                    {
+                        settings.Name = "btnApply";
+                        settings.Text = "Apply";
+                        settings.UseSubmitBehavior = true;
+                    }).GetHtml()
+            </td>
+        </tr>
+    </table>
+}

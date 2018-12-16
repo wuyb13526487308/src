@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<products>
+  <product name="ASP.NET" text="ASP.NET Controls" id="1"></product>
+  <product name="WinForm" text="WinForm Controls" id="2"></product>
+  <product name="VCL" text="VCL Controls" id="3"></product>
+  <product name="WPF" text="WPF Controls" id="4"></product>
+</products>

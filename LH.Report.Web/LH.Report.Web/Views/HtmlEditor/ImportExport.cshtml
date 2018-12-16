@@ -1,0 +1,25 @@
+﻿@model HtmlEditorModel
+
+<p>
+    Sample document: 
+    @Html.DevExpress().HyperLink(
+        settings =>
+        {
+            settings.Name = "lnkDocument";
+            settings.Properties.Text = ViewData["SampleDocumentPath"].ToString();
+            settings.NavigateUrl = settings.Properties.Text;
+        }
+    ).GetHtml()
+</p>
+    @Html.DevExpress().Button(
+        settings =>
+        {
+            settings.Name = "btnImport";
+            settings.RouteValues = new { Controller = "HtmlEditor", Action = "ImportSampleDocument" };
+            settings.Text = "Import the document";
+        }
+    ).GetHtml()
+<br />
+@using (Html.BeginForm()) {
+    @Html.Partial("ImportExportPartial", Model)
+}

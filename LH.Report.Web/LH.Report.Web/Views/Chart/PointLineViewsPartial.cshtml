@@ -1,0 +1,65 @@
+﻿@{
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    string titleText;
+    if (options.View == DevExpress.XtraCharts.ViewType.StepLine || options.View == DevExpress.XtraCharts.ViewType.StepLine3D) {
+        titleText = "Corporations with highest market value in 2004";
+        settings.SeriesTemplate.DataFilters.Add(new DataFilter("Year", "System.String", DataFilterCondition.Equal, "2004"));
+    } else {
+        titleText = "Corporations with highest market value";
+    }
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = titleText
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.bea.gov"
+    });
+
+    settings.SeriesTemplate.ChangeView(options.View);
+    settings.SeriesTemplate.ArgumentDataMember = "Corporation";
+    settings.SeriesTemplate.ValueDataMembers[0] = "MarketValue";
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    if (options.View == DevExpress.XtraCharts.ViewType.Point){
+        ((PointSeriesView)settings.SeriesTemplate.View).PointMarkerOptions.Size = 20;
+    }
+    if (options.View == DevExpress.XtraCharts.ViewType.StepLine) {
+        StepLineSeriesView view = (StepLineSeriesView)settings.SeriesTemplate.View;
+        view.ColorEach = true;
+        view.LineMarkerOptions.Kind = MarkerKind.Square;
+        view.LineMarkerOptions.Size = 20;
+    }
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    settings.SeriesDataMember = "Year";
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+
+    if (settings.Diagram is XYDiagram) {
+        XYDiagram diagram = (XYDiagram)settings.Diagram;
+        diagram.AxisY.Interlaced = true;
+        diagram.AxisY.Title.Text = "Market value (billion US$)";
+        diagram.AxisY.Title.Visible = true;
+        diagram.AxisY.Range.SetMinMaxValues(120, 390);
+    }
+    else {
+        XYDiagram3D diagram = (XYDiagram3D)settings.Diagram;
+        diagram.AxisX.Label.MaxWidth = 70;
+        diagram.AxisY.Interlaced = true;
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.XYZ;
+        diagram.ZoomPercent = 140;
+        diagram.VerticalScrollPercent = 10;
+        diagram.AxisY.Range.SetMinMaxValues(120, 390);
+    }
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

@@ -38,7 +38,7 @@
                         valueField: 'code',
                         textField: 'name',
                         multiple:false">
-            <label class="search_label">物料编码</label>
+            <label class="search_label">物料编码/名称</label>
             <input name="MatNo" class="easyui-textbox" style="width:150px" />
 
         </div>
@@ -76,17 +76,17 @@
             columns: [[
                 { title: 'ck', field: 'ck', checkbox: true },
                 
-                { title: '仓库', field: 'StoreId', width: 150 },
+                { title: '仓库', field: 'StoreName', width: 150 },
                 { title: '编码', field: 'MatNo', width: 100 },
                 { title: '名称', field: 'MatName', width: 200 },
-                { title: '分类', field: 'MatName', width: 200 },
+                { title: '分类', field: 'BigClassName', width: 200 },
                 { title: '规格', field: 'GuiGe', width: 100 },
-                { title: '单位', field: 'UnitNo', width: 100 },
+                { title: '单位', field: 'UnitName', width: 100 },
                 { title: '数量', field: 'Quantity', width: 100 },
                 { title: '单价', field: 'Price', width: 100 },
-                { title: '上限', field: 'Price', width: 100 },
-                { title: '下限', field: 'Price', width: 100 },
-                { title: 'UpToTime', field: 'UpToTime', width: 200 }
+                { title: '上限', field: 'MaxStoreQuantity', width: 100 },
+                { title: '下限', field: 'WarnStoreQuantity', width: 100 },
+                { title: '期初时间', field: 'UpToTime', width: 200 }
             ]],
             onBeforeLoad: function (param) {
 

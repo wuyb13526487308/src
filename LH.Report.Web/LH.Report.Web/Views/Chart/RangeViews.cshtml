@@ -1,0 +1,89 @@
+﻿@using (Html.BeginForm()) {
+    ChartViewTypeDemoOptions options = (ChartViewTypeDemoOptions)ViewData[ChartDemoHelper.OptionsKey]; 
+    <div class="chartOptionsPanel" style="height:19px">
+        <div style="float: left; vertical-align:baseline;">
+            <label for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetRangeViews(), options.View)
+        </div>
+        <input style="float: right;" type="submit" value="Apply"/>
+    </div>
+    <br/>
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+    if (options.View == DevExpress.XtraCharts.ViewType.RangeBar || options.View == DevExpress.XtraCharts.ViewType.SideBySideRangeBar) {
+        settings.CrosshairEnabled = DefaultBoolean.False;
+        settings.ToolTipEnabled = DefaultBoolean.True;
+    }
+    else {
+        settings.CrosshairEnabled = DefaultBoolean.True;
+        settings.ToolTipEnabled = DefaultBoolean.False;
+    }
+
+    settings.SeriesTemplate.ChangeView(options.View);
+    if (options.View == DevExpress.XtraCharts.ViewType.RangeArea || options.View == DevExpress.XtraCharts.ViewType.RangeArea3D) {
+        ((ISupportTransparency)settings.SeriesTemplate.View).Transparency = 140;
+    }
+    settings.SeriesTemplate.LabelsVisibility = DefaultBoolean.False;
+    settings.SeriesTemplate.ArgumentScaleType = ScaleType.DateTime;
+    settings.SeriesTemplate.ArgumentDataMember = "Date";
+    settings.SeriesTemplate.ValueDataMembers[0] = "MinPrice";
+    settings.SeriesTemplate.ValueDataMembers[1] = "MaxPrice";
+    settings.SeriesDataMember = "Company";
+    settings.BoundDataChanged = (s, e) => {
+        if (options.View == DevExpress.XtraCharts.ViewType.RangeBar) {
+            Series series = ((MVCxChartControl)s).Series[OilPricesProvider.WestTexasIntermediate];
+            ((OverlappedRangeBarSeriesView)series.View).BarWidth = 0.2;
+        }
+    };
+
+    AxisBase axisX;
+    AxisBase axisY;
+    if (settings.Diagram is XYDiagram) {
+        XYDiagram diagram = (XYDiagram)settings.Diagram;
+        axisX = diagram.AxisX;
+        axisY = diagram.AxisY;
+        axisY.GridLines.MinorVisible = true;
+        diagram.AxisY.Title.Text = "$ per barrel";
+        diagram.AxisY.Title.Visible = true;
+    } else {
+        XYDiagram3D diagram = (XYDiagram3D)settings.Diagram;
+        axisX = diagram.AxisX;
+        axisY = diagram.AxisY;
+        axisX.GridSpacing = 2;
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.XYZ;
+        diagram.ZoomPercent = 140;
+        diagram.VerticalScrollPercent = 4;
+    }
+    axisX.DateTimeMeasureUnit = DateTimeMeasurementUnit.Month;
+    axisX.DateTimeGridAlignment = DateTimeMeasurementUnit.Month;
+    axisX.Range.SideMarginsEnabled = true;
+    axisX.DateTimeOptions.Format = DateTimeFormat.Custom;
+    axisX.DateTimeOptions.FormatString = "MMMM";
+    axisY.Range.AlwaysShowZeroLevel = false;
+    axisY.Range.SideMarginsEnabled = true;
+    axisY.Interlaced = true;
+    axisY.NumericOptions.Format = NumericFormat.Number;
+    axisY.NumericOptions.Precision = 0;
+
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    settings.Legend.AlignmentVertical = LegendAlignmentVertical.TopOutside;
+    settings.Legend.Direction = LegendDirection.LeftToRight;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Crude Oil Prices in 2005"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.tax.state.ak.us"
+    });
+
+    @Html.DevExpress().Chart(settings).Bind(Model).GetHtml()
+}

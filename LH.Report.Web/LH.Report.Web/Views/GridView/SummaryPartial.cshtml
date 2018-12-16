@@ -1,0 +1,39 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSummary";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "SummaryPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City").GroupIndex = 1;
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country").GroupIndex = 0;
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add(column => {
+            column.FieldName = "Total";
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "c";
+        });
+
+        settings.CustomUnboundColumnData = (sender, e) =>
+            {
+                if (e.Column.FieldName == "Total") {
+                    decimal price = (decimal)e.GetListSourceFieldValue("UnitPrice");
+                    int quantity = Convert.ToInt32(e.GetListSourceFieldValue("Quantity"));
+                    e.Value = price * quantity;
+                }
+            };
+            
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "CompanyName");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total").DisplayFormat= "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Min , "Quantity");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Average , "Quantity");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Max , "Quantity");
+        settings.Settings.ShowFooter = true;
+            
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total").DisplayFormat= "c";
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Count, "CompanyName");
+        settings.Settings.ShowGroupPanel = true;
+    }).Bind(Model).GetHtml()

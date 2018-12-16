@@ -1,0 +1,26 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#moreInformation").live("click", function(){
+            scheduler.InplaceEditFormShowMore();
+        });
+        $("#closeInplaceEditorForm").live("click", function(){
+            scheduler.InplaceEditFormCancel();
+        });
+        $("#saveInplaceFormData").live("click", function(){
+            if(IsValidAppointment())
+                scheduler.InplaceEditFormSave();
+        });
+    });
+    function OnAppointmentFormSave(s, e){
+        if(IsValidAppointment())
+            scheduler.AppointmentFormSave();
+    }
+    function IsValidAppointment(){
+        $.validator.unobtrusive.parse(document);
+        return $("form").valid();
+    }
+</script>
+
+@Html.Partial("CustomFormsPartial", Model)

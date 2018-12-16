@@ -1,0 +1,36 @@
+﻿@using LH.StoReports;
+@using DevExpress.Web.Mvc.UI;
+@using DevExpress.Web.Mvc;
+
+@{
+    Layout = null;
+}
+
+@model ReportsModel
+
+<div>
+    @if (!string.IsNullOrEmpty(Model.ParametersView))
+    {
+        using (Html.BeginForm())
+        {
+            @Html.Partial("ReportParametersPartial", Model)
+        }
+    }
+    <div>
+        哈哈哈哈哈
+        @Html.DevExpress().ReportToolbar(
+                settings =>
+                {
+                    settings.Name = "ReportToolbar";
+                    settings.ReportViewerName = "ReportViewer1";
+                }
+            ).GetHtml()
+        <table cellspacing="0" cellpadding="0" class="reportBorder" style="margin-top:20px;">
+            <tr>
+                <td>
+                    @Html.Partial("ReportViewerPartial", Model)
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

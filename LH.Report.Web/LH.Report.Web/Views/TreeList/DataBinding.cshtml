@@ -1,0 +1,23 @@
+﻿@model IList<Department>
+           
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function () {
+        $("#showServiceColumns").change(
+            function () {
+                $("form").submit();
+            }
+        );
+    });
+// ]]>
+</script>
+
+@using(Html.BeginForm()) {
+    <div class="BottomPadding">
+        @Html.CheckBox("showServiceColumns", (bool)Session["ShowServiceColumns"], new {
+            style = "vertical-align: middle"
+        })
+        <label class="checkBox" for="ShowServiceColumns" style="vertical-align: middle">Show service columns</label>
+    </div>
+    @Html.Partial("DataBindingPartial", Model)
+}

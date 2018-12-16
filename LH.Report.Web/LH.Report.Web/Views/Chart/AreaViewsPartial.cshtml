@@ -1,0 +1,65 @@
+﻿@{
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+    
+    string titleText;
+    if (options.View == DevExpress.XtraCharts.ViewType.StepArea || options.View == DevExpress.XtraCharts.ViewType.StepArea3D) {
+        settings.SeriesTemplate.DataFilters.Add(new DataFilter("Year", "System.String", DataFilterCondition.Equal, "2004"));
+        titleText = "Corporations with highest market value in 2004";
+    }
+    else {
+        titleText = "Corporations with highest market value";
+    }
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = titleText
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.bea.gov"
+    });
+
+    settings.SeriesTemplate.ChangeView(options.View);
+    ((ISupportTransparency)settings.SeriesTemplate.View).Transparency = 120;
+    settings.SeriesTemplate.ArgumentDataMember = "Corporation";
+    settings.SeriesTemplate.ValueDataMembers[0] = "MarketValue";
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    if (options.View == DevExpress.XtraCharts.ViewType.StepArea) {
+        StepAreaSeriesView view = (StepAreaSeriesView)settings.SeriesTemplate.View;
+        view.ColorEach = true;
+        view.MarkerOptions.Kind = MarkerKind.Square;
+        view.MarkerOptions.Size = 20;
+    }
+    settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    settings.SeriesDataMember = "Year";
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+
+    if (settings.Diagram is XYDiagram) {
+        XYDiagram diagram = (XYDiagram)settings.Diagram;
+        diagram.AxisY.Interlaced = true;
+        diagram.AxisY.Title.Text = "Market value (billion US$)";
+        diagram.AxisY.Title.Visible = true;
+        diagram.AxisY.Range.SetMinMaxValues(100, 390);
+    }
+    else if (settings.Diagram is XYDiagram3D) {
+        XYDiagram3D diagram = (XYDiagram3D)settings.Diagram;
+        diagram.AxisX.Label.MaxWidth = 70;
+        diagram.AxisY.Interlaced = true;
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.XYZ;
+        diagram.ZoomPercent = 140;
+        diagram.VerticalScrollPercent = 10;
+        diagram.AxisY.Range.SetMinMaxValues(100, 390);
+    }
+}
+
+@Html.DevExpress().Chart(settings).Bind(Model).GetHtml()

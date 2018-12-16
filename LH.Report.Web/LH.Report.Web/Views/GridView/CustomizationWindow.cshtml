@@ -1,0 +1,32 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function () {
+        $("#btShowCustomizationWindow").click(
+            function () {
+                UpdateCustomizationWindowVisibility();
+            }
+        );
+    });
+    function grid_CustomizationWindowCloseUp(s, e) {
+        UpdateButtonText();
+    }
+    function UpdateCustomizationWindowVisibility() {
+        if (grid.IsCustomizationWindowVisible())
+            grid.HideCustomizationWindow();
+        else
+            grid.ShowCustomizationWindow();
+        UpdateButtonText();
+    }
+    function UpdateButtonText() {
+        var text = grid.IsCustomizationWindowVisible() ? "Hide" : "Show";
+        text += " Customization Window";
+        $("#btShowCustomizationWindow").val(text);
+    }
+// ]]> 
+</script>
+    
+<div><input type="button" id="btShowCustomizationWindow" value="Show Customization Window" style="width: 200px;"/></div>
+<br />
+@Html.Partial("CustomizationWindowPartial", Model)

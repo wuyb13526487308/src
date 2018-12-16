@@ -1,0 +1,31 @@
+﻿@{
+    var scheduler = Html.DevExpress().Scheduler(
+        settings => {
+            settings.Name = "scheduler";
+            settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "RemindersPartial" };
+            settings.EditAppointmentRouteValues = new { Controller = "Scheduler", Action = "RemindersPartialEditAppointment" };
+            settings.ActiveViewType = SchedulerViewType.WorkWeek;
+            settings.ClientSideEvents.BeginCallback = "OnSchedulerBeginCallback";
+            settings.Width = Unit.Percentage(100);
+            settings.Start = DateTime.Today;
+
+            settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+            settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+
+            settings.Views.DayView.ResourcesPerPage = 2;
+            settings.Views.DayView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+            settings.Views.WorkWeekView.ResourcesPerPage = 2;
+            settings.Views.WorkWeekView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+            settings.Views.WeekView.ResourcesPerPage = 2;
+            settings.Views.WeekView.Styles.DateCellBody.Height = Unit.Pixel(200);
+            settings.Views.MonthView.ResourcesPerPage = 2;
+            settings.Views.MonthView.Styles.DateCellBody.Height = Unit.Pixel(100);
+            settings.Views.TimelineView.ResourcesPerPage = 2;
+            settings.Views.MonthView.Styles.DateCellBody.Height = Unit.Pixel(500);
+        }).Bind(Model.Appointments, Model.Resources);
+        
+    if (ViewData["SchedulerErrorText"] != null){
+        scheduler.SetError((string)ViewData["SchedulerErrorText"]);
+    }
+}
+@scheduler.GetHtml()

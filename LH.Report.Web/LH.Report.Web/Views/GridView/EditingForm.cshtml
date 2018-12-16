@@ -1,0 +1,131 @@
+﻿@model EditableProduct
+
+@{
+    Html.EnableClientValidation();   
+}
+
+@using (Html.BeginForm("EditingEdit", "GridView", FormMethod.Post, new { @class = "edit_form" })){
+    @Html.Hidden("ProductID")
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Product Name:";
+                settings.AssociatedControlName = "ProductName";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings => {
+                settings.Name = "ProductName";
+                settings.ControlStyle.CssClass = "editor";
+            }
+        ).Bind(Model.ProductName).GetHtml()
+        @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.AssociatedControlName = "CategoryID";
+                settings.Text = "Category:";
+            }
+        ).GetHtml()
+        @Html.DevExpress().ComboBox(
+            settings => {
+                settings.Name = "CategoryID";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.TextField = "CategoryName";
+                settings.Properties.ValueField = "CategoryID";
+                settings.Properties.ValueType = typeof(int);
+            }
+        ).BindList(NorthwindDataProvider.GetCategories()).Bind(Model.CategoryID).GetHtml()
+        @Html.ValidationMessageFor(model => model.CategoryID, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Quantity Per Unit:";
+                settings.AssociatedControlName = "QuantityPerUnit";
+            }
+        ).GetHtml()
+        @Html.DevExpress().TextBox(
+            settings => {
+                settings.Name = "QuantityPerUnit";
+                settings.ControlStyle.CssClass = "editor";
+            }
+        ).Bind(Model.QuantityPerUnit).GetHtml()
+        @Html.ValidationMessageFor(model => model.QuantityPerUnit, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Unit Price:";
+                settings.AssociatedControlName = "UnitPrice";
+            }
+        ).GetHtml()
+        @Html.DevExpress().SpinEdit(
+            settings => {
+                settings.Name = "UnitPrice";
+                settings.ControlStyle.CssClass = "editor";
+                settings.Properties.DisplayFormatString = "C";
+            }
+        ).Bind(Model.UnitPrice).GetHtml()
+        @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+                settings.Text = "Units In Stock:";
+                settings.AssociatedControlName = "UnitsInStock";
+            }
+        ).GetHtml()
+        @Html.DevExpress().SpinEdit(
+            settings => {
+                settings.Name = "UnitsInStock";
+                settings.ControlStyle.CssClass = "editor";
+            }
+        ).Bind(Model.UnitsInStock).GetHtml()
+        @Html.ValidationMessageFor(model => model.UnitsInStock, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+            }
+        ).GetHtml()
+        @Html.DevExpress().CheckBox(
+            settings => {
+                settings.Name = "Discontinued";
+                settings.ControlStyle.CssClass = "checkEditor";
+                settings.Text = "Discontinued";
+            }
+        ).Bind(Model.Discontinued).GetHtml()
+        @Html.ValidationMessageFor(model => model.Discontinued, null, new { @class = "validator" })
+    </div>
+    <div class="line">
+        @Html.DevExpress().Label(
+            settings => {
+                settings.ControlStyle.CssClass = "label";
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnUpdate";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Update";
+                settings.UseSubmitBehavior = true;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "btnCancel";
+                settings.ControlStyle.CssClass = "button";
+                settings.Text = "Cancel";
+                settings.ClientSideEvents.Click = "function(s, e){ document.location='" + DevExpressHelper.GetUrl(new { Controller = "GridView", Action = "Editing" }) + "'; }";
+            }
+        ).GetHtml()
+    </div>
+}

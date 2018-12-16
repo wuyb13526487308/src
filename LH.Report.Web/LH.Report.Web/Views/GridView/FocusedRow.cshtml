@@ -1,0 +1,38 @@
+﻿@model IEnumerable
+           
+<script type="text/javascript">
+//<![CDATA[
+    function OnGridFocusedRowChanged(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmployeeID;Notes', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        DetailPhoto.SetImageUrl("@GridViewDemosHelper.GetEmployeeImageRouteUrl()?@GridViewDemosHelper.ImageQueryKey=" + values[0]);
+        DetailNotes.SetText(values[1]);
+    }
+// ]]>
+</script>
+
+@Html.Partial("FocusedRowPartial", Model)
+<div class="details_form">
+Details:<br />
+@Html.DevExpress().Image(
+    settings => {
+        settings.Name = "DetailPhoto";
+        settings.Properties.EnableClientSideAPI = true;
+        settings.ControlStyle.CssClass = "image";
+        settings.Width = 160;
+        settings.Height = 170;
+    }
+).GetHtml()
+
+@Html.DevExpress().Memo(
+    settings => {
+        settings.Name = "DetailNotes";
+        settings.Properties.EnableClientSideAPI = true;
+        settings.ControlStyle.CssClass = "memo";
+        settings.ReadOnly = true;
+        settings.Width = 530;
+        settings.Height = 170;
+    }
+).GetHtml()
+</div>

@@ -1,0 +1,85 @@
+﻿<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function () {
+        $("#cbClientVisible").click(
+            function () {
+                mClientSideAPI.SetVisible($("#cbClientVisible").attr("checked"));
+            }
+        );
+        $("#cmbItems").change(
+            function () {
+                ShowProperties();
+            }
+        );
+        $("#cbItemEnabled").click(
+            function () {
+                GetMenuItem().SetEnabled($("#cbItemEnabled").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbItemVisible").click(
+            function () {
+                GetMenuItem().SetVisible($("#cbItemVisible").attr("checked"));
+                ShowProperties();
+            }
+        );
+        $("#cbItemSelected").click(
+            function () {
+                var item = $("#cbItemSelected").attr("checked") ? GetMenuItem() : null;
+                mClientSideAPI.SetSelectedItem(item);
+            }
+        );
+        mClientSideAPI.SetSelectedItem(GetMenuItem());
+        ShowProperties();
+    });
+    function GetMenuItem() {
+        return mClientSideAPI.GetItemByName($("#cmbItems").val());
+    }
+    function ShowProperties() {
+        $("#cbClientVisible").attr("checked", mClientSideAPI.GetVisible());
+        var item = GetMenuItem();
+        $("#cbItemEnabled").attr("checked", item.GetEnabled());
+        $("#cbItemVisible").attr("checked", item.GetVisible());
+        $("#cbItemSelected").attr("checked", mClientSideAPI.GetSelectedItem() == item);
+    }
+    function MenuItemClick(s, e) {
+        $("#cmbItems").val(e.item.name);
+        ShowProperties();
+    }    
+// ]]>
+</script>
+<div class="vertComponentContainer">
+    @Html.DevExpress().Menu(
+        settings =>
+        {
+            settings.Name = "mClientSideAPI";
+            settings.AllowSelectItem = true;
+            settings.EnableClientSideAPI = true;
+            settings.Orientation = Orientation.Vertical;
+            settings.Styles.Item.CssClass = "menuItem";
+            settings.Width = 180;
+
+            settings.Items.Add("Visa", "Visa", "~/Content/Menu/visa.png").Selected = true;
+            settings.Items.Add("MasterCard", "MasterCard", "~/Content/Menu/master.png");
+            settings.Items.Add("Union", "Union", "~/Content/Menu/union.png");
+            settings.Items.Add("American Express", "American Express", "~/Content/Menu/amex.png");
+            settings.Items.Add("Maestro", "Maestro", "~/Content/Menu/maestro.png");
+
+            settings.ClientSideEvents.ItemClick = "MenuItemClick";
+        }).GetHtml()
+</div>
+<div id="menuClientSideAPIPanel" class="vertOptionsPanel" style="height: 240px">
+    <div><input type="checkbox" id="cbClientVisible" /><label class="checkBox" for="cbClientVisible">ClientVisible</label></div>
+    <div><label>&nbsp;</label></div>
+    <div><label for="cmbItems">Choose item:</label>
+    <select id="cmbItems">
+        <option>Visa</option>
+        <option>MasterCard</option>
+        <option>Union</option>
+        <option>American Express</option>
+        <option>Maestro</option>
+    </select></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemEnabled" /><label class="checkBox" for="cbItemEnabled">Enabled</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemVisible" /><label class="checkBox" for="cbItemVisible">Visible</label></div>
+    <div><label>&nbsp;</label><input type="checkbox" id="cbItemSelected" /><label class="checkBox" for="cbItemSelected">Selected</label></div>
+</div>

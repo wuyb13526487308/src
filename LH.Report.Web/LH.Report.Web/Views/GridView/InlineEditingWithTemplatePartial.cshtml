@@ -1,0 +1,217 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+        settings =>
+        {
+            settings.Name = "gvEditingWithTemplate";
+            settings.KeyFieldName = "ProductID";
+            settings.CallbackRouteValues = new { Controller = "GridView", Action = "InlineEditingWithTemplatePartial" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GridView", Action = "InlineEditingWithTemplateAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GridView", Action = "InlineEditingWithTemplateUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GridView", Action = "InlineEditingWithTemplateDeletePartial" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.NewButton.Visible = true;
+            settings.CommandColumn.DeleteButton.Visible = true;
+            settings.CommandColumn.EditButton.Visible = true;
+
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add(column => {
+                column.FieldName = "CategoryID";
+                column.Caption = "Category";
+
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+                comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+                comboBoxProperties.TextField = "CategoryName";
+                comboBoxProperties.ValueField = "CategoryID";
+                comboBoxProperties.ValueType = typeof(int);
+            });
+            settings.Columns.Add("QuantityPerUnit");
+            settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+            settings.Columns.Add("UnitsInStock");
+            settings.Columns.Add("Discontinued", MVCxGridViewColumnType.CheckBox);
+            
+            settings.SetEditFormTemplateContent(c => {
+                var product = ViewData["EditableProduct"] != null ? ViewData["EditableProduct"] : c.DataItem;
+                ViewContext.Writer.Write(
+                    "<div class=\"edit_form\">" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Product Name:";
+                            edtSettings.AssociatedControlName = "ProductName";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().TextBox(
+                        edtSettings => {
+                            edtSettings.Name = "ProductName";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(DataBinder.Eval(product, "ProductName"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Category:";
+                            edtSettings.AssociatedControlName = "CategoryID";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().ComboBox(
+                        edtSettings => {
+                            edtSettings.Name = "CategoryID";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.Properties.TextField = "CategoryName";
+                            edtSettings.Properties.ValueField = "CategoryID";
+                            edtSettings.Properties.ValueType = typeof(int);
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .BindList(NorthwindDataProvider.GetCategories())
+                    .Bind(DataBinder.Eval(product, "CategoryID"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Quantity Per Unit:";
+                            edtSettings.AssociatedControlName = "QuantityPerUnit";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().TextBox(
+                        edtSettings => {
+                            edtSettings.Name = "QuantityPerUnit";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(DataBinder.Eval(product, "QuantityPerUnit"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Unit Price:";
+                            edtSettings.AssociatedControlName = "UnitPrice";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().SpinEdit(
+                        edtSettings => {
+                            edtSettings.Name = "UnitPrice";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.Properties.DisplayFormatString = "C";
+                            edtSettings.Properties.MinValue = 0;
+                            edtSettings.Properties.MaxValue = 1000000;
+                            edtSettings.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(DataBinder.Eval(product, "UnitPrice"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                            edtSettings.Text = "Units In Stock:";
+                            edtSettings.AssociatedControlName = "UnitsInStock";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().SpinEdit(
+                        edtSettings => {
+                            edtSettings.Name = "UnitsInStock";
+                            edtSettings.ControlStyle.CssClass = "editor";
+                            edtSettings.Properties.NumberType = SpinEditNumberType.Integer;
+                            edtSettings.Properties.MinValue = 0;
+                            edtSettings.Properties.MaxValue = 10000;
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(DataBinder.Eval(product, "UnitsInStock"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().CheckBox(
+                        edtSettings => {
+                            edtSettings.Name = "Discontinued";
+                            edtSettings.ControlStyle.CssClass = "checkEditor";
+                            edtSettings.Text = "Discontinued";
+                            edtSettings.ShowModelErrors = true;
+                        }
+                    )
+                    .Bind(DataBinder.Eval(product, "Discontinued"))
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div>" +
+                    "<div class=\"line\">"
+                );
+                    Html.DevExpress().Label(
+                        edtSettings => {
+                            edtSettings.ControlStyle.CssClass = "label";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().Button(
+                        btnSettings => {
+                            btnSettings.Name = "btnUpdate";
+                            btnSettings.ControlStyle.CssClass = "button";
+                            btnSettings.Text = "Update";
+                            btnSettings.ClientSideEvents.Click = "function(s, e){ gvEditingWithTemplate.UpdateEdit(); }";
+                        }
+                    )
+                    .Render();
+                    Html.DevExpress().Button(
+                        btnSettings => {
+                            btnSettings.Name = "btnCancel";
+                            btnSettings.ControlStyle.CssClass = "button";
+                            btnSettings.Text = "Cancel";
+                            btnSettings.ClientSideEvents.Click = "function(s, e){ gvEditingWithTemplate.CancelEdit(); }";
+                        }
+                    )
+                    .Render();
+                ViewContext.Writer.Write(
+                    "</div></div>"
+                );
+            });
+
+            settings.PreRender = (sender, e) => {
+                ((MVCxGridView)sender).StartEdit(1);
+            };
+        });
+
+    if(ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

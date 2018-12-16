@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvBands";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "BandsPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("SalesPerson", "Sales Person");
+        settings.Columns.AddBand(orderBand => {
+            orderBand.Caption = "Order";
+            orderBand.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            orderBand.Columns.AddBand(companyBand => {
+                companyBand.Caption = "Company";
+                companyBand.Columns.Add("CompanyName", "Name");
+                companyBand.Columns.Add("Country", "Country");
+                companyBand.Columns.Add("Region", "Region");
+                orderBand.Columns.Add("OrderDate", "Date").PropertiesEdit.DisplayFormatString = "d";
+            });
+            orderBand.Columns.AddBand(productBand => {
+                productBand.Caption = "Product";
+                productBand.Columns.Add("ProductName", "Name");
+                productBand.Columns.Add("UnitPrice", "Unit Price").PropertiesEdit.DisplayFormatString = "c";
+            });
+            orderBand.Columns.Add("Quantity", "Qty");
+        });
+
+        settings.Settings.ShowGroupPanel = true;
+    }).Bind(Model).GetHtml()

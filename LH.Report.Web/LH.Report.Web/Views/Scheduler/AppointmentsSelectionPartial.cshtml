@@ -1,0 +1,29 @@
+﻿@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Scheduler", Action = "AppointmentsSelectionPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.ActiveViewType = SchedulerViewType.Timeline;
+        settings.Start = new DateTime(2010, 7, 13);
+        settings.ClientSideEvents.AppointmentsSelectionChanged = "OnAppointmentsSelectionChanged";
+
+        settings.Views.DayView.ResourcesPerPage = 2;
+        settings.Views.DayView.Styles.ScrollAreaHeight = Unit.Pixel(200);
+        settings.Views.WorkWeekView.ResourcesPerPage = 2;
+        settings.Views.WorkWeekView.Styles.ScrollAreaHeight = Unit.Pixel(200);
+        settings.Views.WeekView.ResourcesPerPage = 2;
+        settings.Views.WeekView.Styles.DateCellBody.Height = Unit.Pixel(50);
+        settings.Views.MonthView.ResourcesPerPage = 2;
+        settings.Views.MonthView.Styles.DateCellBody.Height = Unit.Pixel(50);
+        settings.Views.TimelineView.ResourcesPerPage = 2;
+        settings.Views.TimelineView.Styles.TimelineCellBody.Height = Unit.Pixel(250);
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.CustomAppointmentStorage);
+        
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None; 
+    }
+).Bind(Model.Appointments, Model.Resources).GetHtml()

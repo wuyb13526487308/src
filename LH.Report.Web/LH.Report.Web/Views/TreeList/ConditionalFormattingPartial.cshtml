@@ -1,0 +1,41 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "ConditionalFormattingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.AutoGenerateColumns = false;
+
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        settings.RootValue = 0;
+        
+        settings.Columns.Add("Name", "Department");
+        settings.Columns.Add("Location");
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "Budget";
+                column.PropertiesEdit.DisplayFormatString = "{0:C}";
+            }
+        );
+        settings.Columns.Add("Phone1", "Phone");
+
+        settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+        settings.SettingsBehavior.AutoExpandAllNodes = true;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+        settings.Styles.Cell.Border.BorderColor = Color.White;
+        
+        settings.HtmlDataCellPrepared = (s, e) => {
+            if(e.Column.FieldName == "Budget") {
+                int value = (int)e.CellValue;
+                e.Cell.BackColor = TreeListDemoHelper.GetBudgetColor(value);
+                if(value > 1000000)
+                    e.Cell.Font.Bold = true;
+            }    
+        };
+        settings.HtmlRowPrepared = (s, e) => {
+            if(Object.Equals(e.GetValue("Location"), "Monterey"))
+                e.Row.BackColor = Color.FromArgb(211, 235, 183);
+        };
+    }
+    ).Bind(Model).GetHtml()

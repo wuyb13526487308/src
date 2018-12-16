@@ -1,0 +1,38 @@
+﻿@model IList
+
+@using (Html.BeginForm()){
+    ChartShowLabelsDemoOptions options = (ChartShowLabelsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:40px;">
+        <div style="padding-bottom: 4px;">
+            <label for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetPointLineViews(), options.View)
+        </div>
+        <div>
+            <div style="float: left; vertical-align:baseline;">
+                @Html.CheckBox("showLabels", options.ShowLabels, new { style = "vertical-align: -2px; margin-left: 0px; padding-left: 0px;" })
+                <label class="checkBox" for="showLabels">Show Labels</label>
+            </div>
+            <input style="float: right;" type="submit" value="Apply"/>
+        </div>
+    </div>
+    <br/>
+    switch (options.View) {
+        case DevExpress.XtraCharts.ViewType.Bubble:
+            @Html.Partial("PointLineViewsBubblePartial", Model)
+            break;
+        case DevExpress.XtraCharts.ViewType.ScatterLine:
+            @Html.Partial("PointLineViewsScatterLinePartial", Model)
+            break;
+        case DevExpress.XtraCharts.ViewType.StackedLine:
+        case DevExpress.XtraCharts.ViewType.StackedLine3D:
+            @Html.Partial("PointLineViewsStackedLinePartial", Model)
+            break;
+        case DevExpress.XtraCharts.ViewType.FullStackedLine:
+        case DevExpress.XtraCharts.ViewType.FullStackedLine3D:
+            @Html.Partial("PointLineViewsFullStackedLinePartial", Model)
+            break;
+        default:
+            @Html.Partial("PointLineViewsPartial", Model)
+            break;
+    }
+}

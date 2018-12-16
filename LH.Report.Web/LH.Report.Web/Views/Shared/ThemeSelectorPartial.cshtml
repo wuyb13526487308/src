@@ -1,0 +1,46 @@
+﻿<script type="text/javascript">
+    DXDemo.CurrentThemeCookieKey = "@Utils.CurrentThemeCookieKey";
+</script>
+
+<a class="DemoSprite Button" id="ThemeSelectorButton" onclick="DXDemo.ShowThemeSelector()">Themes</a>
+  
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "ThemeSelectorPopup";
+        settings.EnableTheming = false;
+        settings.ControlStyle.CssClass = "ThemeSelectorPopup";
+        settings.Styles.EnableDefaultAppearance = false;
+        settings.PopupElementID = "ThemeSelectorButton";
+        settings.PopupAction = PopupAction.LeftMouseClick;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+        settings.ShowShadow = false;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+        settings.PopupVerticalOffset = 1;
+        settings.ShowHeader = false;
+
+        settings.SetContent(() => {
+            ViewContext.Writer.Write("<div id=\"ThemesContainer\">");
+            foreach (ThemeGroupModel themeGroup in ThemesModel.Current.Groups) {
+                Html.DevExpress().Menu(menuSettings => {
+                    menuSettings.Name = "ThemeGroupMenu" + themeGroup.Name;
+                    menuSettings.EnableTheming = false;
+                    menuSettings.ControlStyle.CssClass = "ThemeGroupMenu";
+                    menuSettings.Styles.EnableDefaultAppearance = false;
+                    menuSettings.ItemImagePosition = ImagePosition.Top;
+
+                    foreach (ThemeModel theme in themeGroup.Themes) {
+                        DevExpress.Web.ASPxMenu.MenuItem menuItem = menuSettings.Items.Add(theme.Title, theme.Name);
+                        menuItem.Image.SpriteProperties.CssClass = "DemoSprite " + theme.SpriteCssClass;
+                        menuItem.Selected = (theme.Name == Utils.CurrentTheme);
+                    }
+
+                    menuSettings.ClientSideEvents.ItemClick = "function(s,e){ DXDemo.SetCurrentTheme(e.item.name); }";
+                }).Render();
+            }
+            ViewContext.Writer.Write("</div>");
+        });
+
+        settings.ClientSideEvents.PopUp = "DXDemo.ThemeSelectorPopupPopUp";
+        settings.ClientSideEvents.CloseUp = "DXDemo.ThemeSelectorPopupCloseUp";
+    }).GetHtml()

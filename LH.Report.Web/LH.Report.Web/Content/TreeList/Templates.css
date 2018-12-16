@@ -1,0 +1,22 @@
+﻿table.treeListCard {
+    background: #f5f5f5;
+    border-collapse: collapse;
+    width: 100%;
+}
+table.treeListCard td {
+    border: solid 1px #cecece;
+    padding: 4px;
+    white-space: normal;
+}
+table.treeListCard td.name {
+    background: #efefef;
+    white-space: nowrap;
+    width: 10%;
+}
+table.treeListCard img {
+    border: 0;
+}
+table.treeListCard img:hover {
+	cursor: pointer;
+}
+

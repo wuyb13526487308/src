@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "GridView", Action = "CustomizationWindowPartial" };
+        settings.ClientSideEvents.CustomizationWindowCloseUp = "grid_CustomizationWindowCloseUp";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.Settings.ShowGroupPanel = true;
+            
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region").Visible = false;
+        settings.Columns.Add("Country");
+    }).Bind(Model).GetHtml()

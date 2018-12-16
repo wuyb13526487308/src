@@ -1,0 +1,53 @@
+﻿@using (Html.BeginForm()) {
+    ChartSeriesTemplateBindingDemoOptions options = (ChartSeriesTemplateBindingDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:40px;">
+        <div style="padding-bottom: 4px;">
+            <label for="SeriesDataMember">Series Data Member:</label>
+            @Html.DropDownList("SeriesDataMember", ChartDemoHelper.GetSeriesDataMembers())
+        </div>
+        <div>
+            <div style="float: left; vertical-align:baseline;">
+                @Html.CheckBox("ShowLabels", options.ShowLabels, new { style = "vertical-align: -2px; margin-left: 0px; padding-left: 0px;" })
+                <label class="checkBox" for="ShowLabels">Show Labels</label>
+            </div>
+            <input style="float: right;" type="submit" value="Apply"/>
+        </div>
+    </div>
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.Width = 700;
+    settings.Height = 400;
+    settings.BorderOptions.Visible = false;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.SeriesDataMember = options.SeriesDataMember;
+    settings.SeriesTemplate.ArgumentDataMember = options.ArgumentDataMember;
+    settings.SeriesTemplate.ValueDataMembers[0] = "GSP";
+    settings.SeriesTemplate.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    if (settings.SeriesTemplate.LabelsVisibility == DefaultBoolean.True) {
+        settings.SeriesTemplate.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+        settings.SeriesTemplate.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.FixedPoint;
+        settings.SeriesTemplate.Label.PointOptions.ValueNumericOptions.Precision = 2;
+    }
+
+    XYDiagram diagram = (XYDiagram)settings.Diagram;
+    diagram.AxisX.Label.Staggered = options.ArgumentDataMember == ChartSeriesTemplateBindingDemoOptions.Region;
+    diagram.AxisY.Title.Visible = true;
+    diagram.AxisY.Title.Text = "Millions of Dollars";
+    diagram.AxisY.GridLines.MinorVisible = true;
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "US Regions Gross State Product",
+        Font = new Font("Tahoma", 18)
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "From www.bea.gov",
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom
+    });
+
+    @Html.DevExpress().Chart(settings).Bind(Model).GetHtml()
+}

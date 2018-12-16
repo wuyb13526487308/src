@@ -1,0 +1,69 @@
+﻿@model SchedulerDataObject
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#showPreview").click(function(){
+            reportContainer.Show();
+            reportViewer.Refresh();
+        });
+    });
+    function StartDateInit(s, e){
+        var start = scheduler.GetVisibleIntervals()[0].GetStart();
+        s.SetDate(start);
+    }
+    function EndDateInit(s, e){
+        var end = scheduler.GetVisibleIntervals()[0].GetEnd();
+        s.SetDate(end);
+    }
+    function ReportViewerBeginCallback(s, e){
+        e.customArgs["ReportTemplateFileName"] = $("#reportTemplateFileName").val();
+        e.customArgs["StartDate"] = startDate.GetValueString();
+        e.customArgs["EndDate"] = endDate.GetValueString();
+    }
+    function ValidateTimeInterval(){
+        var startValue = startDate.GetDate();
+        var endValue = endDate.GetDate();
+        if(endValue < startValue)
+            endDate.SetDate(startValue);
+    }
+// ]]>
+</script>
+<div class="chartOptionsPanel horizOptionsPanel" style="height:55px;margin-bottom:15px;">
+    <table cellpadding="2" cellspacing="2" width="100%">
+        <tr>
+            <td>Select a template file to load...</td>
+            <td>Print From:</td>
+            <td>Print To:</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DropDownList("reportTemplateFileName", new SelectList(SchedulerDemoHelper.ReportTemplateFileNames, 0))
+            </td>
+            <td>
+                @Html.DevExpress().DateEdit(
+                    settings =>{
+                        settings.Name = "startDate";
+                        settings.Width = Unit.Pixel(113);
+                        settings.Properties.ClientSideEvents.Init = "StartDateInit";
+                        settings.Properties.ClientSideEvents.DateChanged = "function(s, e) { ValidateTimeInterval(); }";
+                    }).GetHtml()
+            </td>
+            <td>
+                @Html.DevExpress().DateEdit(
+                    settings => {
+                        settings.Name = "endDate";
+                        settings.Width = Unit.Pixel(126);
+                        settings.Properties.ClientSideEvents.Init = "EndDateInit";
+                        settings.Properties.ClientSideEvents.DateChanged = "function(s, e) { ValidateTimeInterval(); }";
+                    }).GetHtml()
+            </td>
+            <td>
+                <input type="button" id="showPreview" value="Show Preview" style="margin-bottom:7px;"/>
+            </td>
+        </tr>
+    </table>
+</div>
+@Html.Partial("ReportTemplatesPartial", Model)
+@Html.Partial("ReportTemplatesPreviewPartial")

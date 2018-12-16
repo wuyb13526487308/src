@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.Coldairarrow.UnitTests",
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "11.GasStoreDatabase", "11.GasStoreDatabase\11.GasStoreDatabase.sqlproj", "{E81CA93D-6B5F-41CE-A135-2BFD489520CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LH.ReportWeb", "LH.Report.Web\LH.ReportWeb\LH.ReportWeb.csproj", "{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "13.Report", "13.Report", "{00235593-D848-4768-9392-4828BE34C500}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Base", "01.Base", "{B2F5EDED-8B19-42B5-B85E-FE2996AFE7AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,9 +151,26 @@ Global
 		{E81CA93D-6B5F-41CE-A135-2BFD489520CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{E81CA93D-6B5F-41CE-A135-2BFD489520CF}.Release|x86.Build.0 = Release|Any CPU
 		{E81CA93D-6B5F-41CE-A135-2BFD489520CF}.Release|x86.Deploy.0 = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|x64.Build.0 = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Debug|x86.Build.0 = Debug|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|x64.ActiveCfg = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|x64.Build.0 = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7095B12B-7FF2-4B6B-8C6C-654197EDAA34} = {B2F5EDED-8B19-42B5-B85E-FE2996AFE7AC}
+		{01C93A6B-76C5-4B10-B8B9-2F173B5F9441} = {B2F5EDED-8B19-42B5-B85E-FE2996AFE7AC}
+		{1F50752E-82EF-427D-9FCC-2BF8F25B2E63} = {00235593-D848-4768-9392-4828BE34C500}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BCE21A4-6BB8-433A-A291-C2CC71949731}

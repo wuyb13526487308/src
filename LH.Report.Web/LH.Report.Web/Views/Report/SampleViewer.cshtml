@@ -1,0 +1,25 @@
+﻿@model ReportsDemoModel
+
+<div>
+    @if(!string.IsNullOrEmpty(Model.ParametersView)) {
+        using (Html.BeginForm()) {
+            @Html.Partial(Model.ParametersView)
+        }
+    }
+    <div>
+    @Html.DevExpress().ReportToolbar(
+            settings =>
+            {
+                settings.Name = "ReportToolbar";
+                settings.ReportViewerName = "ReportViewer1";
+            }
+        ).GetHtml()
+        <table cellspacing="0" cellpadding="0" class="reportBorder" style="margin-top:20px;">
+            <tr>
+                <td>
+                    @Html.Partial("SampleViewerPartial", Model)
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

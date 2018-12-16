@@ -1,0 +1,27 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProducts";
+        settings.CallbackRouteValues = new { Controller = "Common", Action = "AjaxActionLinkPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Category").SetDataItemTemplateContent(c => {
+            int categoryID = (int)DataBinder.Eval(c.DataItem, "CategoryID");
+            ViewContext.Writer.Write(
+                Ajax.ActionLink(NorthwindDataProvider.GetCategoryNameById(categoryID), "AjaxActionLinkCategoryPartial", "Common",
+                    new {
+                        categoryID = categoryID
+                    }, 
+                    new AjaxOptions(){
+                        HttpMethod = "POST",
+                        UpdateTargetId = "categoryContent",
+                        OnSuccess = "ShowCategoryInformation",
+                        InsertionMode = InsertionMode.Replace
+                    }
+                )
+            );
+        });
+    }).Bind(Model).GetHtml()

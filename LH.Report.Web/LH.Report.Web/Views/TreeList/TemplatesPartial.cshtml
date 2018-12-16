@@ -1,0 +1,69 @@
+﻿@Html.DevExpress().TreeList(
+    settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "TreeList", Action = "TemplatesPartial" };
+        settings.CustomDataActionRouteValues = new { Controller = "TreeList", Action = "LoadNotes" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.KeyFieldName = "ID";
+        settings.ParentFieldName = "ParentID";
+        
+        settings.Columns.Add(
+            column => {
+                column.Caption = "Fish Catalog";
+                column.AllowSort = DefaultBoolean.False;
+            }
+        );
+
+        settings.SetDataCellTemplateContent(
+            c => {
+                var itemID = DataBinder.Eval(c.DataItem, "ID");
+                
+                ViewContext.Writer.Write(
+                    "<table class=\"treeListCard\">" +
+                        "<tr>" +
+                            "<td rowspan=\"4\" style=\"width: 10%\">"     
+                );
+                Html.DevExpress().BinaryImage(
+                    imgSettings => {
+                        imgSettings.Name = "pictureLink" + itemID;
+                        imgSettings.ContentBytes = (byte[])DataBinder.Eval(c.DataItem, "Picture");
+                        imgSettings.Properties.ClientSideEvents.Click = "function(s, e) { LoadNotes(" + itemID + ", s.name); }";
+                })
+                .Render();
+                ViewContext.Writer.Write(
+                            "</td>" +
+                            "<td class=\"name\">Species No:</td>" +
+                            "<td>" + DataBinder.Eval(c.DataItem, "Species_No") + "</td>" +
+                            "<td class=\"name\">Length:</td>" +
+                            "<td>" + DataBinder.Eval(c.DataItem, "Length") + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td class=\"name\">Common Name:</td>" +
+                            "<td colspan=\"3\">" + DataBinder.Eval(c.DataItem, "Common_Name") + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td class=\"name\">Species Name:</td>" +
+                            "<td colspan=\"3\">" + DataBinder.Eval(c.DataItem, "Species_Name") + "</td>" +
+                        "</tr>" + 
+                        "<tr>" +
+                            "<td colspan=\"4\">" +
+                                "<a href=\"javascript:;\" id=\"textLink" + itemID +"\" onclick=\"LoadNotes(" + itemID + ", this.id)\">Show notes...</a>" +
+                            "</td>" +
+                        "</tr>" +
+                    "</table>"          
+                );
+            }
+        );
+
+        settings.ClientSideEvents.CustomDataCallback = "ShowNotes";
+
+        settings.SettingsPager.Mode = TreeListPagerMode.ShowPager;
+        settings.SettingsPager.PageSize = 5;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        
+        settings.Styles.Cell.Paddings.PaddingTop = Unit.Pixel(2);
+        settings.Styles.Cell.Paddings.PaddingBottom = Unit.Pixel(2); 
+    }
+).Bind(Model).GetHtml()

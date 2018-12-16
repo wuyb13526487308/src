@@ -1,0 +1,104 @@
+﻿<script type="text/javascript">
+    // <![CDATA[
+    $(window).load(UpdateLabelPositionDisabled);
+
+    function SetLabelPositionEnabled() {
+        $("#labelPosition")[0].disabled = false;
+    }
+    function UpdateLabelPositionDisabled() {
+        $("#labelPosition")[0].disabled = !$("#showLabels")[0].checked;
+    }
+    // ]]> 
+</script>
+
+@using (Html.BeginForm()) {
+    ChartPieDoughnutViewsDemoOptions options = (ChartPieDoughnutViewsDemoOptions)ViewData[ChartDemoHelper.OptionsKey];
+    <div class="chartOptionsPanel" style="height:64px;">
+        <div style="padding-bottom: 4px;">
+            <label style="margin-right:31px" for="view">View Type:</label>
+            @Html.DropDownList("view", ChartDemoHelper.GetPieViews(), new { style = "width:102px" })
+            @Html.CheckBox("valueAsPercent", options.ValueAsPercent, new { style = "margin-left: 8px; vertical-align: -2px;" })
+            <label class="checkBox" for="valueAsPercent">Value As Percent</label>
+        </div>
+        <div style="padding-bottom: 4px;">
+            <label style="margin-right:12px" for="labelPosition">Label Position:</label>
+            @Html.DropDownList("labelPosition", ChartDemoHelper.GetPieLabelPositions(), new { style = "width:102px" })
+            @Html.CheckBox("showLabels", options.ShowLabels, new { style = "margin-left: 8px; vertical-align: -2px;", onclick = "UpdateLabelPositionDisabled()" })
+            <label class="checkBox" for="showLabels">Show Labels</label>
+        </div>
+        <div>
+            <div style="float: left; vertical-align:baseline;">
+                <label for="explodedPoints">Exploded Points:</label>
+                @Html.DropDownList("explodedPoints", ChartDemoHelper.GetPieExplodePoints(), new { style = "width:102px" })
+            </div>
+            <input style="float: right;" type="submit" value="Apply" onclick="SetLabelPositionEnabled()"/>
+        </div>
+    </div>
+    <br/>
+    
+    ChartControlSettings settings = new ChartControlSettings();
+    settings.Name = "chart";
+    settings.BorderOptions.Visible = false;
+    settings.Height = 400;
+    settings.Width = 700;
+    settings.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+
+    Series series = new Series("Counties", options.View);
+    series.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    ((PieSeriesLabel)series.Label).Position = options.LabelPosition;
+    if (options.ValueAsPercent) {
+        series.Label.PointOptions.ValueNumericOptions.Format = NumericFormat.Percent;
+        series.Label.PointOptions.ValueNumericOptions.Precision = 0;
+    }
+    series.LegendPointOptions.PointView = PointView.ArgumentAndValues;
+    series.Label.PointOptions.PointView = PointView.ArgumentAndValues;
+    series.ArgumentDataMember = "Name";
+    series.ValueDataMembers[0] = "Area";
+    settings.Series.Add(series);
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        PieSeriesViewBase view = (PieSeriesViewBase)chart.Series[0].View;
+        if (options.ExplodePoint != null) {
+            SeriesPoint explodedPoint = null;
+            foreach (SeriesPoint point in chart.Series[0].Points) {
+                if (point.Argument == options.ExplodePoint) {
+                    explodedPoint = point;
+                    break;
+                }
+            }
+            if (explodedPoint != null) {
+                view.ExplodedPoints.Add(explodedPoint);
+            }
+        } else {
+            view.ExplodeMode = options.ExplodeMode;
+        }
+    };
+    SimpleDiagram3D diagram = settings.Diagram as SimpleDiagram3D;
+    if (diagram != null) {
+        diagram.RotationType = RotationType.UseAngles;
+        diagram.RotationOrder = RotationOrder.ZXY;
+        diagram.RotationAngleX = -35;
+        diagram.RotationAngleZ = 15;
+    } else {
+        series.Label.TextColor = Color.Black;
+        series.Label.BackColor = Color.Transparent;
+        series.Label.Font = new Font("Tahoma", 8, FontStyle.Bold);
+        series.Label.LineVisible = true;
+        series.Label.Border.Visible = false;
+    }
+    series.Label.Antialiasing = options.LabelPosition == PieSeriesLabelPosition.Radial;
+
+    settings.Titles.Add(new ChartTitle() {
+        Font = new Font("Tahoma", 18),
+        Text = "Area of Countries"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        Font = new Font("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.nationmaster.com"
+    });
+
+    @Html.DevExpress().Chart(settings).Bind(Model).GetHtml()
+}

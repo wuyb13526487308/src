@@ -1,0 +1,8 @@
+﻿<div style="float:left; width:788px; margin-right:2px;">
+    <div style="float:left; padding:3px 0px">@((NavBarGroup)Model).Text</div>
+    <div style="float:right">
+        <a href="@Url.Content(((NavBarGroup)Model).NavigateUrl)" target="_blank" onclick="return DXDemo.ShowScreenshotWindow(event, this);">
+            <img align="middle" alt="" src="@Url.Content("~/Content/NavBar/Lessons/bWatchCollapsed.gif")" border="0" style="margin-bottom:3px; width:71px; height:21px" />
+        </a>
+    </div>
+</div>

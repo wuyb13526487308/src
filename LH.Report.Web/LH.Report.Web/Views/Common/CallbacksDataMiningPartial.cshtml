@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings => {
+        settings.Name = "pivotGrid";
+        settings.CallbackRouteValues = new { Controller = "Common", Action = "CallbacksDataMiningPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 0;
+            field.FieldName = "CompanyName";
+            field.Caption = "Customer";
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 0;
+            field.FieldName = "OrderDate";
+            field.Caption = "Year";
+            field.GroupInterval = PivotGroupInterval.DateYear;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 0;
+            field.FieldName = "ProductAmount";
+            field.Caption = "Product Amount";
+            field.CellFormat.FormatType = FormatType.Custom;
+            field.CellFormat.FormatString = "c";
+        });
+        settings.Fields.Add(field => {
+            field.AreaIndex = 0;
+            field.FieldName = "ProductName";
+            field.Caption = "Product Name";
+        });
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,13 @@
+﻿@model IEnumerable
+
+@{ IList<string> sortFields = new List<string>() { "Name", "Location", "Budget" }; }
+
+<div class="BottomMargin">
+    <label for="Name" style="vertical-align: middle"><b>Sort by:</b></label>
+    @foreach(string field in sortFields) {
+        <input type="button" id="@field" value="@(field == "Name" ? "Department" : field)" 
+            onclick="treeList.SortBy('@field')" style="vertical-align: middle; width: 100px"/>
+        <text>&nbsp;</text>
+    }
+</div>
+@Html.Partial("SortingPartial", Model)

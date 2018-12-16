@@ -1,0 +1,26 @@
+﻿.RightSide
+{
+  position: absolute;
+  top: expression(eval(document.documentElement.scrollTop));
+}
+
+.DemoSprite
+{
+    background-image: url(Sprite.gif);
+}
+
+.LayoutRight {
+    overflow: hidden;
+}
+
+.IntroBanner,
+.IntroBanner .Grad
+{
+    zoom: 1;
+}
+
+.CodeNavBar .dxnb-content
+{
+    height: expression(this.scrollHeight > 359 ? "360px" : "auto");  
+    width: 790px;
+}
