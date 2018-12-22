@@ -59,6 +59,9 @@ namespace Coldairarrow.Business.Sto_ProManage
         public MaterialRequisitionModel GetMaterialRequistion(string mrNo)
         {
             MaterialRequisitionModel theData = null;// new MaterialRequisitionModel ();
+            if (!mrNo.Contains("PMR-"))
+                mrNo = "PMR-" + mrNo;
+
             var query = this.GetIQueryable().Where(p => p.PMR_No == mrNo).ToList();
             if(query.Count > 0)
             {

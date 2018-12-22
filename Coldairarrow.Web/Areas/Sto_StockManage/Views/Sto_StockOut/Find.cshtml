@@ -1,0 +1,112 @@
+﻿@using Coldairarrow.Entity.Sto_BaseInfo;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (Sto_Material)Model;
+
+}
+
+@section search{
+    <div class="search_wrapper">
+        <div class="search_item">
+            <label class="search_label">查询类别</label>
+            <select name="condition" class="easyui-combobox" editable='false' data-options="width:100">
+                <option value="">请选择</option>
+
+                <option value="MatNo">物料编号</option>
+                <option value="MatName">物料名称</option>
+                <option value="JianPin">简拼</option>
+                <option value="BigClass">分类</option>
+                <option value="GuiGe">规格</option>
+                <option value="UnitNo">单位</option>
+                <option value="Context">备注</option>
+            </select>
+            <input name="keyword" class="easyui-textbox" style="width:150px" />
+        </div>
+        <div class="search_submit">
+            <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+        </div>
+    </div>
+}
+<div id="dataTable">
+</div>
+
+@section foottoolbar{
+    <div style="position: absolute; right: 50px;">
+        <a id="saveForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-save'">选择</a>
+        <a id="closeForm" href="#" class="easyui-linkbutton" style="width:60px;height:30px" data-options="iconCls:'icon-cancel'">取消</a>
+    </div>
+}
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var sId = 'ddd12345';
+
+    function initTable() {
+        $('#dataTable').datagrid({
+            url: rootUrl + 'Sto_BaseInfo/Sto_Material/GetDataList',
+            method: 'POST',
+            //queryParams: { 'id': id },
+            idField: 'Id',
+            fit: true,
+            fitColumns: true,
+            singleSelect: false,
+            selectOnCheck: false,
+            checkOnSelect: false,
+            //rownumbers: true,
+            pagination: true,
+            pageSize: 30,
+            nowrap: false,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            //showFooter: true,
+            columns: [[
+                { title: 'ck', field: 'ck', checkbox: true },
+
+                { title: '编号', field: 'MatNo', width: 200 },
+                //{ title: 'BarCode', field: 'BarCode', width: 200 },
+                { title: '名称', field: 'MatName', width: 200 },
+                { title: '简拼', field: 'JianPin', width: 200 },
+                { title: '分类', field: 'BigClass', width: 200 },
+                { title: '规格', field: 'GuiGe', width: 200 },
+                { title: '上限', field: 'MaxStoreQuantity', width: 200 },
+                { title: '下限', field: 'WarnStoreQuantity', width: 200 },
+                { title: '单位', field: 'UnitNo', width: 200 },
+                { title: '备注', field: 'Context', width: 200 }
+            ]],
+            onBeforeLoad: function (param) {
+
+            },
+            onBeforeSelect: function () {
+                return false;
+            }
+        });
+    }
+
+    $(function () {
+        initTable();
+
+        $('#saveForm').click(function () {
+            var selected = $("#dataTable").datagrid("getChecked");
+            if (!selected || !selected.length || selected.length ==0) {
+                dialogError('请选择物料!');
+                return;
+            }
+            //var theEntity = selected[0];
+            var theData = { Entity: selected, Id: sId };
+            $.postJSON(rootUrl + 'Sto_StockManage/Sto_StockOut/CreateCacheItem', theData, function (resJson) {
+                if (resJson.Success) {
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+
+        });
+
+        $('#closeForm').click(function () {
+            parent.dialogClose('form');
+        });
+    });
+</script>

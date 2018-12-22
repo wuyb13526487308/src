@@ -1,7 +1,13 @@
+using Aspose.Cells;
 using Coldairarrow.Business.Sto_StockManage;
 using Coldairarrow.Entity.Sto_StockManage;
 using Coldairarrow.Util;
+using Coldairarrow.Util.lib;
 using System;
+using System.Data;
+using System.IO;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Coldairarrow.Web
@@ -35,8 +41,50 @@ namespace Coldairarrow.Web
         /// <returns></returns>
         public ActionResult GetDataList(string param,  Pagination pagination)
         {
+            new SystemCache().SetCache("stock_query", param==null?"":param,new TimeSpan(3,0,0));
             var dataList = _sto_StockBusiness.GetDataList(param, pagination);
             return Content(pagination.BuildTableResult_DataGrid(dataList).ToJson());
+        }
+
+        /// <summary>
+        /// 下载当前查询的库存列表
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public ActionResult DownLoad(string key)
+        {
+            string param = $"{new SystemCache().GetCache("stock_query")}";
+            var dataList = _sto_StockBusiness.GetDataList(param, new Pagination() { PageRows=int.MaxValue});
+            string outputFileName = $"库存-{DateTime.Now.ToString("yyyyMMddHHmmss")}";
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add(new DataColumn("仓库"));
+            dataTable.Columns.Add(new DataColumn("编码"));
+            dataTable.Columns.Add(new DataColumn("名称"));
+            dataTable.Columns.Add(new DataColumn("分类"));
+            dataTable.Columns.Add(new DataColumn("规格"));
+            dataTable.Columns.Add(new DataColumn("单位"));
+            dataTable.Columns.Add(new DataColumn("数量"));
+            dataTable.Columns.Add(new DataColumn("单价"));
+            dataTable.Columns.Add(new DataColumn("上限"));
+            dataTable.Columns.Add(new DataColumn("下限"));
+            foreach(Sto_StockBusiness.Stock stock in dataList)
+            {
+                DataRow newRow = dataTable.NewRow();
+                newRow[0] = stock.StoreName;
+                newRow[1] = stock.MatNo;
+                newRow[2] = stock.MatName;
+                newRow[3] = stock.BigClassName;
+                newRow[4] = stock.GuiGe;
+                newRow[5] = stock.UnitName;
+                newRow[6] = stock.Quantity;
+                newRow[7] = stock.Price;
+                newRow[8] = stock.MaxStoreQuantity;
+                newRow[9] = stock.WarnStoreQuantity;
+                dataTable.Rows.Add(newRow);
+            }
+           
+            OperateExcel.ExportToExcel(System.Web.HttpContext.Current, dataTable, outputFileName);
+            return new EmptyResult();
         }
 
         #endregion

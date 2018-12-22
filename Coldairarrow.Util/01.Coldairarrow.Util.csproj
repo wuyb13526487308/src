@@ -154,6 +154,7 @@
     <Compile Include="Helper\LoopHelper.cs" />
     <Compile Include="Helper\TimerHelper.cs" />
     <Compile Include="Helper\TypeBuilderHelper.cs" />
+    <Compile Include="lib\OperateExcel.cs" />
     <Compile Include="Model\EasyuiTreeDto.cs" />
     <Compile Include="Model\ErrorResult.cs" />
     <Compile Include="Model\SuccessResult.cs" />

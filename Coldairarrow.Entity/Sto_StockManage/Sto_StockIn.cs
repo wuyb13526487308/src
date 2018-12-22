@@ -57,5 +57,10 @@ namespace Coldairarrow.Entity.Sto_StockManage
         /// </summary>
         public String StoreId { get; set; }
 
+        /// <summary>
+        /// 入库类型，0 采购 1 退料 2 期初
+        /// </summary>
+        public Int16? InType { get; set; } = 0;
+
     }
 }

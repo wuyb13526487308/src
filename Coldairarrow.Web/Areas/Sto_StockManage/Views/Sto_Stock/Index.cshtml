@@ -44,7 +44,7 @@
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchParamGrid(this,'#dataTable')">查询</a>
-        </div>
+            <a href='@Url.Content("~/")Sto_StockManage/Sto_Stock/DownLoad?key=stock_query' class="easyui-linkbutton" data-options="iconCls:'icon-excel'">导出</a>
     </div>
 }
 <div id="dataTable">
@@ -85,8 +85,7 @@
                 { title: '数量', field: 'Quantity', width: 100 },
                 { title: '单价', field: 'Price', width: 100 },
                 { title: '上限', field: 'MaxStoreQuantity', width: 100 },
-                { title: '下限', field: 'WarnStoreQuantity', width: 100 },
-                { title: '期初时间', field: 'UpToTime', width: 200 }
+                { title: '下限', field: 'WarnStoreQuantity', width: 100 }
             ]],
             onBeforeLoad: function (param) {
 

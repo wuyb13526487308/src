@@ -84,7 +84,7 @@
                     }
                 },
                 {
-                    title: '操作', field: '_', width: 100, fixed: true, formatter: function (value, row) {
+                    title: '操作', field: '_', width: 130, fixed: true, formatter: function (value, row) {
                         var html = '';
                         if (row.Status == 2)
                             return html;
@@ -97,6 +97,11 @@
                         if (deletePermission) {
                             html += ' <a href="javascript:;" onclick="deleteData([\'{0}\'])">删除</a>'.format(row['Id']);
                         }
+                        if(html.length >0){
+                            html += ' | ';
+                        }
+                        html += ' <a href="javascript:;" onclick="printData([\'{0}\'])">打印</a>'.format(row['Id']);
+
                         return html;
                     }
                 }
@@ -109,7 +114,11 @@
             }
         });
     }
+    //打印申请单
+    function printData(id) {
 
+        printTicket(rootUrl, "RG_TICKET", id);
+    }
     $(function () {
         initTable();
 

@@ -312,8 +312,11 @@ namespace AJWebAPI.Report
 
     public class CacheReportData
     {
-        public XtraReport XtraReport { get; set; }
+        //public XtraReport XtraReport { get; set; }
 
-        public object DataSource { get; set; }
+        //public object DataSource { get; set; }
+        public int ReportID { get; set; }
+
+        public string QueryKey { get; set; }
     }
 }

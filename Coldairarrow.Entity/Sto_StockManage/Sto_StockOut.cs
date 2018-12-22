@@ -20,6 +20,7 @@ namespace Coldairarrow.Entity.Sto_StockManage
         /// <summary>
         /// OutNo
         /// </summary>
+        
         public String OutNo { get; set; }
 
         /// <summary>

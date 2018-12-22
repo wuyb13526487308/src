@@ -144,22 +144,22 @@ namespace Coldairarrow.Business.Sto_StockManage
             return theData;
         }
 
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="newData">数据</param>
-        public void AddData(Sto_StockOut newData)
-        {
-            Insert(newData);
-        }
+        ///// <summary>
+        ///// 添加数据
+        ///// </summary>
+        ///// <param name="newData">数据</param>
+        //public void AddData(Sto_StockOut newData)
+        //{
+        //    Insert(newData);
+        //}
 
-        /// <summary>
-        /// 更新数据
-        /// </summary>
-        public void UpdateData(Sto_StockOut theData)
-        {
-            Update(theData);
-        }
+        ///// <summary>
+        ///// 更新数据
+        ///// </summary>
+        //public void UpdateData(Sto_StockOut theData)
+        //{
+        //    Update(theData);
+        //}
 
         /// <summary>
         /// 删除数据
@@ -171,6 +171,43 @@ namespace Coldairarrow.Business.Sto_StockManage
         }
 
         #endregion
+
+        /// <summary>
+        /// 普通出库
+        /// </summary>
+        /// <param name="theData"></param>
+        public void NormalMaterial(StockOutModel theData)
+        {
+            Sto_StockOut stockOut = theData.ToJson().ToObject<Sto_StockOut>();
+            if (stockOut.Id.IsNullOrEmpty())
+            {
+                //新增出库单
+                stockOut.Id = Guid.NewGuid().ToSequentialGuid();
+                stockOut.OutNo = $"N-{DateTime.Now.ToString("yyMMddHHmmss.fff")}";
+                this.BeginTransaction();
+                this._stockOutItemBus.BeginTransaction();
+                this.Insert(stockOut);
+
+                foreach (Sto_StockOutItem item in theData.StockOutItems)
+                {
+                    item.Id = Guid.NewGuid().ToSequentialGuid();
+                    item.OutNo = stockOut.OutNo;
+                    this._stockOutItemBus.Insert(item);
+                }
+                if (this.EndTransaction())
+                {
+                    if (!this._stockOutItemBus.EndTransaction())
+                    {
+                        this.Delete(stockOut.Id);
+                        throw new Exception("出库失败");
+                    }
+                }
+                else
+                {
+                    throw new Exception("出库失败");
+                }
+            }
+        }
 
         /// <summary>
         /// 工程领料单领料
@@ -242,6 +279,8 @@ namespace Coldairarrow.Business.Sto_StockManage
                 throw new Exception("出库失败");
             }
         }
+
+
 
         #region 私有成员
 

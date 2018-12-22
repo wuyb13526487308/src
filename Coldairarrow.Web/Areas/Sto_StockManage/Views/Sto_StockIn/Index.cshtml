@@ -9,12 +9,15 @@
 
 }
 @section toolbar{
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">创建入库单</a>
+    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">采购入库</a>
+    <a id="tl_add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">退料入库</a>
+    <a id="qc_add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">期初入库</a>
+
     <a id="auditor" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">审核</a>
     <a id="un_auditor" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">反审核</a>
 
     @*<a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>*@
+        <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>*@
 
 }
 @section search{
@@ -71,11 +74,21 @@
                 { title: 'ck', field: 'ck', checkbox: true },
 
                 { title: '入库单号', field: 'InNo', width: 200 },
-                { title: '入库日期', field: 'InDate', width: 200 },
-                { title: '操作员', field: 'InOperID', width: 200 },
+                { title: '入库时间', field: 'InDate', width: 200 },
+                {
+                    title: '入库类型', field: 'InType', width: 100, formatter: function (value, row) {
+                        var mapping = {
+
+                            '0': '采购',
+                            '1': '退库',
+                            '2': '期初'
+                        };
+                        return mapping[value];
+                    }  },
+                { title: '操作员', field: 'InOperID', width: 150 },
                 { title: '备注', field: 'Context', width: 200 },
                 {
-                    title: '状态', field: 'State', width: 200, formatter: function (value, row) {
+                    title: '状态', field: 'State', width: 100, formatter: function (value, row) {
                         var mapping = {// 预算  1 建设  2 已结算 3
 
                             '0': '录入',
@@ -104,7 +117,7 @@
                     }
                 },
                 {
-                    title: '操作', field: '_', width: 150, fixed: true, formatter: function (value, row) {
+                    title: '操作', field: '_', width: 200, fixed: true, formatter: function (value, row) {
                         var html = '';
                         if (editPermission) {
                             html += '<a href="javascript:;" onclick="editData(\'{0}\')">编辑</a>'.format(row['Id']);
@@ -126,6 +139,9 @@
                                 html += ' | <a href="javascript:;" onclick="un_auditorData(\'{0}\')">反审核</a>'.format(row['Id']);
                             }
                         }
+                        html += ' | <a href="javascript:;" onclick="printData(\'{0}\')">打印</a>'.format(row['Id']);
+
+
                         return html;
                     }
                 }
@@ -139,18 +155,37 @@
         });
     }
 
+    function printData(id) {
+
+        printTicket(rootUrl, "IN_TICKET", id);
+    }
+
+    function createStockIn(inType) {
+        dialogOpen({
+            id: 'form',
+            title: '创建入库单',
+            width: formWidth,
+            height: formHeight,
+            url: rootUrl + 'Sto_StockManage/Sto_StockIn/Form?id=,' + inType
+        });
+    }
+
     $(function () {
         initTable();
 
-        //添加数据
+        //采购入库
         $('#add').click(function () {
-            dialogOpen({
-                id: 'form',
-                title: '添加数据',
-                width: formWidth,
-                height: formHeight,
-                url: rootUrl + 'Sto_StockManage/Sto_StockIn/Form',
-            });
+            createStockIn(0);
+        });
+
+        //退料入库
+        $('#tl_add').click(function () {
+            createStockIn(1);
+        });
+
+        //期初入库
+        $('#qc_add').click(function () {
+            createStockIn(2);
         });
 
         //修改数据
@@ -264,8 +299,8 @@
         var selectData;
         data.rows.forEach(function (item, index) {
             if (item.Id == id) {
-                selectData = item;               
-            }            
+                selectData = item;
+            }
         });
 
         dialogComfirm('删除入库单:[' + selectData.InNo + '],确认删除吗？', function () {

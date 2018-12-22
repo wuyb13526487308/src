@@ -1,6 +1,7 @@
 ﻿using AJWebAPI.Report;
 using Coldairarrow.Util;
 using DevExpress.XtraReports.UI;
+using RX.Gas.ReportLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +29,24 @@ namespace LH.ReportWeb
             }
             else
             {
-                XtraReport xtraReport = data.XtraReport;
-                xtraReport.DataSource = data.DataSource;
+                BaseReport report = ReadReport(data.ReportID);
+
+                XtraReport xtraReport = XtraReport.FromStream(report.getReportStream(), true);
+                foreach (DefineSqlParameter par in report.DataSource.DbParameterCollection)
+                {
+                    if (par.ParameterName.ToUpper() == "ID".ToUpper())
+                       par.Value = data.QueryKey;
+                }
+                report.DataSource.Fill();
+                xtraReport.DataSource = report.DataSource;
                 this.ReportViewer1.Report = xtraReport;
+                //xtraReport.CreateDocument();
             }
+        }
+
+        private BaseReport ReadReport(int rid)
+        {
+            return new BaseReport(Convert.ToInt32(rid));
         }
     }
 }

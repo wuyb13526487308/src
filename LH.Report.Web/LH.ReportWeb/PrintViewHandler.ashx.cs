@@ -24,27 +24,13 @@ namespace LH.ReportWeb
             context.Response.ContentType = "text/plain";
 
             CacheReportData data = new CacheReportData();
-
-
             //获取打印的类型
-            string printType = context.Request.QueryString["ptype"];
-            switch (printType.ToUpper())
-            {
-                case OUT_Ticket:
+            int.TryParse(context.Request.QueryString["r"], out int reportID);
+            data.ReportID = reportID;
+            data.QueryKey = context.Request.QueryString["key"];           
 
-                    break;
-                case IN_Ticket:
-
-                    break;
-            }
-            BaseReport report = ReadReport(1);
-
-            data.XtraReport = XtraReport.FromStream(report.getReportStream(), true);
-            data.DataSource = report.DataSource;
-
-            string printData = context.Request.Form["Data"];
             string key = Guid.NewGuid().ToSequentialGuid();
-            new SystemCache().SetCache(key, data, new TimeSpan(0, 0, 30));
+            new SystemCache().SetCache(key, data, new TimeSpan(0, 30, 30));
 
             AjaxResult res = new AjaxResult
             {

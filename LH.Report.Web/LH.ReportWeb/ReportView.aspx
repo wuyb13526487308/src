@@ -27,12 +27,17 @@
             position :absolute ;
 
         }
+        body{
+	        margin: 0; 
+	        padding: 0;
+	        border: 0;
+        }
     </style>
     <script>
         //SH.MainGridHeight = $(window).height() * 0.99+10;
         function boxheight() { //函数：获取尺寸
             $('#layout').layout({
-                height: $(window).height() * 0.99-40
+                height: $(window).height() * 0.99-1
             }); 
         }
 

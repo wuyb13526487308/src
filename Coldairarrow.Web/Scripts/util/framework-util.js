@@ -14,7 +14,8 @@ function searchParamGrid(searchBtnObj, gridSelector) {
     if (!$wrapper || !$wrapper.length) {
         return;
     }
-    var obj =$wrapper.getValues();
+    var obj = $wrapper.getValues();
+
     var params = {
         param: JSON.stringify(obj)
     };
@@ -32,6 +33,19 @@ function searchTreeGrid(searchBtnObj, gridSelector) {
     $(gridSelector).treegrid("load", params);
 }
 
+//按指定的条件
+function outputDataToExcel(btnObject, dataSelector) {
+    var $wrapper = $(searchBtnObj).closest("div.search_wrapper");
+    if (!$wrapper || !$wrapper.length) {
+        return;
+    }
+    var obj = $wrapper.getValues();
+
+    var params = {
+        param: JSON.stringify(obj)
+    };
+    $(gridSelector).datagrid("load", params);
+}
 //加载动画
 function loading(isLoading) {
     var loading = true;
@@ -157,14 +171,14 @@ function printTicket(rootUrl, type, value) {
     var theData = { type: type, key: value };
     $.getJSON(rootUrl + 'base/report?type=' + type + '&key=' + value, function (resJson) {
         if (resJson.Success) {
-            Desktop.tabs.add('_panel_' + resJson.Msg, '出库统计', ''+resJson.Data);
-            //dialogOpen({
-            //    id: 'form',
-            //    title: '打印预览',
-            //    width: 800,
-            //    height: 500,
-            //    url: resJson.Data,
-            //});
+            //Desktop.tabs.add('_panel_' + resJson.Msg, '出库统计', ''+resJson.Data);
+            dialogOpen({
+                id: 'form',
+                title: '打印预览',
+                width: 890,
+                height: 520,
+                url: resJson.Data,
+            });
         }
         else {
             dialogError(resJson.Msg);

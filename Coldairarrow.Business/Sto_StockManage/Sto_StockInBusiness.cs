@@ -26,7 +26,7 @@ namespace Coldairarrow.Business.Sto_StockManage
             //模糊查询
             if (!condition.IsNullOrEmpty() && !keyword.IsNullOrEmpty())
                 q = q.Where($@"{condition}.Contains(@0)", keyword);
-
+            q = q.OrderByDescending(p => p.InDate);
             return q.GetPagination(pagination).ToList();
         }
 
@@ -76,9 +76,11 @@ namespace Coldairarrow.Business.Sto_StockManage
                             UnitNo = item.UnitNo,
                             StoreUnitId = "",
                             Price = item.Price,
-                            UpToTime = DateTime.Now
+                            UpToTime =  DateTime.Now.AddDays(-1),
+                            BigClass = item.BigClass
                         };
                         _stockBus.Insert(stock);
+                       
                     }
                 }
 
@@ -93,7 +95,8 @@ namespace Coldairarrow.Business.Sto_StockManage
                     StoreId = newData.StoreId,
                     AuditDate = newData.AuditDate,
                     Auditor = newData.Auditor,
-                    Context = newData.Context 
+                    Context = newData.Context ,
+                    InType = newData.InType
                 };
 
                 Insert(stockIn);
@@ -106,10 +109,7 @@ namespace Coldairarrow.Business.Sto_StockManage
 
                         throw new Exception("保存数据失败");
                     }
-                    else
-                    {
-                        _stockBus.EndTransaction();
-                    }
+                    _stockBus.EndTransaction();
                 }                    
             }
             else
@@ -165,7 +165,8 @@ namespace Coldairarrow.Business.Sto_StockManage
                             UnitNo = item.UnitNo,
                             StoreUnitId = "",
                             Price = item.Price,
-                            UpToTime = DateTime.Now
+                            UpToTime = DateTime.Now.AddDays(-1),
+                            BigClass=item.BigClass
                         };
                         _stockBus.Insert(stock);
                     }
@@ -204,6 +205,7 @@ namespace Coldairarrow.Business.Sto_StockManage
                     this.Update(stockIn);
                     throw new Exception("修改入库单失败。");
                 }
+                _stockBus.EndTransaction();
             }
         }
 
@@ -334,7 +336,8 @@ namespace Coldairarrow.Business.Sto_StockManage
             this.AuditDate = stockIn.AuditDate;
             this.Auditor = stockIn.Auditor;
             this.Context = stockIn.Context;
-            this.InOperID = stockIn.InOperID; 
+            this.InOperID = stockIn.InOperID;
+            this.InType = stockIn.InType;
         }
     }
 }

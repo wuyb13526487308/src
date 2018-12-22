@@ -22,7 +22,19 @@ namespace Coldairarrow.Web
 
         public ActionResult Form(string id)
         {
+            Int16 inType = -1;
+
+            if (!id.IsNullOrEmpty() && id.Contains(","))
+            {
+                inType = Convert.ToInt16(id.Replace(",",""));
+                id = "";
+            }
+
             var theData = id.IsNullOrEmpty() ? new StockInModel() : _sto_StockInBusiness.GetTheData(id);
+            if (id.IsNullOrEmpty())
+            {
+                theData.InType = inType;
+            }
 
             return View(theData);
         }

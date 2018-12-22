@@ -33,9 +33,9 @@
                 <td>
                     <input name="InNo" value="@obj.InNo" class="easyui-textbox" data-options="width:'200px',required:true">
                 </td>
-                <th>入库日期</th>
+                <th>入库时间</th>
                 <td>
-                    <input name="InDate" value="@obj.InDate" class="easyui-datebox" data-options="width:'200px',required:true">
+                    <input name="InDate" value="@obj.InDate" class="easyui-datetimebox" data-options="width:'200px',required:true">
                 </td>
             </tr>
             <tr>
@@ -61,11 +61,26 @@
                 <td>
                     <input name="Context" value="@obj.Context" class="easyui-textbox" data-options="width:'200px'">
                 </td>
-                <th>状态</th>
+                <th>入库类型</th>
                 <td>
+                    <input name="State" value="@obj.InType" class="easyui-combobox" readonly="readonly" editable="false" data-options="
+		                valueField: 'value',
+		                textField: 'label',
+                        width:'90px',
+		                data: [{
+			                label: '采购',
+			                value: '0'
+		                },{
+			                label: '退库',
+			                value: '1'
+		                },{
+			                label: '期初',
+			                value: '2'
+		                }]" />  状态 
                     <input name="State" value="@obj.State" class="easyui-combobox" readonly="readonly" editable="false" data-options="
 		                valueField: 'value',
 		                textField: 'label',
+                        width:'80px',
 		                data: [{
 			                label: '录入',
 			                value: '0'
@@ -176,6 +191,7 @@
             rowData.MatName = resJson.MatName;
             rowData.GuiGe = resJson.GuiGe;
             rowData.UnitNo = resJson.UnitNo;
+            rowData.BigClass = resJson.BigClass;
 
             accept();
             $('#dataTable').datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);

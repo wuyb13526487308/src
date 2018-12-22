@@ -47,6 +47,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=5.3.1.0, Culture=neutral, PublicKeyToken=9ec0ff091d04b091, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Coldairarrow.Util\lib\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
@@ -124,6 +128,7 @@
     <Content Include="Scripts\business\requestbusiness.js" />
     <Content Include="Scripts\config.js" />
     <Content Include="Scripts\index.css" />
+    <Content Include="Scripts\md5\md5.min.js" />
     <Content Include="Scripts\util\easyui-extend.js" />
     <Content Include="Scripts\easyui\datagrid-cellediting.js" />
     <Content Include="Scripts\easyui\easyloader.js" />
@@ -753,6 +758,8 @@
     <Content Include="Areas\Sto_StockManage\Views\Sto_Stock\Index.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\FormPro.cshtml" />
     <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\StockOutList.cshtml" />
+    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\FormNormal.cshtml" />
+    <Content Include="Areas\Sto_StockManage\Views\Sto_StockOut\Find.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
@@ -790,6 +797,7 @@
     <Content Include="Scripts\vendor\umeditor\third-party\mathquill\font\Symbola.woff" />
     <Content Include="Views\Shared\_Layout_List_js.cshtml" />
     <None Include="Properties\PublishProfiles\wuyb_服务器部署.pubxml" />
+    <Content Include="Scripts\md5\md5.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

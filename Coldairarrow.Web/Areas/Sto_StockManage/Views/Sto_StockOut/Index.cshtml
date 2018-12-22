@@ -3,9 +3,9 @@
 }
 @section toolbar{
     <a id="add_pro" class="easyui-linkbutton" data-options="iconCls:'icon-add'">工程领料</a>
-    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
-    <a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
-    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+    <a id="add" class="easyui-linkbutton" data-options="iconCls:'icon-add'">普通领料</a>
+    @*<a id="edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+    <a id="delete" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>*@
 }
 @section search{
     <div class="search_wrapper">
@@ -40,6 +40,7 @@
             method: 'POST',
             //queryParams: { 'id': id },
             idField: 'Id',
+            order:'desc',
             fit: true,
             fitColumns: true,
             singleSelect: false,
@@ -63,7 +64,7 @@
                         var mapping = {
 
                             '0': '工程领料',
-                            '1': '',
+                            '1': '普通领料',
                             '2': ''
                         };
                         return mapping[value];
@@ -121,10 +122,10 @@
         $('#add').click(function () {
             dialogOpen({
                 id: 'form',
-                title: '添加数据',
+                title: '领料',
                 width: formWidth,
                 height: formHeight,
-                url: rootUrl + 'Sto_StockManage/Sto_StockOut/Form',
+                url: rootUrl + 'Sto_StockManage/Sto_StockOut/FormNormal',
             });
         });
 

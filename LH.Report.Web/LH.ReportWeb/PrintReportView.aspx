@@ -26,22 +26,24 @@
     <style type="text/css">
         #divQuery{
             position :absolute ;
-
+        }
+        body{
+	        margin: 0; 
+	        padding: 0;
+	        border: 0;
         }
     </style>
     <script>
         //SH.MainGridHeight = $(window).height() * 0.99+10;
         function boxheight() { //函数：获取尺寸
             $('#layout').layout({
-                height: $(window).height() * 0.99-40
+                height: $(window).height() * 0.99-0
             }); 
         }
 
         $(function () {
-
             boxheight(); //执行函数 
             window.onresize = boxheight; //窗口或框架被调整大小时执行
-
         });
       
     </script>
@@ -73,8 +75,6 @@
                     <dx:ReportToolbarComboBox ItemKind="SaveFormat" Width="70px">
                         <Elements>
                             <dx:ListElement Value="xls" />
-                            <dx:ListElement Value="xlsx" />
-                            <dx:ListElement Value="pdf" />
                             <dx:ListElement Value="png" />
                         </Elements>
                     </dx:ReportToolbarComboBox>

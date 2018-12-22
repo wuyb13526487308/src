@@ -28,6 +28,7 @@
         </div>
         <div class="search_submit">
             <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchGrid(this,'#dataTable')">查询</a>
+            <a href='@Url.Content("~/")Sto_StockManage/Sto_StockOut/DownLoad' class="easyui-linkbutton" data-options="iconCls:'icon-excel'">导出</a>
         </div>
     </div>
 }
@@ -67,14 +68,14 @@
                 { title: '材料名称', field: 'MatName', width: 100 },
                 { title: '规格', field: 'GuiGe', width: 100 },
                 { title: '单位', field: 'UnitName', width: 100 },
-                { title: '价格', field: 'Price', width: 100 },
+                //{ title: '价格', field: 'Price', width: 100 },
                 { title: '数量', field: 'Quantity', width: 100 },
                 {
                     title: '出库类型', field: 'OutType', width: 100, formatter: function (value, row) {
                         var mapping = {
 
                             '0': '工程领料',
-                            '1': '',
+                            '1': '普通领料',
                             '2': ''
                         };
                         return mapping[value];
